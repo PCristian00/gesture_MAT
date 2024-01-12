@@ -1,10 +1,10 @@
-%% Data Loading
+%% Caricamento Dati
 load('acc.mat')
 
 plot(a);
 legend('X', 'Y', 'Z');
-xlabel('Samples');
-ylabel('Acceleration (m/s^2)');
+xlabel('Campioni');
+ylabel('Accelerazione (m/s^2)');
 
 %% Pre-processing
 % Compute magnitude

@@ -1,37 +1,33 @@
-%Connect to the phone
+%Connessione allo smartphone
 close all; clear m; m = mobiledev;
 
 
 fprintf("Dispositivo %s connesso con successo.\n",m.Device)
 
-% Turn on sensors 
+% Attivazione sensori 
 m.AccelerationSensorEnabled = 1;
 
 pause(0.5);
 
-sampling_frequency = 100; % Hz ("high" sps according to MATLAB documentation) 
+sampling_frequency = 100; % Hz
 m.SampleRate = sampling_frequency;
 
-disp('Press a key to start logging...');
-pause;  % Wait for a key press to start logging
-disp('Logging started.');
+disp('Premi un tasto per avviare il logging...');
+pause;  % Attesa del tasto
+disp('Logging avviato.');
 
 m.Logging = 1;
 
-disp('Press a key to stop logging...');
-pause;  % Wait for a key press to start logging
-disp('Logging stopped.');
+disp('Press un tasto per fermare il logging...');
+pause;  % Attesa del tasto
+disp('Logging fermato.');
 
 [a, t] = accellog(m);
-m.Logging = 0; %Disable logging
-m.discardlogs; % Erase the logs 
-% (this is important otherwise if you do a new acquisition you will also
-% get all the previous logs)
+m.Logging = 0; % Disattivazione del logging
+m.discardlogs; % Cancellazione dei log
 
-% Save the data to a mat file
-
-% In this case, we only need acceleration data.
+% Salvataggio dei dati in un file mat
 save('acc.mat', 'a');
-disp(['Data saved to ', 'acc.mat.']);
+disp(['Dati salvati su ', 'acc.mat.']);
 
 
