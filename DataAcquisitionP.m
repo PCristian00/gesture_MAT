@@ -1,6 +1,9 @@
 %Connect to the phone
 close all; clear m; m = mobiledev;
 
+
+fprintf("Dispositivo %s connesso con successo.\n",m.Device)
+
 % Turn on sensors 
 m.AccelerationSensorEnabled = 1;
 
