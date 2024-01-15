@@ -1,15 +1,15 @@
 %% Caricamento del segnale e calcolo di zero-mean magnitude
 
 load('acc.mat')
-x = a(:,1);
-y = a(:,2);
-z = a(:,3);
-signal = sqrt(sum(x.^2 + y.^2 + z.^2, 2));
+x = a(:, 1);
+y = a(:, 2);
+z = a(:, 3);
+signal = sqrt(sum(x.^2+y.^2+z.^2, 2));
 
 signal = signal - mean(signal);
 
 %% Calcolo e Plot di Movestd
-window_size = 20;  % Imposta la dimensione della finestra
+window_size = 20; % Imposta la dimensione della finestra
 movestd_signal = movstd(signal, window_size);
 
 %figure;
@@ -22,7 +22,7 @@ movestd_signal = movstd(signal, window_size);
 % legend('Acceleration Signal', 'Movestd');
 
 % Definizione soglia per movimento e quiete
-threshold = 0.45;  % Adjust threshold as needed
+threshold = 0.45; % Adjust threshold as needed
 
 % Identifica quiete e movimento in base alla soglia
 stillness_indices = find(movestd_signal <= threshold);
@@ -43,4 +43,3 @@ title('Segmentazione approssimata di Quiete e Movimento usando Movestd');
 xlabel('Campioni');
 ylabel('Accelerazione');
 legend('Segnale Accelerazione', 'Quiete', 'Movimento');
-
