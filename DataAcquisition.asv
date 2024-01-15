@@ -30,26 +30,16 @@ while (l)
             sampling_frequency = 100; % Hz
             m.SampleRate = sampling_frequency;
 
-
+            while(i<5 && t=20)
             disp('Premi un tasto per avviare il logging...');
             pause; % Attesa del tasto
             disp('Logging avviato.');
 
             m.Logging = 1;
-            i = 0;
 
-            while i < 4
-                i = i + 1;
-                fprintf("Eseguire gesto %d\n", i);
-                disp('Premi un tasto quando tornato in posizione di partenza');
-                pause; % Attesa del tasto
-                disp("Attendere...");
-                pause(1);
-            end
-
-            % disp('Premi un tasto per fermare il logging...');
-            % pause; % Attesa del tasto
-            % disp('Logging fermato.');
+            disp('Press un tasto per fermare il logging...');
+            pause; % Attesa del tasto
+            disp('Logging fermato.');
 
             [a, t] = accellog(m);
             m.Logging = 0; % Disattivazione del logging
