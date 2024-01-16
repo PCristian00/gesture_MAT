@@ -12,15 +12,19 @@ while (l)
 
     scelta = input(""); % Selezione del menu
     close all;
-    % disp(scelta);
 
     switch (scelta)
 
-        %% Implementare?
-        case 1 % Nuovo Utente
+
+        case 1
+
+            %% Inserire nuovo utente (da implementare)
             fprintf("NON IMPLEMENTATO\n");
 
-        case 2 % Avvio
+
+        case 2
+
+            %% Avvio acquisizione
             clear m;
             disp('Aprire MATLAB Mobile sul dispositivo e premere un tasto.');
             pause; % Attesa del tasto
@@ -55,7 +59,7 @@ while (l)
                 for i = 1:4 % Raccolta dei 4 gesti
                     fprintf("Eseguire gesto %d:\t %s\n", i, gesti(i));
                     % disp(gesti(i))
-                    disp('Premi un tasto quando tornato in posizione di partenza.');
+                    disp('Premi un tasto quando il gesto è completo.');
                     pause; % Attesa del tasto
 
                     time = toc; % Conteggio tempo impiegato
@@ -85,17 +89,23 @@ while (l)
             m.Logging = 0; % Disattivazione del logging
             m.discardlogs; % Cancellazione dei log
 
-            %% Scoprire come concatenare più log e se sia necessario
+            % Scoprire come concatenare più log e se sia necessario
 
             % Salvataggio dei dati in un file mat
             save('acc.mat', 'a');
             disp(['Dati salvati su ', 'acc.mat.']);
 
-        case 3 % Processa e Visualizza
+
+        case 3
+
+            %% Processing e Visualizzazione
             DataProcessing;
             VisualizeSTD;
 
-        case 0 % Esci
+
+        case 0
+
+            %% Uscita
             fprintf("CHIUSURA PROGRAMMA\n");
             l = false; % Interrompe il ciclo
 
