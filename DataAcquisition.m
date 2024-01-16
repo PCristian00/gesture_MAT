@@ -1,4 +1,3 @@
-%Connessione allo smartphone
 close all; clear m;
 l = true; % Mantiene il programma attivo finche' non viene scelto di uscire dal menu
 while (l)
@@ -22,6 +21,7 @@ while (l)
         case 2 % Avvio
             disp('Aprire MATLAB Mobile sul dispositivo e premere un tasto');
             pause; % Attesa del tasto
+            %Connessione allo smartphone
             m = mobiledev;
             fprintf("Dispositivo %s connesso con successo.\n", m.Device)
             % Attivazione sensori
@@ -38,6 +38,9 @@ while (l)
             m.Logging = 1;
             i = 0;
 
+            tic;
+
+            %% Aggiungere un modo per eliminare il dato se supera i 20 secondi
             while i < 4
                 i = i + 1;
                 fprintf("Eseguire gesto %d\n", i);
@@ -46,6 +49,7 @@ while (l)
                 disp("Attendere...");
                 pause(1);
             end
+            time = toc;
 
             % disp('Premi un tasto per fermare il logging...');
             % pause; % Attesa del tasto
