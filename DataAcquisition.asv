@@ -44,10 +44,10 @@ while (l)
                 tic;
 
                 gesti = ["S", "AS", "Z", "AZ"];
-                % disp(gesti)
+                disp(gesti)
 
-                gesti = gesti(randperm(length(gesti))); % Randomizzazione ordine gesti
-                % disp(gesti)
+                gesti = gesti(randperm(length(gesti)));
+                disp(gesti)
 
                 for i = 1:4
 
@@ -64,7 +64,7 @@ while (l)
                     end
 
                     if i ~= 4
-                        pause(1);
+                          pause(1);
                     end
                 end
                 time = toc;
