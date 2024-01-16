@@ -19,7 +19,6 @@ while (l)
             fprintf("NON IMPLEMENTATO\n");
 
         case 2 % Avvio
-            clear m;
             disp('Aprire MATLAB Mobile sul dispositivo e premere un tasto');
             pause; % Attesa del tasto
             %Connessione allo smartphone
@@ -30,34 +29,27 @@ while (l)
             pause(0.5);
             sampling_frequency = 100; % Hz
             m.SampleRate = sampling_frequency;
-            time_out = true;
-            while time_out
-                disp('Premi un tasto per avviare il logging...');
+
+
+            disp('Premi un tasto per avviare il logging...');
+            pause; % Attesa del tasto
+            disp('Logging avviato.');
+
+            m.Logging = 1;
+            i = 0;
+
+            tic;
+
+            %% Aggiungere un modo per eliminare il dato se supera i 20 secondi
+            while i < 4 && co
+                i = i + 1;
+                fprintf("Eseguire gesto %d\n", i);
+                disp('Premi un tasto quando tornato in posizione di partenza');
                 pause; % Attesa del tasto
-                disp('Logging avviato.');
-
-                m.Logging = 1;
-                i = 0;
-
-                tic;
-
-                while i < 4
-                    i = i + 1;
-                    fprintf("Eseguire gesto %d\n", i);
-                    disp('Premi un tasto quando tornato in posizione di partenza');
-                    pause; % Attesa del tasto
-                    disp("Attendere...");
-                    pause(1);
-                end
-                time = toc;
-                fprintf("Eseguiti tutti i gesti in %d secondi!\n", time);
-                if time < 20
-                    time_out = false;
-                                    
-                else, fprintf("Tempo di 20 secondi superati.\n");
-                end
-
+                disp("Attendere...");
+                pause(1);
             end
+            time = toc;
 
             % disp('Premi un tasto per fermare il logging...');
             % pause; % Attesa del tasto
