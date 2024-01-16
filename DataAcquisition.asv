@@ -15,11 +15,16 @@ while (l)
 
     switch (scelta)
 
-        %% Inserire nuovo utente (da implementare)
+
         case 1
+
+            %% Inserire nuovo utente (da implementare)
             fprintf("NON IMPLEMENTATO\n");
-%% Avvio acquisizione
+
+
         case 2
+
+            %% Avvio acquisizione
             clear m;
             disp('Aprire MATLAB Mobile sul dispositivo e premere un tasto.');
             pause; % Attesa del tasto
@@ -37,6 +42,30 @@ while (l)
             pic = imread("gestures.png");
             imshow(pic);
             while time_out
+
+                gestures = ["S", "AS", "Z", "AZ"; ...
+                    "Up", "CW", "CCW", "Down"; ...
+                    "C", "CW", "Push", "Pull"; ...
+                    "Push", "Pull", "CW", "CCW"]; % Set di gesti
+                disp(gestures)
+                disp("Test riga 1")
+                disp(gestures(1, :))
+
+                while true
+                x = input("Inserire utente (1-4):");
+                if x<1 || x>4
+                disp(x);
+                gesture = gestures(x, :);
+                disp(gesture);
+                end
+                end
+
+
+                gesture = gesture(randperm(length(gesture))); % Randomizzazione ordine gesti
+                disp("Riga randomizzata")
+                disp(gesture)
+
+
                 disp('Premi un tasto per avviare il logging...');
                 pause; % Attesa del tasto
                 disp('Logging avviato.');
@@ -45,14 +74,8 @@ while (l)
 
                 tic; % Avvio timer
 
-                gesti = ["S", "AS", "Z", "AZ"]; % Set di gesti
-                % disp(gesti)
-
-                gesti = gesti(randperm(length(gesti))); % Randomizzazione ordine gesti
-                % disp(gesti)
-
                 for i = 1:4 % Raccolta dei 4 gesti
-                    fprintf("Eseguire gesto %d:\t %s\n", i, gesti(i));
+                    fprintf("Eseguire gesto %d:\t %s\n", i, gesture(i));
                     % disp(gesti(i))
                     disp('Premi un tasto quando il gesto è completo.');
                     pause; % Attesa del tasto
@@ -84,17 +107,23 @@ while (l)
             m.Logging = 0; % Disattivazione del logging
             m.discardlogs; % Cancellazione dei log
 
-            %% Scoprire come concatenare più log e se sia necessario
+            % Scoprire come concatenare più log e se sia necessario
 
             % Salvataggio dei dati in un file mat
             save('acc.mat', 'a');
             disp(['Dati salvati su ', 'acc.mat.']);
 
-        case 3 % Processa e Visualizza
+
+        case 3
+
+            %% Processing e Visualizzazione
             DataProcessing;
             VisualizeSTD;
 
-        case 0 % Esci
+
+        case 0
+
+            %% Uscita
             fprintf("CHIUSURA PROGRAMMA\n");
             l = false; % Interrompe il ciclo
 

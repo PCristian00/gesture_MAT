@@ -42,6 +42,32 @@ while (l)
             pic = imread("gestures.png");
             imshow(pic);
             while time_out
+
+                gestures = ["S", "AS", "Z", "AZ"; ...
+                    "Up", "CW", "CCW", "Down"; ...
+                    "CW", "CW", "Push", "Pull"; ...
+                    "Push", "Pull", "CW", "CCW"]; % Set di gesti
+                % disp(gestures)
+
+
+                while true
+                    x = input("Inserire utente (1-4):");
+                    if x < 1 || x > 4
+                        disp("Indice non trovato.")
+                    else
+                        % disp(x);
+                        gesture = gestures(x, :);
+                        % disp(gesture);
+                        break;
+                    end
+                end
+
+
+                gesture = gesture(randperm(length(gesture))); % Randomizzazione ordine gesti
+                % disp("Riga randomizzata")
+                % disp(gesture)
+
+
                 disp('Premi un tasto per avviare il logging...');
                 pause; % Attesa del tasto
                 disp('Logging avviato.');
@@ -50,14 +76,8 @@ while (l)
 
                 tic; % Avvio timer
 
-                gesti = ["S", "AS", "Z", "AZ"]; % Set di gesti
-                % disp(gesti)
-
-                gesti = gesti(randperm(length(gesti))); % Randomizzazione ordine gesti
-                % disp(gesti)
-
                 for i = 1:4 % Raccolta dei 4 gesti
-                    fprintf("Eseguire gesto %d:\t %s\n", i, gesti(i));
+                    fprintf("Eseguire gesto %d:\t %s\n", i, gesture(i));
                     % disp(gesti(i))
                     disp('Premi un tasto quando il gesto è completo.');
                     pause; % Attesa del tasto
