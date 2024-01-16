@@ -1,4 +1,4 @@
-%% Caricamento del segnale e calcolo di zero-mean magnitude
+%% Caricamento del segnale e calcolo di zero-mean magnitude (CAPIRE COME CAMBIA CON STRUCT)
 
 load('acc.mat')
 x = a(:, 1);

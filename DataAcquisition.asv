@@ -1,5 +1,6 @@
 close all; clear m;
 l = true; % Mantiene il programma attivo finche' non viene scelto di uscire dal menu
+n = 1; % Contatore della raccolta per il salvataggio su file diversi
 while (l)
     pause(1); % Pausa aggiunta per stile
 
@@ -12,17 +13,23 @@ while (l)
 
     scelta = input(""); % Selezione del menu
     close all;
-    % disp(scelta);
 
     switch (scelta)
-        case 1 % Nuovo Utente
+
+
+        case 1
+
+            %% Inserire nuovo utente (da implementare)
             fprintf("NON IMPLEMENTATO\n");
 
-        case 2 % Avvio
+
+        case 2
+            %% Avvio acquisizione
             clear m;
-            disp('Aprire MATLAB Mobile sul dispositivo e premere un tasto');
+            disp('Aprire MATLAB Mobile sul dispositivo e premere un tasto.');
             pause; % Attesa del tasto
-            %Connessione allo smartphone
+            disp("Attendere...")
+            % Connessione allo smartphone
             m = mobiledev;
             fprintf("Dispositivo %s connesso con successo.\n", m.Device)
             % Attivazione sensori
@@ -31,60 +38,103 @@ while (l)
             sampling_frequency = 100; % Hz
             m.SampleRate = sampling_frequency;
             time_out = true;
+
+            pic = imread("gestures.png");
+            imshow(pic);
             while time_out
+
+                gestures = ["S", "AS", "Z", "AZ"; ...
+                    "Up", "CW", "CCW", "Down"; ...
+                    "CW", "CW", "Push", "Pull"; ...
+                    "Push", "Pull", "CW", "CCW"]; % Set di gesti
+                % disp(gestures)
+
+
+                while true
+                    user = input("Inserire utente (1-4):");
+                    if user < 1 || user > 4
+                        disp("Indice non trovato.")
+                    else
+                        % disp(user);
+                        gesture = gestures(user, :);
+                        % disp(gesture);
+                        break;
+                    end
+                end
+
+
+                gesture = gesture(randperm(length(gesture))); % Randomizzazione ordine gesti
+                % disp("Riga randomizzata")
+                % disp(gesture)
+
+
                 disp('Premi un tasto per avviare il logging...');
                 pause; % Attesa del tasto
                 disp('Logging avviato.');
 
                 m.Logging = 1;
 
-                tic;
+                tic; % Avvio timer
 
-                for i = 1:4
-                    fprintf("Eseguire gesto %d\n", i);
-                    disp('Premi un tasto quando tornato in posizione di partenza');
+                for i = 1:4 % Raccolta dei 4 gesti
+                    fprintf("Eseguire gesto %d:\t %s\n", i, gesture(i));
+                    % disp(gesti(i))
+                    disp('Premi un tasto quando il gesto è completo.');
                     pause; % Attesa del tasto
-                    disp("Attendere...");
-                    time = toc;
-                    time_left = 20 - time;
-                    fprintf("Eseguito in %.1f secondi!\n", time);
-                    if time >= 20, break
+
+                    time = toc; % Conteggio tempo impiegato
+                    time_left = 20 - time; % Calcolo tempo rimanente
+
+                    if time >= 20, break % Se il tempo e' esaurito il ciclo viene interrotto
                     end
-                    pause(1);
+
+                    if i ~= 4
+                        disp("Attendere...");
+                        pause(1); % Fa una pausa di 1 secondo tra un gesto e l'altro
+                        fprintf("Massimo %.1f secondi rimanenti.\n", time_left-1);
+                    end
                 end
                 time = toc;
-                fprintf(" in %.1f secondi!\n", time);
-                if time < 20
+                fprintf("Gesti eseguiti in %.1f secondi.\n", time);
+                if time < 20 % Se il tempo non e' scaduto va avanti
                     time_out = false;
-                    time_left = 20 - time;
-                    % disp(time_left)
-                    fprintf("Rimanere fermo per %.1f secondi\n", time_left);
+                    fprintf("Rimanere fermo per %.1f secondi.\n", time_left);
                     pause(time_left)
 
                 else, fprintf("Tempo di 20 secondi superati. Riavvio raccolta.\n");
                 end
             end
 
-            % disp('Premi un tasto per fermare il logging...');
-            % pause; % Attesa del tasto
-            % disp('Logging fermato.');
-
             [a, t] = accellog(m);
             m.Logging = 0; % Disattivazione del logging
             m.discardlogs; % Cancellazione dei log
 
+            % Scoprire come concatenare più log e se sia necessario
+            sample.user=user;
+            sample.user(user).acquisition
+            sample.user_1.acquisition_1.acc=a;
+            disp(sample);
             % Salvataggio dei dati in un file mat
-            save('acc.mat', 'a');
+            filename="acc"+n+".mat";
+            disp(filename);
+            save(filename, 'a');
             disp(['Dati salvati su ', 'acc.mat.']);
+            n=n+1;
 
-        case 3 % Processa e Visualizza
+
+        case 3
+
+            %% Processing e Visualizzazione
             DataProcessing;
             VisualizeSTD;
 
-        case 0 % Esci
+
+        case 0
+
+            %% Uscita
             fprintf("CHIUSURA PROGRAMMA\n");
             l = false; % Interrompe il ciclo
 
-        otherwise, fprintf("Menu non trovato\n"); % L'utente torna al menu
+        otherwise, fprintf("Indice non trovato.\n"); % L'utente torna al menu
     end
 end
