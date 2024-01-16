@@ -1,5 +1,6 @@
 close all; clear m;
 l = true; % Mantiene il programma attivo finche' non viene scelto di uscire dal menu
+n = 1; % Contatore della raccolta per il salvataggio su file diversi
 while (l)
     pause(1); % Pausa aggiunta per stile
 
@@ -23,10 +24,8 @@ while (l)
 
 
         case 2
-            
             %% Avvio acquisizione
             clear m;
-            n=0;
             disp('Aprire MATLAB Mobile sul dispositivo e premere un tasto.');
             pause; % Attesa del tasto
             disp("Attendere...")
@@ -52,12 +51,12 @@ while (l)
 
 
                 while true
-                    x = input("Inserire utente (1-4):");
-                    if x < 1 || x > 4
+                    user = input("Inserire utente (1-4):");
+                    if user < 1 || user > 4
                         disp("Indice non trovato.")
                     else
-                        % disp(x);
-                        gesture = gestures(x, :);
+                        % disp(user);
+                        gesture = gestures(user, :);
                         % disp(gesture);
                         break;
                     end
@@ -111,12 +110,16 @@ while (l)
             m.discardlogs; % Cancellazione dei log
 
             % Scoprire come concatenare più log e se sia necessario
-
+            sample.user=user;
+            sample.user(user).acquisition
+            sample.user_1.acquisition_1.acc=a;
+            disp(sample);
             % Salvataggio dei dati in un file mat
-            filename='acc'+n+'.mat';
+            filename="acc"+n+".mat";
             disp(filename);
             save(filename, 'a');
             disp(['Dati salvati su ', 'acc.mat.']);
+            n=n+1;
 
 
         case 3

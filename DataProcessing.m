@@ -1,4 +1,4 @@
-%% Caricamento Dati
+%% Caricamento Dati (CAPIRE COME CAMBIA CON STRUCT)
 % n = input("Inserire ID file:");
 % filename="acc"+n+".mat";
 % load(filename)
