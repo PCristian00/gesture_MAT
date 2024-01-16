@@ -45,15 +45,20 @@ while (l)
                     disp('Premi un tasto quando tornato in posizione di partenza');
                     pause; % Attesa del tasto
                     disp("Attendere...");
+                    time = toc;
+                    time_left = 20 - time;
+                    fprintf("Massimo %.1f secondi rimanenti.\n", time_left);
+                    if time >= 20, break
+                    end
                     pause(1);
                 end
                 time = toc;
-                fprintf("Eseguiti tutti i gesti in %.1f secondi!\n", time);
+                fprintf("Gesti eseguiti in %.1f secondi!\n", time);
                 if time < 20
                     time_out = false;
-                    time_left=20-time;
-                    disp(time_left)
-                    fprintf("Rimanere fermo per %.1f secondi\n",time_left);
+                    time_left = 20 - time;
+                    % disp(time_left)
+                    fprintf("Rimanere fermo per %.1f secondi\n", time_left);
                     pause(time_left)
 
                 else, fprintf("Tempo di 20 secondi superati. Riavvio raccolta.\n");
