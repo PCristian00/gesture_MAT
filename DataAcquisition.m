@@ -50,7 +50,7 @@ while (l)
                     pause(1);
                 end
                 time = toc;
-                fprintf("Eseguiti tutti i gesti in %d secondi!\n", time);
+                fprintf("Eseguiti tutti i gesti in %.1f secondi!\n", time);
                 if time < 20
                     time_out = false;
                                     
