@@ -47,13 +47,13 @@ while (l)
                     disp("Attendere...");
                     time = toc;
                     time_left = 20 - time;
-                    fprintf("Massimo %.1f secondi rimanenti.\n", time_left);
+                    fprintf("Eseguito in %.1f secondi!\n", time);
                     if time >= 20, break
                     end
                     pause(1);
                 end
                 time = toc;
-                fprintf("Gesti eseguiti in %.1f secondi!\n", time);
+                fprintf(" in %.1f secondi!\n", time);
                 if time < 20
                     time_out = false;
                     time_left = 20 - time;
