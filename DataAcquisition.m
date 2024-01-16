@@ -64,7 +64,7 @@ while (l)
                     if i ~= 4
                         disp("Attendere...");
                         pause(1); % Fa una pausa di 1 secondo tra un gesto e l'altro
-                        fprintf("Massimo %.1f secondi rimanenti.\n", time_left);
+                        fprintf("Massimo %.1f secondi rimanenti.\n", time_left-1);
                     end
                 end
                 time = toc;
