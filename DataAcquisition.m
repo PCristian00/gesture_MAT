@@ -15,6 +15,7 @@ while (l)
     % disp(scelta);
 
     switch (scelta)
+        %% Implementare?
         case 1 % Nuovo Utente
             fprintf("NON IMPLEMENTATO\n");
 
@@ -22,6 +23,7 @@ while (l)
             clear m;
             disp('Aprire MATLAB Mobile sul dispositivo e premere un tasto');
             pause; % Attesa del tasto
+            disp("Attendere...")
             %Connessione allo smartphone
             m = mobiledev;
             fprintf("Dispositivo %s connesso con successo.\n", m.Device)
@@ -40,8 +42,16 @@ while (l)
 
                 tic;
 
+                gesti=["S", "AS", "Z", "AZ"];
+                disp(gesti)
+
+                gesti=gesti(randperm(length(gesti)));
+                disp(gesti)
+
                 for i = 1:4
+                    %% Inserire istruzioni gesti e randomizzazione
                     fprintf("Eseguire gesto %d\n", i);
+                    disp(gesti(i))
                     disp('Premi un tasto quando tornato in posizione di partenza');
                     pause; % Attesa del tasto
                     disp("Attendere...");
@@ -72,6 +82,8 @@ while (l)
             [a, t] = accellog(m);
             m.Logging = 0; % Disattivazione del logging
             m.discardlogs; % Cancellazione dei log
+
+            %% Scoprire come concatenare più log e se sia necessario
 
             % Salvataggio dei dati in un file mat
             save('acc.mat', 'a');
