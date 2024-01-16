@@ -19,6 +19,7 @@ while (l)
             fprintf("NON IMPLEMENTATO\n");
 
         case 2 % Avvio
+            clear m;
             disp('Aprire MATLAB Mobile sul dispositivo e premere un tasto');
             pause; % Attesa del tasto
             %Connessione allo smartphone
@@ -29,27 +30,36 @@ while (l)
             pause(0.5);
             sampling_frequency = 100; % Hz
             m.SampleRate = sampling_frequency;
-
-
-            disp('Premi un tasto per avviare il logging...');
-            pause; % Attesa del tasto
-            disp('Logging avviato.');
-
-            m.Logging = 1;
-            i = 0;
-
-            tic;
-
-            %% Aggiungere un modo per eliminare il dato se supera i 20 secondi
-            while i < 4 && co
-                i = i + 1;
-                fprintf("Eseguire gesto %d\n", i);
-                disp('Premi un tasto quando tornato in posizione di partenza');
+            time_out = true;
+            while time_out
+                disp('Premi un tasto per avviare il logging...');
                 pause; % Attesa del tasto
-                disp("Attendere...");
-                pause(1);
+                disp('Logging avviato.');
+
+                m.Logging = 1;
+
+                tic;
+
+                for i = 1:4
+                    fprintf("Eseguire gesto %d\n", i);
+                    disp('Premi un tasto quando tornato in posizione di partenza');
+                    pause; % Attesa del tasto
+                    disp("Attendere...");
+                    pause(1);
+                end
+                time = toc;
+                fprintf("Eseguiti tutti i gesti in %.1f secondi!\n", time);
+                if time < 20
+                    time_out = false;
+                    time_left=20-time;
+                    disp(time_left)
+                    fprintf("Rimanere fermo per %.1f secondi\n",time_left);
+                    pause(time_left)
+     
+
+                else, fprintf("Tempo di 20 secondi superati.\n");
+                end
             end
-            time = toc;
 
             % disp('Premi un tasto per fermare il logging...');
             % pause; % Attesa del tasto

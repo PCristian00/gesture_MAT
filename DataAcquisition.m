@@ -51,8 +51,12 @@ while (l)
                 fprintf("Eseguiti tutti i gesti in %.1f secondi!\n", time);
                 if time < 20
                     time_out = false;
+                    time_left=20-time;
+                    disp(time_left)
+                    fprintf("Rimanere fermo per %.1f secondi\n",time_left);
+                    pause(time_left)
 
-                else, fprintf("Tempo di 20 secondi superati.\n");
+                else, fprintf("Tempo di 20 secondi superati. Riavvio raccolta.\n");
                 end
             end
 
