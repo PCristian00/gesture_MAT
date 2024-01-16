@@ -23,9 +23,10 @@ while (l)
 
 
         case 2
-
+            
             %% Avvio acquisizione
             clear m;
+            n=0;
             disp('Aprire MATLAB Mobile sul dispositivo e premere un tasto.');
             pause; % Attesa del tasto
             disp("Attendere...")
@@ -45,25 +46,27 @@ while (l)
 
                 gestures = ["S", "AS", "Z", "AZ"; ...
                     "Up", "CW", "CCW", "Down"; ...
-                    "C", "CW", "Push", "Pull"; ...
+                    "CW", "CW", "Push", "Pull"; ...
                     "Push", "Pull", "CW", "CCW"]; % Set di gesti
-                disp(gestures)
-                disp("Test riga 1")
-                disp(gestures(1, :))
+                % disp(gestures)
+
 
                 while true
-                x = input("Inserire utente (1-4):");
-                if x<1 || x>4
-                disp(x);
-                gesture = gestures(x, :);
-                disp(gesture);
-                end
+                    x = input("Inserire utente (1-4):");
+                    if x < 1 || x > 4
+                        disp("Indice non trovato.")
+                    else
+                        % disp(x);
+                        gesture = gestures(x, :);
+                        % disp(gesture);
+                        break;
+                    end
                 end
 
 
                 gesture = gesture(randperm(length(gesture))); % Randomizzazione ordine gesti
-                disp("Riga randomizzata")
-                disp(gesture)
+                % disp("Riga randomizzata")
+                % disp(gesture)
 
 
                 disp('Premi un tasto per avviare il logging...');
@@ -110,7 +113,9 @@ while (l)
             % Scoprire come concatenare più log e se sia necessario
 
             % Salvataggio dei dati in un file mat
-            save('acc.mat', 'a');
+            filename='acc'+n+'.mat';
+            disp(filename);
+            save(filename, 'a');
             disp(['Dati salvati su ', 'acc.mat.']);
 
 

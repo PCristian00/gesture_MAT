@@ -1,5 +1,6 @@
 close all; clear m;
 l = true; % Mantiene il programma attivo finche' non viene scelto di uscire dal menu
+n = 1; % Contatore della raccolta per il salvataggio su file diversi
 while (l)
     pause(1); % Pausa aggiunta per stile
 
@@ -23,7 +24,6 @@ while (l)
 
 
         case 2
-
             %% Avvio acquisizione
             clear m;
             disp('Aprire MATLAB Mobile sul dispositivo e premere un tasto.');
@@ -112,8 +112,11 @@ while (l)
             % Scoprire come concatenare più log e se sia necessario
 
             % Salvataggio dei dati in un file mat
-            save('acc.mat', 'a');
+            filename="acc"+n+".mat";
+            disp(filename);
+            save(filename, 'a');
             disp(['Dati salvati su ', 'acc.mat.']);
+            n=n+1;
 
 
         case 3

@@ -1,8 +1,7 @@
 %% Caricamento Dati
-% n = input("Inserire ID file:");
-% filename="acc"+n+".mat";
-% load(filename)
-load('acc.mat')
+n = input("Inserire ID file:");
+filename="acc"+n+".mat";
+load(filename)
 
 plot(a);
 legend('X', 'Y', 'Z');
