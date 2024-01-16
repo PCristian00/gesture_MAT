@@ -34,6 +34,9 @@ while (l)
             sampling_frequency = 100; % Hz
             m.SampleRate = sampling_frequency;
             time_out = true;
+
+            pic = imread("gestures.png");
+            imshow(pic);
             while time_out
                 disp('Premi un tasto per avviare il logging...');
                 pause; % Attesa del tasto
