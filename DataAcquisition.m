@@ -37,12 +37,10 @@ while (l)
                 disp('Logging avviato.');
 
                 m.Logging = 1;
-                i = 0;
 
                 tic;
 
-                while i < 4
-                    i = i + 1;
+                for i = 1:4
                     fprintf("Eseguire gesto %d\n", i);
                     disp('Premi un tasto quando tornato in posizione di partenza');
                     pause; % Attesa del tasto
@@ -53,10 +51,9 @@ while (l)
                 fprintf("Eseguiti tutti i gesti in %.1f secondi!\n", time);
                 if time < 20
                     time_out = false;
-                                    
+
                 else, fprintf("Tempo di 20 secondi superati.\n");
                 end
-
             end
 
             % disp('Premi un tasto per fermare il logging...');
