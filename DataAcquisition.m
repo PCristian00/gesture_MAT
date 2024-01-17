@@ -15,7 +15,7 @@ m.AccelerationSensorEnabled = 1;
 pause(0.5);
 sampling_frequency = 100; % Hz
 m.SampleRate = sampling_frequency;
-while (true) % RISOLVERE QUESTO CICLO
+while true % Finche' l'utente vuole fare nuove acquisizioni con lo stesso dispositivo
     time_out = true;
 
     pic = imread("gestures.png");
@@ -51,7 +51,28 @@ while (true) % RISOLVERE QUESTO CICLO
             "1 - Guidato: 1 gesto alla volta, con intervalli guidati\n");
         switch (scelta_r)
             case 0
-                disp("DA IMPLEMENTARE");
+                % disp("DA IMPLEMENTARE");
+                disp('Premi un tasto per avviare il logging...');
+                pause; % Attesa del tasto
+                disp('Logging avviato.');
+                m.Logging = 1;
+
+                tic; % Avvio timer
+
+                % RISOLVERE STAMPA
+                fprintf("Gesti da eseguire, in questo ordine:"+ ...
+                    "%s\n"+ ...
+                    "Fare una pausa di almeno 1 secondo tra un gesto e l'altro." + ...
+                    "Premere un tasto una volta finito.", gesture);
+                pause;
+                time = toc;
+                % VEDERE SE MANCA IL COMPLETAMENTO (vedi riga 106 circa)
+                if time <= 20, time_out = false;
+                    break;
+                end
+
+                % VEDERE SE SALVA
+
             case 1
                 disp('Premi un tasto per avviare il logging...');
                 pause; % Attesa del tasto
@@ -103,15 +124,14 @@ while (true) % RISOLVERE QUESTO CICLO
             scelta_a = input("Premere 0 per uscire dalla raccolta.\nPremi 1 per una nuova acquisizione.\n");
             if scelta_a == 0, disp("CHIUSURA");
                 return;
-            else, if scelta_a ~= 1, fprintf("Codice non trovato.\n");
-            else, break;
-                    end
+            else
+                if scelta_a ~= 1, fprintf("Codice non trovato.\n");
+                else, break;
+                end
             end
-            % CAPIRE COME FARE WHILE CON BREAK CORRETTO (jump?)
-            % if scelta_a == 0, return; end
         end
     end
-end % CAPIRE COME RISOLVERE QUESTO CICLO
+end
 
 filename = "acc.mat";
 save(filename, 'a');
