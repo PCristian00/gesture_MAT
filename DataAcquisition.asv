@@ -1,6 +1,5 @@
 close all; clear m;
-n = 1;
-%% RISOLVERE (1 INDICE PER OGNI UTENTE? RACCOGLIERE ULTIMO INDICE PER OGNI UTENTE?)
+n = 1; % RISOLVERE (1 INDICE PER OGNI UTENTE? RACCOGLIERE ULTIMO INDICE PER OGNI UTENTE?)
 while true % Mantiene il programma attivo finche' non viene scelto di uscire dal menu
     pause(1); % Pausa aggiunta per stile
 
@@ -116,8 +115,7 @@ while true % Mantiene il programma attivo finche' non viene scelto di uscire dal
                 % while true
                 scelta_a = input("Premere 0 per uscire dalla raccolta.\nPremi 1 per una nuova acquisizione.\n");
                 if scelta_a == 0, break;
-                else, if scelta_a ~= 1, fprintf("Codice non trovato.\n");
-                        %% CAPIRE COME FARE WHILE CON BREAK CORRETTO (jump?)
+                else, if scelta_a ~= 1, fprintf("Codice non trovato.\n"); 
                 end
                 end
 
