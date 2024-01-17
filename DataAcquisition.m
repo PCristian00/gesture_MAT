@@ -1,166 +1,120 @@
-close all; clear m;
+%% Avvio acquisizione
+clear m;
 n = 1;
 
 %% RISOLVERE (1 INDICE PER OGNI UTENTE? RACCOGLIERE ULTIMO INDICE PER OGNI UTENTE?)
-while true % Mantiene il programma attivo finche' non viene scelto di uscire dal menu
-    pause(1); % Pausa aggiunta per stile
 
-    fprintf("\nSCEGLIERE OPERAZIONE\n"+ ...
-        "1 - Nuovo Utente\n"+ ...
-        "2 - Avvio\n"+ ...
-        "3 - Processa e Visualizza\n"+ ...
-        "0 - Esci\n"+ ...
-        "----------------\n");
+disp('Aprire MATLAB Mobile sul dispositivo e premere un tasto.');
+pause; % Attesa del tasto
+disp("Attendere...")
+% Connessione allo smartphone
+m = mobiledev;
+fprintf("Dispositivo %s connesso con successo.\n", m.Device)
+% Attivazione sensori
+m.AccelerationSensorEnabled = 1;
+pause(0.5);
+sampling_frequency = 100; % Hz
+m.SampleRate = sampling_frequency;
+while (true) % RISOLVERE QUESTO CICLO
+    time_out = true;
 
-    % fprintf("1 - Nuovo Utente\n") % Forse togliere?
-    % fprintf("2 - Avvio\n") % Avvia la raccolta
-    % fprintf("3 - Processa e Visualizza\n") % Esegue i restanti script
-    % fprintf("0 - Esci\n"); % Interrompe l'esecuzione del programma
-    % fprintf("----------------\n");
+    pic = imread("gestures.png");
+    imshow(pic);
+    while time_out
 
-    scelta = input(""); % Selezione del menu
-    close all;
-
-    switch (scelta)
-
-
-        case 1
-
-            %% Inserire nuovo utente (da implementare)s
-            fprintf("NON IMPLEMENTATO\n");
+        gestures = ["S", "AS", "Z", "AZ"; ...
+            "Up", "CW", "CCW", "Down"; ...
+            "CW", "CW", "Push", "Pull"; ...
+            "Push", "Pull", "CW", "CCW"]; % Set di gesti
+        % disp(gestures)
 
 
-        case 2 %CREARE FUNZIONE AGGIUNTIVA (NUOVO FILE M??) / CREARE UNO PER MENU
-
-            %% Avvio acquisizione
-            clear m;
-            disp('Aprire MATLAB Mobile sul dispositivo e premere un tasto.');
-            pause; % Attesa del tasto
-            disp("Attendere...")
-            % Connessione allo smartphone
-            m = mobiledev;
-            fprintf("Dispositivo %s connesso con successo.\n", m.Device)
-            % Attivazione sensori
-            m.AccelerationSensorEnabled = 1;
-            pause(0.5);
-            sampling_frequency = 100; % Hz
-            m.SampleRate = sampling_frequency;
-           % while (true) % RISOLVERE QUESTO CICLO
-                time_out = true;
-
-                pic = imread("gestures.png");
-                imshow(pic);
-                while time_out
-
-                    gestures = ["S", "AS", "Z", "AZ"; ...
-                        "Up", "CW", "CCW", "Down"; ...
-                        "CW", "CW", "Push", "Pull"; ...
-                        "Push", "Pull", "CW", "CCW"]; % Set di gesti
-                    % disp(gestures)
+        while true
+            user = input("Inserire utente (1-4):");
+            if user < 1 || user > 4
+                disp("Indice non trovato.")
+            else
+                % disp(user);
+                gesture = gestures(user, :);
+                % disp(gesture);
+                break;
+            end
+        end
 
 
-                    while true
-                        user = input("Inserire utente (1-4):");
-                        if user < 1 || user > 4
-                            disp("Indice non trovato.")
-                        else
-                            % disp(user);
-                            gesture = gestures(user, :);
-                            % disp(gesture);
-                            break;
-                        end
+        gesture = gesture(randperm(length(gesture))); % Randomizzazione ordine gesti
+        % disp("Riga randomizzata")
+        disp(gesture)
+
+        scelta_r = input("Scegliere metodo di raccolta.\n"+ ...
+            "0 - Normale: 1 tasto per avviare, 4 gesti\n"+ ...
+            "1 - Guidato: 1 gesto alla volta, con intervalli guidati\n");
+        switch (scelta_r)
+            case 0
+                disp("DA IMPLEMENTARE");
+            case 1
+                disp('Premi un tasto per avviare il logging...');
+                pause; % Attesa del tasto
+                disp('Logging avviato.');
+
+                m.Logging = 1;
+
+                tic; % Avvio timer
+
+                for i = 1:4 % Raccolta dei 4 gesti
+                    fprintf("Eseguire gesto %d:\t %s\n", i, gesture(i));
+                    % disp(gesti(i))
+                    disp('Premi un tasto quando il gesto è completo.');
+                    pause; % Attesa del tasto
+
+                    time = toc; % Conteggio tempo impiegato
+                    time_left = 20 - time; % Calcolo tempo rimanente
+
+                    if time >= 20, break % Se il tempo e' esaurito il ciclo viene interrotto
                     end
 
-
-                    gesture = gesture(randperm(length(gesture))); % Randomizzazione ordine gesti
-                    % disp("Riga randomizzata")
-                    disp(gesture)
-
-                    scelta_r = input("Scegliere metodo di raccolta.\n"+ ...
-                        "0 - Normale: 1 tasto per avviare, 4 gesti\n"+ ...
-                        "1 - Guidato: 1 gesto alla volta, con intervalli guidati\n");
-                    switch (scelta_r)
-                        case 0
-                            disp("DA IMPLEMENTARE");
-                        case 1
-                            disp('Premi un tasto per avviare il logging...');
-                            pause; % Attesa del tasto
-                            disp('Logging avviato.');
-
-                            m.Logging = 1;
-
-                            tic; % Avvio timer
-
-                            for i = 1:4 % Raccolta dei 4 gesti
-                                fprintf("Eseguire gesto %d:\t %s\n", i, gesture(i));
-                                % disp(gesti(i))
-                                disp('Premi un tasto quando il gesto è completo.');
-                                pause; % Attesa del tasto
-
-                                time = toc; % Conteggio tempo impiegato
-                                time_left = 20 - time; % Calcolo tempo rimanente
-
-                                if time >= 20, break % Se il tempo e' esaurito il ciclo viene interrotto
-                                end
-
-                                if i ~= 4
-                                    disp("Attendere...");
-                                    pause(1); % Fa una pausa di 1 secondo tra un gesto e l'altro
-                                    fprintf("Massimo %.1f secondi rimanenti.\n", time_left-1);
-                                end
-                            end
-                            time = toc;
-                            fprintf("Gesti eseguiti in %.1f secondi.\n", time);
-                            if time < 20 % Se il tempo non e' scaduto va avanti
-                                time_out = false;
-                                fprintf("Rimanere fermo per %.1f secondi.\n", time_left);
-                                pause(time_left)
-
-                            else, fprintf("Tempo di 20 secondi superati. Riavvio raccolta.\n");
-                            end
-                        otherwise, disp("Valore non trovato");
+                    if i ~= 4
+                        disp("Attendere...");
+                        pause(1); % Fa una pausa di 1 secondo tra un gesto e l'altro
+                        fprintf("Massimo %.1f secondi rimanenti.\n", time_left-1);
                     end
-
-
-                    [a, t] = accellog(m);
-                    m.Logging = 0; % Disattivazione del logging
-                    m.discardlogs; % Cancellazione dei log
-
-
-                    samples.user(user).acquisition(n).acc = a; % Salvataggio nella struct
-
-
-                    % scelta_a = input("Premere 0 per uscire dalla raccolta.\nPremi 1 per una nuova acquisizione.\n");
-                    % if scelta_a == 0, disp("CHIUSURA");
-                    %     break;
-                    % else, if scelta_a ~= 1, fprintf("Codice non trovato.\n");
-                    % end
-                    % end
-                    % CAPIRE COME FARE WHILE CON BREAK CORRETTO (jump?)
-                    % if scelta_a == 0, return; end
                 end
-            % end % CAPIRE COME RISOLVERE QUESTO CICLO 
+                time = toc;
+                fprintf("Gesti eseguiti in %.1f secondi.\n", time);
+                if time < 20 % Se il tempo non e' scaduto va avanti
+                    time_out = false;
+                    fprintf("Rimanere fermo per %.1f secondi.\n", time_left);
+                    pause(time_left)
 
-            filename = "acc.mat";
-            save(filename, 'a');
-            fprintf("Dati salvati su %s\n", filename);
-            n = n + 1;
-            % end
-
-
-        case 3
-
-            %% Processing e Visualizzazione
-            DataProcessing;
-            VisualizeSTD;
+                else, fprintf("Tempo di 20 secondi superati. Riavvio raccolta.\n");
+                end
+            otherwise, disp("Valore non trovato");
+        end
 
 
-        case 0
+        [a, t] = accellog(m);
+        m.Logging = 0; % Disattivazione del logging
+        m.discardlogs; % Cancellazione dei log
 
-            %% Uscita
-            fprintf("CHIUSURA PROGRAMMA\n");
-            break; % Interrompe il ciclo
 
-        otherwise, fprintf("Indice non trovato.\n"); % L'utente torna al menu
+        samples.user(user).acquisition(n).acc = a; % Salvataggio nella struct
+
+        while true
+            scelta_a = input("Premere 0 per uscire dalla raccolta.\nPremi 1 per una nuova acquisizione.\n");
+            if scelta_a == 0, disp("CHIUSURA");
+                return;
+            else, if scelta_a ~= 1, fprintf("Codice non trovato.\n");
+            else, break;
+                    end
+            end
+            % CAPIRE COME FARE WHILE CON BREAK CORRETTO (jump?)
+            % if scelta_a == 0, return; end
+        end
     end
-end
+end % CAPIRE COME RISOLVERE QUESTO CICLO
+
+filename = "acc.mat";
+save(filename, 'a');
+fprintf("Dati salvati su %s\n", filename);
+n = n + 1;
+% end
