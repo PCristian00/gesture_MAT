@@ -116,7 +116,7 @@ while (l)
             
             filename = "acc.mat";
             save(filename, 'a');
-            disp(['Dati salvati su ', filename]);
+            fprintf("Dati salvati su %s",filename);
             n = n + 1;
 
 
