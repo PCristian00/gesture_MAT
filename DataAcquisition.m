@@ -2,18 +2,25 @@
 clear m;
 clearvars;
 % n = 1; % Rimuovere (DA RICAVARE DALLA STRUCT!)
-acc=0;
-acquisition = struct('acc',{0});
+acc = 0;
+
+save_index = ones(1, 4); % Contatore acquisizioni, salvare su file!!!
+disp(save_index)
+
+acquisition = struct('acc', {0});
 samples = struct();
 
 for i = 1:4
-samples.user(i).acquisition = acquisition;
-% 
-%     % samples.user(user).acquisition(n).acc = a;
+    samples.user(i).acquisition = acquisition;
+    %
+    %     % samples.user(user).acquisition(n).acc = a;
 end
 
 %% RISOLVERE (1 INDICE PER OGNI UTENTE? RACCOGLIERE ULTIMO INDICE PER OGNI UTENTE?)
-disp("STOP!");
+
+%% PROVARE CREANDO UNA MATRICE / ARRAY DI INDICI CHE TIENE IL CONTO DELLE ACQUISIZIONI EFFETTUATE PER OGNI UTENTE
+
+%% LA MATRICE VA SALVATA SU UN FILE E CARICATA AD OGNI ESECUZIONE
 disp('Aprire MATLAB Mobile sul dispositivo e premere un tasto.');
 pause; % Attesa del tasto
 disp("Attendere...")
@@ -53,9 +60,21 @@ while true % Finche' l'utente vuole fare nuove acquisizioni con lo stesso dispos
         % disp("Riga randomizzata")
         disp(gesture)
 
-        n = length(samples.user(user).acquisition);
-        disp(n);
-        % disp(samples.user(user))
+        %% DA TESTARE
+        disp("Acquisizioni")
+        disp(save_index)
+
+        % for i = 1:numel(fieldnames(samples.user(user).acquisition))
+        %     disp("a");
+        % end
+
+        %% PARTE CHE NON FUNZIONA
+        % acq=samples.user(user);
+        % disp(samples.user(user));
+        % n = numel(fieldnames(samples.user(user).acquisition));
+        % numel(fieldnames(Structure))
+        % disp(n);
+        % disp(samples.user(use))
 
         while (true)
             scelta_r = input("Scegliere metodo di raccolta.\n"+ ...
@@ -137,14 +156,15 @@ while true % Finche' l'utente vuole fare nuove acquisizioni con lo stesso dispos
         m.discardlogs; % Cancellazione dei log
 
 
-        if (n <= 1)
+        if (save_index(user) <= 1)
             disp("n min o uguale a 1")
-            samples.user(user).acquisition(n).acc = a; % Salvataggio nella struct
-            n = n + 1;
+            save_index(user) = save_index(user) + 1;
+            samples.user(user).acquisition(save_index(user)).acc = a; % Salvataggio nella struct
+            % n = n + 1;
         else
             disp("n maggiore di 1")
-            n = n + 1;
-            samples.user(user).acquisition(n).acc = a; % Salvataggio nella struct
+            save_index(user) = save_index(user) + 1;
+            samples.user(user).acquisition(save_index(user)).acc = a; % Salvataggio nella struct
         end
 
         filename = "acc.mat";
