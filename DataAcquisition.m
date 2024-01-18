@@ -1,6 +1,15 @@
 %% Avvio acquisizione
-clear m;
+clear m; clearvars;
 n = 1; % Rimuovere (DA RICAVARE DALLA STRUCT!)
+
+acquisition=struct();
+samples = struct('user',acquisition);
+
+% for i = 1:4
+%     %acquisition
+%     samples.user(i)=acquisition;
+%     % samples.user(user).acquisition(n).acc = a;
+% end
 
 %% RISOLVERE (1 INDICE PER OGNI UTENTE? RACCOGLIERE ULTIMO INDICE PER OGNI UTENTE?)
 
@@ -42,6 +51,9 @@ while true % Finche' l'utente vuole fare nuove acquisizioni con lo stesso dispos
         gesture = gesture(randperm(length(gesture))); % Randomizzazione ordine gesti
         % disp("Riga randomizzata")
         disp(gesture)
+        % n = samples.user(user);
+        % disp(length(n));
+        % disp(samples.user(user))
 
         while (true)
             scelta_r = input("Scegliere metodo di raccolta.\n"+ ...
