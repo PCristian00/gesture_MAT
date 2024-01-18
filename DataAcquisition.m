@@ -1,18 +1,19 @@
 %% Avvio acquisizione
-clear m; clearvars;
-n = 1; % Rimuovere (DA RICAVARE DALLA STRUCT!)
+clear m;
+clearvars;
+% n = 1; % Rimuovere (DA RICAVARE DALLA STRUCT!)
+acc=0;
+acquisition = struct('acc',{0});
+samples = struct();
 
-acquisition=struct();
-samples = struct('user',acquisition);
-
-% for i = 1:4
-%     %acquisition
-%     samples.user(i)=acquisition;
+for i = 1:4
+samples.user(i).acquisition = acquisition;
+% 
 %     % samples.user(user).acquisition(n).acc = a;
-% end
+end
 
 %% RISOLVERE (1 INDICE PER OGNI UTENTE? RACCOGLIERE ULTIMO INDICE PER OGNI UTENTE?)
-
+disp("STOP!");
 disp('Aprire MATLAB Mobile sul dispositivo e premere un tasto.');
 pause; % Attesa del tasto
 disp("Attendere...")
@@ -51,8 +52,9 @@ while true % Finche' l'utente vuole fare nuove acquisizioni con lo stesso dispos
         gesture = gesture(randperm(length(gesture))); % Randomizzazione ordine gesti
         % disp("Riga randomizzata")
         disp(gesture)
-        % n = samples.user(user);
-        % disp(length(n));
+
+        n = length(samples.user(user).acquisition);
+        disp(n);
         % disp(samples.user(user))
 
         while (true)
@@ -80,7 +82,8 @@ while true % Finche' l'utente vuole fare nuove acquisizioni con lo stesso dispos
                     if time <= 20, time_out = false;
                         time_left = 20 - time;
                         fprintf("Rimanere fermo per %.1f secondi.\n", time_left);
-                        pause(time_left)
+                        % TOLTO PER TEST RAPIDI, RIMETTERE PAUSA
+                        % pause(time_left)
                         break;
                     end
 
@@ -133,12 +136,20 @@ while true % Finche' l'utente vuole fare nuove acquisizioni con lo stesso dispos
         m.Logging = 0; % Disattivazione del logging
         m.discardlogs; % Cancellazione dei log
 
-        samples.user(user).acquisition(n).acc = a; % Salvataggio nella struct
+
+        if (n <= 1)
+            disp("n min o uguale a 1")
+            samples.user(user).acquisition(n).acc = a; % Salvataggio nella struct
+            n = n + 1;
+        else
+            disp("n maggiore di 1")
+            n = n + 1;
+            samples.user(user).acquisition(n).acc = a; % Salvataggio nella struct
+        end
 
         filename = "acc.mat";
         save(filename, 'a'); % Dovrebbe salvare samples, modificare in seguito
         fprintf("Dati salvati su %s\n", filename);
-        n = n + 1;
 
         while true
             scelta_a = input("Premere 0 per uscire dalla raccolta.\nPremi 1 per una nuova acquisizione.\n");

@@ -1,12 +1,14 @@
 %% Avvio acquisizione
 clear m;
+clearvars;
 n = 1; % Rimuovere (DA RICAVARE DALLA STRUCT!)
-ac
-samples = struct("user", {1, 2, 3, 4});
+
+acquisition = struct();
+samples = struct('user', acquisition);
 
 for i = 1:4
     %acquisition
-    samples.user(user).acquisition = struct("acc");
+    samples.user(i)=acquisition;
     % samples.user(user).acquisition(n).acc = a;
 end
 
@@ -50,9 +52,9 @@ while true % Finche' l'utente vuole fare nuove acquisizioni con lo stesso dispos
         gesture = gesture(randperm(length(gesture))); % Randomizzazione ordine gesti
         % disp("Riga randomizzata")
         disp(gesture)
-        % n = samples.user(user);
-        % disp(length(n));
-        disp(length(samples.user(user)))
+         n = length(samples.user(user);
+         disp(length(n));
+        % disp(samples.user(user))
 
         while (true)
             scelta_r = input("Scegliere metodo di raccolta.\n"+ ...
@@ -79,7 +81,8 @@ while true % Finche' l'utente vuole fare nuove acquisizioni con lo stesso dispos
                     if time <= 20, time_out = false;
                         time_left = 20 - time;
                         fprintf("Rimanere fermo per %.1f secondi.\n", time_left);
-                        pause(time_left)
+                        % TOLTO PER TEST RAPIDI, RIMETTERE PAUSA
+                        % pause(time_left)
                         break;
                     end
 
@@ -132,12 +135,16 @@ while true % Finche' l'utente vuole fare nuove acquisizioni con lo stesso dispos
         m.Logging = 0; % Disattivazione del logging
         m.discardlogs; % Cancellazione dei log
 
-        samples.user(user).acquisition(n).acc = a; % Salvataggio nella struct
+        test=length(n);
+        if(length(n)<=1)
+        test=test+1;
+        end
+        samples.user(user).acquisition(test).acc = a; % Salvataggio nella struct
 
         filename = "acc.mat";
         save(filename, 'a'); % Dovrebbe salvare samples, modificare in seguito
         fprintf("Dati salvati su %s\n", filename);
-        n = n + 1;
+        % n = n + 1;
 
         while true
             scelta_a = input("Premere 0 per uscire dalla raccolta.\nPremi 1 per una nuova acquisizione.\n");
