@@ -1,6 +1,6 @@
 %% Avvio acquisizione
 clear m;
-n = 1;
+n = 1; % Rimuovere (DA RICAVARE DALLA STRUCT!)
 
 %% RISOLVERE (1 INDICE PER OGNI UTENTE? RACCOGLIERE ULTIMO INDICE PER OGNI UTENTE?)
 
@@ -34,14 +34,11 @@ while true % Finche' l'utente vuole fare nuove acquisizioni con lo stesso dispos
             if user < 1 || user > 4
                 disp("Indice non trovato.")
             else
-                % disp(user);
-                gesture = gestures(user, :);
-                % disp(gesture);
                 break;
             end
         end
 
-
+        gesture = gestures(user, :);
         gesture = gesture(randperm(length(gesture))); % Randomizzazione ordine gesti
         % disp("Riga randomizzata")
         disp(gesture)
