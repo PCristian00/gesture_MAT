@@ -59,8 +59,7 @@ while true % Finche' l'utente vuole fare nuove acquisizioni con lo stesso dispos
 
                 tic; % Avvio timer
 
-                % RISOLVERE STAMPA
-                fprintf("Gesti da eseguire, in questo ordine:\n"+ ...
+                fprintf("\nGesti da eseguire, in questo ordine:\n"+ ...
                     "%s %s %s %s\n"+ ...
                     "Fare una pausa di almeno 1 secondo tra un gesto e l'altro.\n"+ ...
                     "Premere un tasto una volta finito.\n", gesture);
@@ -116,6 +115,7 @@ while true % Finche' l'utente vuole fare nuove acquisizioni con lo stesso dispos
             otherwise, disp("Valore non trovato");
         end
 
+        dips("")
 
         [a, t] = accellog(m);
         m.Logging = 0; % Disattivazione del logging

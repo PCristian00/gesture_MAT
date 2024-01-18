@@ -46,81 +46,90 @@ while true % Finche' l'utente vuole fare nuove acquisizioni con lo stesso dispos
         % disp("Riga randomizzata")
         disp(gesture)
 
-        scelta_r = input("Scegliere metodo di raccolta.\n"+ ...
-            "0 - Normale: 1 tasto per avviare, 4 gesti\n"+ ...
-            "1 - Guidato: 1 gesto alla volta, con intervalli guidati\n");
-        switch (scelta_r)
-            case 0
-                % disp("DA IMPLEMENTARE");
-                disp('Premi un tasto per avviare il logging...');
-                pause; % Attesa del tasto
-                disp('Logging avviato.');
-                m.Logging = 1;
-
-                tic; % Avvio timer
-                
-                fprintf("\nGesti da eseguire, in questo ordine:\n"+ ...
-                    "%s %s %s %s\n"+ ...
-                    "Fare una pausa di almeno 1 secondo tra un gesto e l'altro.\n"+ ...
-                    "Premere un tasto una volta finito.\n", gesture);
-                pause;
-                time = toc;
-                fprintf("Gesti eseguiti in %.1f secondi.\n", time);
-                % VEDERE SE MANCA IL COMPLETAMENTO (vedi riga 106 circa)
-                if time <= 20, time_out = false;
-                    time_left = 20 - time;
-                    fprintf("Rimanere fermo per %.1f secondi.\n", time_left);
-                    pause(time_left)
-                    break;
-                end
-
-                % VEDERE SE SALVA
-
-            case 1
-                disp('Premi un tasto per avviare il logging...');
-                pause; % Attesa del tasto
-                disp('Logging avviato.');
-
-                m.Logging = 1;
-
-                tic; % Avvio timer
-
-                for i = 1:4 % Raccolta dei 4 gesti
-                    fprintf("Eseguire gesto %d:\t %s\n", i, gesture(i));
-                    % disp(gesti(i))
-                    disp('Premi un tasto quando il gesto è completo.');
+        while (true)
+            scelta_r = input("Scegliere metodo di raccolta.\n"+ ...
+                "0 - Normale: 1 tasto per avviare, 4 gesti\n"+ ...
+                "1 - Guidato: 1 gesto alla volta, con intervalli guidati\n");
+            switch (scelta_r)
+                case 0
+                    % disp("DA IMPLEMENTARE");
+                    disp('Premi un tasto per avviare il logging...');
                     pause; % Attesa del tasto
+                    disp('Logging avviato.');
+                    m.Logging = 1;
 
-                    time = toc; % Conteggio tempo impiegato
-                    time_left = 20 - time; % Calcolo tempo rimanente
+                    tic; % Avvio timer
 
-                    if time >= 20, break % Se il tempo e' esaurito il ciclo viene interrotto
+                    fprintf("\nGesti da eseguire, in questo ordine:\n"+ ...
+                        "%s %s %s %s\n"+ ...
+                        "Fare una pausa di almeno 1 secondo tra un gesto e l'altro.\n"+ ...
+                        "Premere un tasto una volta finito.\n", gesture);
+                    pause;
+                    time = toc;
+                    fprintf("Gesti eseguiti in %.1f secondi.\n", time);
+
+                    if time <= 20, time_out = false;
+                        time_left = 20 - time;
+                        fprintf("Rimanere fermo per %.1f secondi.\n", time_left);
+                        pause(time_left)
+                        break;
                     end
 
-                    if i ~= 4
-                        disp("Attendere...");
-                        pause(1); % Fa una pausa di 1 secondo tra un gesto e l'altro
-                        fprintf("Massimo %.1f secondi rimanenti.\n", time_left-1);
-                    end
-                end
-                time = toc;
-                fprintf("Gesti eseguiti in %.1f secondi.\n", time);
-                if time < 20 % Se il tempo non e' scaduto va avanti
-                    time_out = false;
-                    fprintf("Rimanere fermo per %.1f secondi.\n", time_left);
-                    pause(time_left)
+                    break
 
-                else, fprintf("Tempo di 20 secondi superati. Riavvio raccolta.\n");
-                end
-            otherwise, disp("Valore non trovato");
+                case 1
+                    disp('Premi un tasto per avviare il logging...');
+                    pause; % Attesa del tasto
+                    disp('Logging avviato.');
+
+                    m.Logging = 1;
+
+                    tic; % Avvio timer
+
+                    for i = 1:4 % Raccolta dei 4 gesti
+                        fprintf("Eseguire gesto %d:\t %s\n", i, gesture(i));
+                        % disp(gesti(i))
+                        disp('Premi un tasto quando il gesto è completo.');
+                        pause; % Attesa del tasto
+
+                        time = toc; % Conteggio tempo impiegato
+                        time_left = 20 - time; % Calcolo tempo rimanente
+
+                        if time >= 20, break % Se il tempo e' esaurito il ciclo viene interrotto
+                        end
+
+                        if i ~= 4
+                            disp("Attendere...");
+                            pause(1); % Fa una pausa di 1 secondo tra un gesto e l'altro
+                            fprintf("Massimo %.1f secondi rimanenti.\n", time_left-1);
+                        end
+                    end
+                    time = toc;
+                    fprintf("Gesti eseguiti in %.1f secondi.\n", time);
+                    if time < 20 % Se il tempo non e' scaduto va avanti
+                        time_out = false;
+                        fprintf("Rimanere fermo per %.1f secondi.\n", time_left);
+                        pause(time_left)
+
+                    else, fprintf("Tempo di 20 secondi superati. Riavvio raccolta.\n");
+
+                    end
+                    break
+
+                otherwise, disp("Valore non trovato");
+            end
         end
-
 
         [a, t] = accellog(m);
         m.Logging = 0; % Disattivazione del logging
         m.discardlogs; % Cancellazione dei log
 
         samples.user(user).acquisition(n).acc = a; % Salvataggio nella struct
+
+        filename = "acc.mat";
+        save(filename, 'a'); % Dovrebbe salvare samples, modificare in seguito
+        fprintf("Dati salvati su %s\n", filename);
+        n = n + 1;
 
         while true
             scelta_a = input("Premere 0 per uscire dalla raccolta.\nPremi 1 per una nuova acquisizione.\n");
@@ -134,9 +143,3 @@ while true % Finche' l'utente vuole fare nuove acquisizioni con lo stesso dispos
         end
     end
 end
-
-filename = "acc.mat";
-save(filename, 'a');
-fprintf("Dati salvati su %s\n", filename);
-n = n + 1;
-% end
