@@ -58,16 +58,19 @@ while true % Finche' l'utente vuole fare nuove acquisizioni con lo stesso dispos
                 m.Logging = 1;
 
                 tic; % Avvio timer
-
-                % RISOLVERE STAMPA
-                fprintf("Gesti da eseguire, in questo ordine:"+ ...
-                    "%s\n"+ ...
-                    "Fare una pausa di almeno 1 secondo tra un gesto e l'altro." + ...
-                    "Premere un tasto una volta finito.", gesture);
+                
+                fprintf("\nGesti da eseguire, in questo ordine:\n"+ ...
+                    "%s %s %s %s\n"+ ...
+                    "Fare una pausa di almeno 1 secondo tra un gesto e l'altro.\n"+ ...
+                    "Premere un tasto una volta finito.\n", gesture);
                 pause;
                 time = toc;
+                fprintf("Gesti eseguiti in %.1f secondi.\n", time);
                 % VEDERE SE MANCA IL COMPLETAMENTO (vedi riga 106 circa)
                 if time <= 20, time_out = false;
+                    time_left = 20 - time;
+                    fprintf("Rimanere fermo per %.1f secondi.\n", time_left);
+                    pause(time_left)
                     break;
                 end
 
@@ -116,7 +119,6 @@ while true % Finche' l'utente vuole fare nuove acquisizioni con lo stesso dispos
         [a, t] = accellog(m);
         m.Logging = 0; % Disattivazione del logging
         m.discardlogs; % Cancellazione dei log
-
 
         samples.user(user).acquisition(n).acc = a; % Salvataggio nella struct
 
