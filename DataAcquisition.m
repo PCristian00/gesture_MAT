@@ -214,35 +214,10 @@ while true % Finche' l'utente vuole fare nuove acquisizioni con lo stesso dispos
             end
         end
 
-        % [a, t] = accellog(m); % Logging accelerometro
-        % [mag, t] = magfieldlog(m); % Logging campo magnetico
-        % [ang_vel, t] = angvellog(m); % Logging velocita' angolare
-        % [orientation, t] = orientlog(m); % Logging orientamento
-
-        [a, ~] = accellog(m); % Logging accelerometro
-        [mag, ~] = magfieldlog(m); % Logging campo magnetico
-        [ang_vel, ~] = angvellog(m); % Logging velocita' angolare
-        [orientation, t] = orientlog(m); % Logging orientamento
-
-        % switch (scelta_s)
-        %     case 1
-        %         [a, t] = accellog(m); % Logging accelerometro
-        %     case 2
-        %         [mag, t] = magfieldlog(m); % Logging campo magnetico
-        %     case 3
-        %         [ang_vel, t] = angvellog(m); % Logging velocita' angolare
-        %     case 4
-        %         [orientation, t] = orientlog(m); % Logging orientamento
-        %     case 5
-        %         [a, ~] = accellog(m); % Logging accelerometro
-        %         [mag, ~] = magfieldlog(m); % Logging campo magnetico
-        %         [ang_vel, ~] = angvellog(m); % Logging velocita' angolare
-        %         [orientation, t] = orientlog(m); % Logging orientamento
-        %     otherwise, disp("Errore nel logging.");
-        % end
-
-        % [pos,t]=poslog(m); % Logging posizione (NON VARIA CON I GESTI)
-
+        [a, t1] = accellog(m); % Logging accelerometro
+        [mag, t2] = magfieldlog(m); % Logging campo magnetico
+        [ang_vel, t3] = angvellog(m); % Logging velocita' angolare
+        [orientation, t4] = orientlog(m); % Logging orientamento
 
         m.Logging = 0; % Disattivazione del logging
         m.discardlogs; % Cancellazione dei log
@@ -252,23 +227,6 @@ while true % Finche' l'utente vuole fare nuove acquisizioni con lo stesso dispos
         samples.user(user).acquisition(save_index(user)).hand = hand; % Salvataggio mano (VA IN CSV)
         samples.user(user).acquisition(save_index(user)).device = m.device; % Salvataggio dispositivo (VA IN CSV)
         samples.user(user).acquisition(save_index(user)).sensors = scelta_s;
-        % Salvataggio nella struct
-        %  switch (scelta_s)
-        %     case 1
-        %         samples.user(user).acquisition(save_index(user)).acc = a; % Salvataggio accelerazione
-        %     case 2
-        %         samples.user(user).acquisition(save_index(user)).mag = mag; % Salvataggio campo magnetico
-        %     case 3
-        %         samples.user(user).acquisition(save_index(user)).ang_vel = ang_vel; % Salvataggio velocita' angolare
-        %     case 4
-        %         samples.user(user).acquisition(save_index(user)).orientation = orientation; % Salvataggio orientamento
-        %     case 5
-        %         samples.user(user).acquisition(save_index(user)).acc = a; % Salvataggio accelerazione
-        %         samples.user(user).acquisition(save_index(user)).mag = mag; % Salvataggio campo magnetico
-        %         samples.user(user).acquisition(save_index(user)).orientation = orientation; % Salvataggio orientamento
-        %         samples.user(user).acquisition(save_index(user)).ang_vel = ang_vel; % Salvataggio velocita' angolare
-        %     otherwise, disp("Errore nel logging.");
-        % end
 
         % Salvataggio nella struct
         samples.user(user).acquisition(save_index(user)).acc = a; % Salvataggio accelerazione

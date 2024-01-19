@@ -43,8 +43,6 @@ while true % Finche' l'utente vuole fare nuove acquisizioni con lo stesso dispos
 
     %% Attivazione sensori
 
-    % NOTA!
-    % CAPITA 
     while true
         scelta_s = input("Scegliere sensori da attivare:\n"+ ...
             "1 - Accelerometro\n"+ ...
@@ -216,40 +214,20 @@ while true % Finche' l'utente vuole fare nuove acquisizioni con lo stesso dispos
             end
         end
 
-        % [a, t] = accellog(m); % Logging accelerometro
-        % [mag, t] = magfieldlog(m); % Logging campo magnetico
-        % [ang_vel, t] = angvellog(m); % Logging velocita' angolare
-        % [orientation, t] = orientlog(m); % Logging orientamento
-
-        [a, ~] = accellog(m); % Logging accelerometro
-        [mag, ~] = magfieldlog(m); % Logging campo magnetico
-        [ang_vel, ~] = angvellog(m); % Logging velocita' angolare
-        [orientation, t] = orientlog(m); % Logging orientamento
-
-        % switch (scelta_s)
-        %     case 1
-        %         [a, t] = accellog(m); % Logging accelerometro
-        %     case 2
-        %         [mag, t] = magfieldlog(m); % Logging campo magnetico
-        %     case 3
-        %         [ang_vel, t] = angvellog(m); % Logging velocita' angolare
-        %     case 4
-        %         [orientation, t] = orientlog(m); % Logging orientamento
-        %     case 5
-        %         [a, ~] = accellog(m); % Logging accelerometro
-        %         [mag, ~] = magfieldlog(m); % Logging campo magnetico
-        %         [ang_vel, ~] = angvellog(m); % Logging velocita' angolare
-        %         [orientation, t] = orientlog(m); % Logging orientamento
-        %     otherwise, disp("Errore nel logging.");
-        % end
-
-        % [pos,t]=poslog(m); % Logging posizione (NON VARIA CON I GESTI)
-
+        [a, t1] = accellog(m); % Logging accelerometro
+        [mag, t2] = magfieldlog(m); % Logging campo magnetico
+        [ang_vel, t3] = angvellog(m); % Logging velocita' angolare
+        [orientation, t4] = orientlog(m); % Logging orientamento
 
         m.Logging = 0; % Disattivazione del logging
         m.discardlogs; % Cancellazione dei log
 
         save_index(user) = save_index(user) + 1; % Incrementa le acquisioni fatte dall'utente
+
+        samples.user(user).acquisition(save_index(user)).hand = hand; % Salvataggio mano (VA IN CSV)
+        samples.user(user).acquisition(save_index(user)).device = m.device; % Salvataggio dispositivo (VA IN CSV)
+        samples.user(user).acquisition(save_index(user)).sensors = scelta_s;
+
         % Salvataggio nella struct
         samples.user(user).acquisition(save_index(user)).acc = a; % Salvataggio accelerazione
 
@@ -258,11 +236,6 @@ while true % Finche' l'utente vuole fare nuove acquisizioni con lo stesso dispos
         samples.user(user).acquisition(save_index(user)).ang_vel = ang_vel; % Salvataggio velocita' angolare
 
         % samples.user(user).acquisition(save_index(user)).pos = pos; % Salvataggio posizione (NON VARIA CON I GESTI)
-
-
-        samples.user(user).acquisition(save_index(user)).hand = hand; % Salvataggio mano (VA IN CSV)
-        samples.user(user).acquisition(save_index(user)).device = m.device; % Salvataggio dispositivo (VA IN CSV)
-        % samples.user(user).acquisition(save_index(user)).sensors = sensors;
 
         filename = "acc.mat";
         save(filename, 'a'); % Salvataggio accelerazione singola (da rimuovere)
