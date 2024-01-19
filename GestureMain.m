@@ -29,7 +29,7 @@ while true % Mantiene il programma attivo finche' non viene scelto di uscire dal
 
             %% Processing e Visualizzazione
             DataProcessing;
-            VisualizeSTD;
+            % VisualizeSTD;
 
         case 0
 

@@ -164,8 +164,8 @@ while true % Finche' l'utente vuole fare nuove acquisizioni con lo stesso dispos
                         time_out = false;
                         time_left = 20 - time;
                         fprintf("Rimanere fermo per %.1f secondi.\n", time_left);
-                        % TOLTO PER TEST RAPIDI, RIMETTERE PAUSA
-                        % pause(time_left)
+                        % TOGLIERE PAUSA PER FARE TEST PIù RAPIDI
+                        pause(time_left)
                         break;
                     end
 
