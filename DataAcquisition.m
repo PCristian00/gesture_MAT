@@ -5,9 +5,10 @@ while true
     fprintf("Caricare file?\n"+ ...
         "1 - Si\n"+ ...
         "0 - No\n");
-    scelta_c = input("");    
+    scelta_c = input("");
     if (scelta_c == 1)
-        disp("FARE CARICAMENTO")
+        load("save_index.mat")
+        load("samples.mat")
         break
     else
         if scelta_c == 0
@@ -15,7 +16,7 @@ while true
             disp(save_index)
             break
         else
-            disp("RIPROVA")
+            fprintf("Indice non trovato.\n");
         end
     end
 end
