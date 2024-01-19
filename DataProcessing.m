@@ -43,7 +43,38 @@ end
             x = acc(:, 1);
             y = acc(:, 2);
             z = acc(:, 3);
-            acc = sqrt(sum(x.^2+y.^2+z.^2, 2));
+            acc = sqrt(sum(x.^2+y.^2+z.^2, 2));        
+
+            acc = acc - mean(acc);
+
+            window_size = 20; % Imposta la dimensione della finestra
+            movestd_signal = movstd(acc, window_size);
+            
+            % Definizione soglia per movimento e quiete
+            threshold = 0.45; % Soglia iniziale = 0.45
+            
+            % Identifica quiete e movimento in base alla soglia
+            stillness_indices = find(movestd_signal <= threshold);
+            movement_indices = find(movestd_signal > threshold);
+            
+            % Provare a controllare ogni 100 indici? Per scoprire veri gesti 
+            
+            % Plot del segnale originale
+            figure;
+            plot(acc);
+            
+            % Evidenzia quiete in blu
+            hold on; % scatter(X, Y) draws markers at the locations specified by X and Y
+            scatter(stillness_indices, acc(stillness_indices), 'b', 'filled');
+            
+            % Evidenzia movimento in rosso
+            scatter(movement_indices, acc(movement_indices), 'r', 'filled');
+            
+            title('Segmentazione approssimata di Quiete e Movimento usando Movestd');
+            xlabel('Campioni');
+            ylabel('Accelerazione');
+            legend('Segnale Accelerazione', 'Quiete', 'Movimento');
+
         case 2
             mag = samples.user(user).acquisition(scelta_a).mag;
             plot(mag);
@@ -54,6 +85,36 @@ end
             y = mag(:, 2);
             z = mag(:, 3);
             mag = sqrt(sum(x.^2+y.^2+z.^2, 2));
+
+            mag = mag - mean(mag);
+
+            window_size = 20; % Imposta la dimensione della finestra
+            movestd_signal = movstd(mag, window_size);
+            
+            % Definizione soglia per movimento e quiete
+            threshold = 0.45; % Soglia iniziale = 0.45
+            
+            % Identifica quiete e movimento in base alla soglia
+            stillness_indices = find(movestd_signal <= threshold);
+            movement_indices = find(movestd_signal > threshold);
+            
+            % Provare a controllare ogni 100 indici? Per scoprire veri gesti 
+            
+            % Plot del segnale originale
+            figure;
+            plot(mag);
+            
+            % Evidenzia quiete in blu
+            hold on; % scatter(X, Y) draws markers at the locations specified by X and Y
+            scatter(stillness_indices, mag(stillness_indices), 'b', 'filled');
+            
+            % Evidenzia movimento in rosso
+            scatter(movement_indices, mag(movement_indices), 'r', 'filled');
+            
+            title('Segmentazione approssimata di Quiete e Movimento usando Movestd');
+            xlabel('Campioni');
+            ylabel('Campo Magnetico');
+            legend('Segnale C. Magnetico', 'Quiete', 'Movimento');
         case 3
             orientation = samples.user(user).acquisition(scelta_a).orientation;
             plot(orientation);
@@ -64,6 +125,36 @@ end
             y = orientation(:, 2);
             z = orientation(:, 3);
             orientation = sqrt(sum(x.^2+y.^2+z.^2, 2));
+
+            orientation = orientation - mean(orientation);
+
+            window_size = 20; % Imposta la dimensione della finestra
+            movestd_signal = movstd(orientation, window_size);
+            
+            % Definizione soglia per movimento e quiete
+            threshold = 0.45; % Soglia iniziale = 0.45
+            
+            % Identifica quiete e movimento in base alla soglia
+            stillness_indices = find(movestd_signal <= threshold);
+            movement_indices = find(movestd_signal > threshold);
+            
+            % Provare a controllare ogni 100 indici? Per scoprire veri gesti 
+            
+            % Plot del segnale originale
+            figure;
+            plot(orientation);
+            
+            % Evidenzia quiete in blu
+            hold on; % scatter(X, Y) draws markers at the locations specified by X and Y
+            scatter(stillness_indices, orientation(stillness_indices), 'b', 'filled');
+            
+            % Evidenzia movimento in rosso
+            scatter(movement_indices, orientation(movement_indices), 'r', 'filled');
+            
+            title('Segmentazione approssimata di Quiete e Movimento usando Movestd');
+            xlabel('Campioni');
+            ylabel('Orientamento');
+            legend('Segnale Orientamento', 'Quiete', 'Movimento');
         case 4
             ang_vel = samples.user(user).acquisition(scelta_a).ang_vel;
             plot(ang_vel);
@@ -74,6 +165,36 @@ end
             y = ang_vel(:, 2);
             z = ang_vel(:, 3);
             ang_vel = sqrt(sum(x.^2+y.^2+z.^2, 2));
+
+            ang_vel = ang_vel - mean(ang_vel);
+
+            window_size = 20; % Imposta la dimensione della finestra
+            movestd_signal = movstd(ang_vel, window_size);
+            
+            % Definizione soglia per movimento e quiete
+            threshold = 0.45; % Soglia iniziale = 0.45
+            
+            % Identifica quiete e movimento in base alla soglia
+            stillness_indices = find(movestd_signal <= threshold);
+            movement_indices = find(movestd_signal > threshold);
+            
+            % Provare a controllare ogni 100 indici? Per scoprire veri gesti 
+            
+            % Plot del segnale originale
+            figure;
+            plot(ang_vel);
+            
+            % Evidenzia quiete in blu
+            hold on; % scatter(X, Y) draws markers at the locations specified by X and Y
+            scatter(stillness_indices, ang_vel(stillness_indices), 'b', 'filled');
+            
+            % Evidenzia movimento in rosso
+            scatter(movement_indices, ang_vel(movement_indices), 'r', 'filled');
+            
+            title('Segmentazione approssimata di Quiete e Movimento usando Movestd');
+            xlabel('Campioni');
+            ylabel('Velocità Angolare');
+            legend('Segnale Velocità Angolare', 'Quiete', 'Movimento');
         case 5
             disp("DA CAPIRE")
         otherwise, disp("Indice non trovato.");

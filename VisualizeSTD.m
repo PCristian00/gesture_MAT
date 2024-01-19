@@ -12,15 +12,6 @@ signal = signal - mean(signal);
 window_size = 20; % Imposta la dimensione della finestra
 movestd_signal = movstd(signal, window_size);
 
-%figure;
-
-% plot(signal); hold on;
-% plot(movestd_signal, 'g--', 'LineWidth', 2);
-% title('Movestd of Acceleration Signal');
-% xlabel('Samples');
-% ylabel('Acceleration');
-% legend('Acceleration Signal', 'Movestd');
-
 % Definizione soglia per movimento e quiete
 threshold = 0.45; % Soglia iniziale = 0.45
 
@@ -45,3 +36,14 @@ title('Segmentazione approssimata di Quiete e Movimento usando Movestd');
 xlabel('Campioni');
 ylabel('Accelerazione');
 legend('Segnale Accelerazione', 'Quiete', 'Movimento');
+
+%figure;
+
+% plot(signal); hold on;
+% plot(movestd_signal, 'g--', 'LineWidth', 2);
+% title('Movestd of Acceleration Signal');
+% xlabel('Samples');
+% ylabel('Acceleration');
+% legend('Acceleration Signal', 'Movestd');
+
+
