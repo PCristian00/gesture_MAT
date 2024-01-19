@@ -40,11 +40,10 @@ fprintf("Dispositivo %s connesso con successo.\n", m.Device)
 
 %% Attivazione sensori
 m.AccelerationSensorEnabled = 1;
-
-% COMPLETARE QUESTA PARTE E AGGIUNGERE AL SALVATAGGIo
-% m.AngularVelocitySensorEnabled = 1;
-% m.MagneticSensorEnabled = 1;
-% m.OrientationSensorEnabled = 1;
+m.MagneticSensorEnabled = 1;
+m.OrientationSensorEnabled = 1;
+m.AngularVelocitySensorEnabled = 1;
+% m.PositionSensorEnabled = 1; % NON VARIA CON I GESTI
 
 pause(0.5);
 sampling_frequency = 100; % Hz
@@ -171,13 +170,26 @@ while true % Finche' l'utente vuole fare nuove acquisizioni con lo stesso dispos
             end
         end
 
-        [a, t] = accellog(m);
+        [a, t] = accellog(m); % Logging accelerometro
+        [mag,t]=magfieldlog(m); % Logging campo magnetico
+        [ang_vel,t]=angvellog(m); % Logging velocita' angolare
+        [orientation,t]=orientlog(m); % Logging orientamento
+        % [pos,t]=poslog(m); % Logging posizione (NON VARIA CON I GESTI)
+
+
         m.Logging = 0; % Disattivazione del logging
         m.discardlogs; % Cancellazione dei log
 
         save_index(user) = save_index(user) + 1; % Incrementa le acquisioni fatte dall'utente
         % Salvataggio nella struct
         samples.user(user).acquisition(save_index(user)).acc = a; % Salvataggio accelerazione
+
+        samples.user(user).acquisition(save_index(user)).mag = mag; % Salvataggio campo magnetico
+        samples.user(user).acquisition(save_index(user)).orientation = orientation; % Salvataggio orientamento
+        samples.user(user).acquisition(save_index(user)).ang_vel = ang_vel; % Salvataggio velocita' angolare
+        
+        % samples.user(user).acquisition(save_index(user)).pos = pos; % Salvataggio posizione (NON VARIA CON I GESTI)
+        
 
         samples.user(user).acquisition(save_index(user)).hand = hand; % Salvataggio mano (VA IN CSV)
         samples.user(user).acquisition(save_index(user)).device = m.device; % Salvataggio dispositivo (VA IN CSV)
