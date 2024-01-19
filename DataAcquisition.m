@@ -7,7 +7,7 @@ while true
         "0 - No\n");
     scelta_c = input("");
     if (scelta_c == 1)
-        load("save_index.mat")
+        %load("save_index.mat")
         load("samples.mat")
         break
     else
@@ -150,12 +150,12 @@ while true % Finche' l'utente vuole fare nuove acquisizioni con lo stesso dispos
         save(filename, 'a'); % Salvataggio accelerazione singola (da rimuovere)
         fprintf("Dati salvati su %s\n", filename);
 
-        filename = "save_index.mat";
-        save(filename, 'save_index'); % Salvataggio indici di salvataggio
-        fprintf("Dati salvati su %s\n", filename);
+        % filename = "save_index.mat";
+        % save(filename, 'save_index'); % Salvataggio indici di salvataggio
+        % fprintf("Dati salvati su %s\n", filename);
 
         filename = "samples.mat";
-        save(filename, 'samples'); % Salvataggio campioni
+        save(filename, 'samples', 'save_index'); % Salvataggio campioni e indici di salvataggio
         fprintf("Dati salvati su %s\n", filename);
 
         while true
