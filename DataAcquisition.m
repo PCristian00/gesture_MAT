@@ -1,24 +1,36 @@
 %% Avvio acquisizione
 clear m;
 clearvars;
-while true
-    fprintf("Caricare file?\n"+ ...
-        "1 - Si\n"+ ...
-        "0 - No\n");
-    scelta_c = input("");
-    if (scelta_c == 1)
-        %load("save_index.mat")
-        load("samples.mat")
-        break
-    else
-        if scelta_c == 0
-            save_index = zeros(1, 4);
+
+if (isfile("samples.mat")) % Se il file esiste, chiede se deve essere caricato
+    % disp("FILE PRESENTE")
+    while true
+        fprintf("Caricare file?\n"+ ...
+            "1 - Si\n"+ ...
+            "0 - No\n");
+        scelta_c = input("");
+        if (scelta_c == 1)
+            %load("save_index.mat")
+            load("samples.mat")
+            fprintf("File caricato con successo.\n");
             disp(save_index)
+            disp(samples)
+
             break
         else
-            fprintf("Indice non trovato.\n");
+            if scelta_c == 0
+                fprintf("Creazione nuovo file.\n");
+                save_index = zeros(1, 4);
+                disp(save_index)
+                break
+            else
+                fprintf("Indice non trovato.\n");
+            end
         end
     end
+else, fprintf("File di salvataggio non trovato.\n");
+    save_index = zeros(1, 4);
+    disp(save_index)
 end
 
 

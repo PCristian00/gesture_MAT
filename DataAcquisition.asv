@@ -1,22 +1,27 @@
 %% Avvio acquisizione
 clear m;
 clearvars;
+
+if(isfile("samples.mat"))
 while true
     fprintf("Caricare file?\n"+ ...
         "1 - Si\n"+ ...
         "0 - No\n");
-    scelta_c = input();
+    scelta_c = input("");
     if (scelta_c == 1)
-        disp("FARE CARICAMENTO")
-        break;
+        %load("save_index.mat")
+        load("samples.mat")
+        break
     else
         if scelta_c == 0
             save_index = zeros(1, 4);
             disp(save_index)
+            break
         else
-            disp()
+            fprintf("Indice non trovato.\n");
         end
     end
+end
 end
 
 
@@ -148,12 +153,12 @@ while true % Finche' l'utente vuole fare nuove acquisizioni con lo stesso dispos
         save(filename, 'a'); % Salvataggio accelerazione singola (da rimuovere)
         fprintf("Dati salvati su %s\n", filename);
 
-        filename = "save_index.mat";
-        save(filename, 'save_index'); % Salvataggio indici di salvataggio
-        fprintf("Dati salvati su %s\n", filename);
+        % filename = "save_index.mat";
+        % save(filename, 'save_index'); % Salvataggio indici di salvataggio
+        % fprintf("Dati salvati su %s\n", filename);
 
         filename = "samples.mat";
-        save(filename, 'samples'); % Salvataggio campioni
+        save(filename, 'samples', 'save_index'); % Salvataggio campioni e indici di salvataggio
         fprintf("Dati salvati su %s\n", filename);
 
         while true
