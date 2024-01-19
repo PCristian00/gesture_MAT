@@ -5,17 +5,16 @@ while true
     fprintf("Caricare file?\n"+ ...
         "1 - Si\n"+ ...
         "0 - No\n");
-    scelta_c = input("");    
+    scelta_c = input();
     if (scelta_c == 1)
         disp("FARE CARICAMENTO")
-        break
+        break;
     else
         if scelta_c == 0
             save_index = zeros(1, 4);
             disp(save_index)
-            break
         else
-            disp("RIPROVA")
+            disp()
         end
     end
 end
