@@ -2,25 +2,26 @@
 clear m;
 clearvars;
 % n = 1; % Rimuovere (DA RICAVARE DALLA STRUCT!)
-acc = 0;
+% acc = 0;
 
-save_index = ones(1, 4); % Contatore acquisizioni, salvare su file!!!
+save_index = zeros(1, 4); % Contatore acquisizioni, salvare su file!!!
 disp(save_index)
 
-acquisition = struct('acc', {0});
-samples = struct();
-
-for i = 1:4
-    samples.user(i).acquisition = acquisition;
-    %
-    %     % samples.user(user).acquisition(n).acc = a;
-end
+%% FUNZIONAVA MA METTE IL CAMPO ACC = 0 come prima acquisizione che non viene sovrascritto
+% acquisition = struct('acc', {0});
+% samples = struct();
+% 
+% for i = 1:4
+%     samples.user(i).acquisition = acquisition;
+%     %
+%     %     % samples.user(user).acquisition(n).acc = a;
+% end
 
 %% RISOLVERE (1 INDICE PER OGNI UTENTE? RACCOGLIERE ULTIMO INDICE PER OGNI UTENTE?)
 
-%% PROVARE CREANDO UNA MATRICE / ARRAY DI INDICI CHE TIENE IL CONTO DELLE ACQUISIZIONI EFFETTUATE PER OGNI UTENTE
 
-%% LA MATRICE VA SALVATA SU UN FILE E CARICATA AD OGNI ESECUZIONE
+
+%% save_index VA SALVATO SU UN FILE E CARICATO AD OGNI ESECUZIONE
 disp('Aprire MATLAB Mobile sul dispositivo e premere un tasto.');
 pause; % Attesa del tasto
 disp("Attendere...")
@@ -60,7 +61,6 @@ while true % Finche' l'utente vuole fare nuove acquisizioni con lo stesso dispos
         % disp("Riga randomizzata")
         disp(gesture)
 
-        %% DA TESTARE
         disp("Acquisizioni")
         disp(save_index)
 
@@ -155,17 +155,19 @@ while true % Finche' l'utente vuole fare nuove acquisizioni con lo stesso dispos
         m.Logging = 0; % Disattivazione del logging
         m.discardlogs; % Cancellazione dei log
 
+        save_index(user) = save_index(user) + 1;
+            samples.user(user).acquisition(save_index(user)).acc = a; % Salvataggio nella struct
 
-        if (save_index(user) <= 1)
-            disp("n min o uguale a 1")
-            save_index(user) = save_index(user) + 1;
-            samples.user(user).acquisition(save_index(user)).acc = a; % Salvataggio nella struct
-            % n = n + 1;
-        else
-            disp("n maggiore di 1")
-            save_index(user) = save_index(user) + 1;
-            samples.user(user).acquisition(save_index(user)).acc = a; % Salvataggio nella struct
-        end
+
+        % if (save_index(user) <= 1)
+        %     disp("n min o uguale a 1")
+        % 
+        %     % n = n + 1;
+        % else
+        %     disp("n maggiore di 1")
+        %     save_index(user) = save_index(user) + 1;
+        %     samples.user(user).acquisition(save_index(user)).acc = a; % Salvataggio nella struct
+        % end
 
         filename = "acc.mat";
         save(filename, 'a'); % Dovrebbe salvare samples, modificare in seguito
