@@ -28,16 +28,18 @@ else, disp("Indice non trovato");
 end
 end
 
+scelta_s=samples.user(user).acquisition(scelta_a).sensors;
+
 while true
-        scelta_s = input("Scegliere sensori da mostrare:\n"+ ...
-            "1 - Accelerometro\n"+ ...
-            "2 - Magnetometro\n"+ ...
-            "3 - Orientazione\n"+ ...
-            "4 - Velocità angolare\n"+ ...
-            "5 - Tutti\n");
+        % scelta_s = input("Scegliere sensori da mostrare:\n"+ ...
+           % "1 - Accelerometro\n"+ ...
+            %"2 - Magnetometro\n"+ ...
+            % "3 - Orientazione\n"+ ...
+            % "4 - Velocità angolare\n"+ ...
+            % "5 - Tutti\n");
         switch (scelta_s)
             case 1
-                acc=samples.user(user).acquisition(scelta_s).acc;
+                acc=samples.user(user).acquisition(scelta_a).acc;
                 plot(acc);
                 legend('X', 'Y', 'Z');
                 xlabel('Campioni');
@@ -48,7 +50,7 @@ while true
                 acc = sqrt(sum(x.^2+y.^2+z.^2, 2));
                 break
             case 2
-                mag=samples.user(user).acquisition(scelta_s).mag;
+                mag=samples.user(user).acquisition(scelta_a).mag;
                 plot(mag);
                 legend('X', 'Y', 'Z');
                 xlabel('Campioni');
@@ -59,7 +61,7 @@ while true
                 mag = sqrt(sum(x.^2+y.^2+z.^2, 2));
                 break
             case 3
-                orientation=samples.user(user).acquisition(scelta_s).orientation;
+                orientation=samples.user(user).acquisition(scelta_a).orientation;
                 plot(orientation);
                 legend('Azimut', 'Beccheggio', 'Rollio');
                 xlabel('Campioni');
@@ -70,7 +72,7 @@ while true
                 mag = sqrt(sum(x.^2+y.^2+z.^2, 2));
                 break
             case 4
-                ang_vel=samples.user(user).acquisition(scelta_s).ang_vel;
+                ang_vel=samples.user(user).acquisition(scelta_a).ang_vel;
                 plot(ang_vel);
                 legend('X', 'Y', 'Z');
                 xlabel('Campioni');
