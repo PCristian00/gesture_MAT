@@ -38,19 +38,63 @@ disp("Attendere...")
 m = mobiledev;
 fprintf("Dispositivo %s connesso con successo.\n", m.Device)
 
-%% Attivazione sensori
-m.AccelerationSensorEnabled = 1;
-m.MagneticSensorEnabled = 1;
-m.OrientationSensorEnabled = 1;
-m.AngularVelocitySensorEnabled = 1;
-% m.PositionSensorEnabled = 1; % NON VARIA CON I GESTI
-
-pause(0.5);
-sampling_frequency = 100; % Hz
-m.SampleRate = sampling_frequency;
-
 %% Loop di acquisizione
 while true % Finche' l'utente vuole fare nuove acquisizioni con lo stesso dispositivo
+
+    %% Attivazione sensori
+
+    while true
+        scelta_s = input("Scegliere sensori da attivare:\n"+ ...
+            "1 - Accelerometro\n"+ ...
+            "2 - Magnetometro\n"+ ...
+            "3 - Orientazione\n"+ ...
+            "4 - Velocità angolare\n"+ ...
+            "5 - Tutti\n");
+        switch (scelta_s)
+            case 1
+                m.AccelerationSensorEnabled = 1;
+                m.MagneticSensorEnabled = 0;
+                m.OrientationSensorEnabled = 0;
+                m.AngularVelocitySensorEnabled = 0;
+                disp("Accelerometro acceso.");
+                break
+            case 2
+                m.AccelerationSensorEnabled = 0;
+                m.MagneticSensorEnabled = 1;
+                m.OrientationSensorEnabled = 0;
+                m.AngularVelocitySensorEnabled = 0;
+                disp("Magnetometro acceso.");
+                break
+            case 3
+                m.AccelerationSensorEnabled = 0;
+                m.MagneticSensorEnabled = 0;
+                m.OrientationSensorEnabled = 1;
+                m.AngularVelocitySensorEnabled = 0;
+                disp("Sensore orientazione acceso.");
+                break
+            case 4
+                m.AccelerationSensorEnabled = 0;
+                m.MagneticSensorEnabled = 0;
+                m.OrientationSensorEnabled = 0;
+                m.AngularVelocitySensorEnabled = 1;
+                disp("Sensore velocità angolare acceso.");
+                break
+            case 5
+                m.AccelerationSensorEnabled = 1;
+                m.MagneticSensorEnabled = 1;
+                m.OrientationSensorEnabled = 1;
+                m.AngularVelocitySensorEnabled = 1;
+                disp("Tutti i sensori accesi.");
+                break
+            otherwise, disp("Indice non trovato.");
+        end
+
+        % m.PositionSensorEnabled = 1; % NON VARIA CON I GESTI
+    end
+    pause(0.5);
+    sampling_frequency = 100; % Hz
+    m.SampleRate = sampling_frequency;
+
     time_out = true;
     % Viene mostrata un'immagine contenente tutti i gesti
     pic = imread("gestures.png");
@@ -171,9 +215,9 @@ while true % Finche' l'utente vuole fare nuove acquisizioni con lo stesso dispos
         end
 
         [a, t] = accellog(m); % Logging accelerometro
-        [mag,t]=magfieldlog(m); % Logging campo magnetico
-        [ang_vel,t]=angvellog(m); % Logging velocita' angolare
-        [orientation,t]=orientlog(m); % Logging orientamento
+        [mag, t] = magfieldlog(m); % Logging campo magnetico
+        [ang_vel, t] = angvellog(m); % Logging velocita' angolare
+        [orientation, t] = orientlog(m); % Logging orientamento
         % [pos,t]=poslog(m); % Logging posizione (NON VARIA CON I GESTI)
 
 
@@ -187,9 +231,9 @@ while true % Finche' l'utente vuole fare nuove acquisizioni con lo stesso dispos
         samples.user(user).acquisition(save_index(user)).mag = mag; % Salvataggio campo magnetico
         samples.user(user).acquisition(save_index(user)).orientation = orientation; % Salvataggio orientamento
         samples.user(user).acquisition(save_index(user)).ang_vel = ang_vel; % Salvataggio velocita' angolare
-        
+
         % samples.user(user).acquisition(save_index(user)).pos = pos; % Salvataggio posizione (NON VARIA CON I GESTI)
-        
+
 
         samples.user(user).acquisition(save_index(user)).hand = hand; % Salvataggio mano (VA IN CSV)
         samples.user(user).acquisition(save_index(user)).device = m.device; % Salvataggio dispositivo (VA IN CSV)
