@@ -68,6 +68,25 @@ while true % Finche' l'utente vuole fare nuove acquisizioni con lo stesso dispos
             end
         end
 
+        while true
+            hand = input("Scegliere mano:\n"+ ...
+                "0 - Destra\n"+ ...
+                "1 - Sinistra\n");
+            if hand == 0
+                hand = 'right';
+                break;
+            else
+                if hand == 1
+                    hand = 'left';
+                    break;
+
+                else, fprintf("Indice non trovato.\n");
+                end
+            end
+        end
+
+        disp(hand);
+
         gesture = gestures(user, :);
         gesture = gesture(randperm(length(gesture))); % Randomizzazione ordine gesti
         % disp("Riga randomizzata")
@@ -82,7 +101,6 @@ while true % Finche' l'utente vuole fare nuove acquisizioni con lo stesso dispos
                 "1 - Guidato: 1 gesto alla volta, con intervalli guidati\n");
             switch (scelta_r)
                 case 0
-                    % disp("DA IMPLEMENTARE");
                     disp('Premi un tasto per avviare il logging...');
                     pause; % Attesa del tasto
                     disp('Logging avviato.');
@@ -156,7 +174,11 @@ while true % Finche' l'utente vuole fare nuove acquisizioni con lo stesso dispos
         m.discardlogs; % Cancellazione dei log
 
         save_index(user) = save_index(user) + 1;
-        samples.user(user).acquisition(save_index(user)).acc = a; % Salvataggio nella struct
+        % Salvataggio nella struct
+        samples.user(user).acquisition(save_index(user)).acc = a; % Salvataggio accelerazione
+        samples.user(user).acquisition(save_index(user)).hand = hand; % Salvataggio mano (VA IN CSV)
+        samples.user(user).acquisition(save_index(user)).device = m.device; % Salvataggio dispositivo (VA IN CSV)
+        % samples.user(user).acquisition(save_index(user)).sensors = sensors;
 
         filename = "acc.mat";
         save(filename, 'a'); % Salvataggio accelerazione singola (da rimuovere)
