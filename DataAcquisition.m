@@ -214,10 +214,33 @@ while true % Finche' l'utente vuole fare nuove acquisizioni con lo stesso dispos
             end
         end
 
-        [a, t] = accellog(m); % Logging accelerometro
-        [mag, t] = magfieldlog(m); % Logging campo magnetico
-        [ang_vel, t] = angvellog(m); % Logging velocita' angolare
+        % [a, t] = accellog(m); % Logging accelerometro
+        % [mag, t] = magfieldlog(m); % Logging campo magnetico
+        % [ang_vel, t] = angvellog(m); % Logging velocita' angolare
+        % [orientation, t] = orientlog(m); % Logging orientamento
+
+        [a, ~] = accellog(m); % Logging accelerometro
+        [mag, ~] = magfieldlog(m); % Logging campo magnetico
+        [ang_vel, ~] = angvellog(m); % Logging velocita' angolare
         [orientation, t] = orientlog(m); % Logging orientamento
+
+        % switch (scelta_s)
+        %     case 1
+        %         [a, t] = accellog(m); % Logging accelerometro
+        %     case 2
+        %         [mag, t] = magfieldlog(m); % Logging campo magnetico
+        %     case 3
+        %         [ang_vel, t] = angvellog(m); % Logging velocita' angolare
+        %     case 4
+        %         [orientation, t] = orientlog(m); % Logging orientamento
+        %     case 5
+        %         [a, ~] = accellog(m); % Logging accelerometro
+        %         [mag, ~] = magfieldlog(m); % Logging campo magnetico
+        %         [ang_vel, ~] = angvellog(m); % Logging velocita' angolare
+        %         [orientation, t] = orientlog(m); % Logging orientamento
+        %     otherwise, disp("Errore nel logging.");
+        % end
+
         % [pos,t]=poslog(m); % Logging posizione (NON VARIA CON I GESTI)
 
 
