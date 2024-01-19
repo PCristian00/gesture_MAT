@@ -37,52 +37,73 @@ while true
             "5 - Tutti\n");
         switch (scelta_s)
             case 1
-                acc=samples.user(user).acquisition(scelta_s).acc;
-                plot(acc);
+                a=samples.user(user).acquisition(scelta_s).acc;
+                plot(a);
                 legend('X', 'Y', 'Z');
                 xlabel('Campioni');
                 ylabel('Accelerazione (m/s^2)');   
-                x = acc(:, 1);
-                y = acc(:, 2);
-                z = acc(:, 3);
-                acc = sqrt(sum(x.^2+y.^2+z.^2, 2));
+                x = a(:, 1);
+                y = a(:, 2);
+                z = a(:, 3);
+                 = sqrt(sum(x.^2+y.^2+z.^2, 2));
                 break
             case 2
                 mag=samples.user(user).acquisition(scelta_s).mag;
                 plot(mag);
                 legend('X', 'Y', 'Z');
                 xlabel('Campioni');
-                ylabel('Campo magnetico (uT)');   
+                ylabel('Accelerazione (m/s^2)');   
                 x = mag(:, 1);
                 y = mag(:, 2);
                 z = mag(:, 3);
                 mag = sqrt(sum(x.^2+y.^2+z.^2, 2));
                 break
             case 3
-                orientation=samples.user(user).acquisition(scelta_s).orientation;
-                plot(orientation);
-                legend('Azimut', 'Beccheggio', 'Rollio');
-                xlabel('Campioni');
-                ylabel('Orientamento (deg)');   
-                x = orientation(:, 1);
-                y = orientation(:, 2);
-                z = orientation(:, 3);
-                mag = sqrt(sum(x.^2+y.^2+z.^2, 2));
+                m.AccelerationSensorEnabled = 0;
+                m.MagneticSensorEnabled = 0;
+                m.OrientationSensorEnabled = 1;
+                m.AngularVelocitySensorEnabled = 0;
+                disp("Sensore orientazione acceso.");
                 break
             case 4
-                ang_vel=samples.user(user).acquisition(scelta_s).ang_vel;
-                plot(ang_vel);
-                legend('X', 'Y', 'Z');
-                xlabel('Campioni');
-                ylabel('Velocità angolare (rad/s)');   
-                x = ang_vel(:, 1);
-                y = ang_vel(:, 2);
-                z = ang_vel(:, 3);
-                mag = sqrt(sum(x.^2+y.^2+z.^2, 2));
+                m.AccelerationSensorEnabled = 0;
+                m.MagneticSensorEnabled = 0;
+                m.OrientationSensorEnabled = 0;
+                m.AngularVelocitySensorEnabled = 1;
+                disp("Sensore velocità angolare acceso.");
                 break
             case 5
-                disp("DA CAPIRE")
+                m.AccelerationSensorEnabled = 1;
+                m.MagneticSensorEnabled = 1;
+                m.OrientationSensorEnabled = 1;
+                m.AngularVelocitySensorEnabled = 1;
+                disp("Tutti i sensori accesi.");
                 break
             otherwise, disp("Indice non trovato.");
         end
 end
+
+
+% plot(a);
+% legend('X', 'Y', 'Z');
+% xlabel('Campioni');
+% ylabel('Accelerazione (m/s^2)');
+% 
+% %% Pre-processing
+% % Compute magnitude
+% 
+% x = a(:, 1);
+% y = a(:, 2);
+% z = a(:, 3);
+% mag = sqrt(sum(x.^2+y.^2+z.^2, 2));
+
+% figure; plot(mag);
+% xlabel('Samples');
+% ylabel('Acceleration (m/s^2)'); % it is not zero-mean ->
+%
+% % -> remove offset from the magnitude (due to gravity)
+% magNoG = mag - mean(mag);
+
+% plot(magNoG);
+% xlabel('Time (s)');
+% ylabel('Acceleration (m/s^2)');
