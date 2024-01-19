@@ -22,11 +22,13 @@ movestd_signal = movstd(signal, window_size);
 % legend('Acceleration Signal', 'Movestd');
 
 % Definizione soglia per movimento e quiete
-threshold = 0.45; % Adjust threshold as needed
+threshold = 0.45; % Soglia iniziale = 0.45
 
 % Identifica quiete e movimento in base alla soglia
 stillness_indices = find(movestd_signal <= threshold);
 movement_indices = find(movestd_signal > threshold);
+
+% Provare a controllare ogni 100 indici? Per scoprire veri gesti 
 
 % Plot del segnale originale
 figure;
