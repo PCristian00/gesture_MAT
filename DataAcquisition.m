@@ -248,6 +248,28 @@ while true % Finche' l'utente vuole fare nuove acquisizioni con lo stesso dispos
         m.discardlogs; % Cancellazione dei log
 
         save_index(user) = save_index(user) + 1; % Incrementa le acquisioni fatte dall'utente
+
+        samples.user(user).acquisition(save_index(user)).hand = hand; % Salvataggio mano (VA IN CSV)
+        samples.user(user).acquisition(save_index(user)).device = m.device; % Salvataggio dispositivo (VA IN CSV)
+        samples.user(user).acquisition(save_index(user)).sensors = scelta_s;
+        % Salvataggio nella struct
+        %  switch (scelta_s)
+        %     case 1
+        %         samples.user(user).acquisition(save_index(user)).acc = a; % Salvataggio accelerazione
+        %     case 2
+        %         samples.user(user).acquisition(save_index(user)).mag = mag; % Salvataggio campo magnetico
+        %     case 3
+        %         samples.user(user).acquisition(save_index(user)).ang_vel = ang_vel; % Salvataggio velocita' angolare
+        %     case 4
+        %         samples.user(user).acquisition(save_index(user)).orientation = orientation; % Salvataggio orientamento
+        %     case 5
+        %         samples.user(user).acquisition(save_index(user)).acc = a; % Salvataggio accelerazione
+        %         samples.user(user).acquisition(save_index(user)).mag = mag; % Salvataggio campo magnetico
+        %         samples.user(user).acquisition(save_index(user)).orientation = orientation; % Salvataggio orientamento
+        %         samples.user(user).acquisition(save_index(user)).ang_vel = ang_vel; % Salvataggio velocita' angolare
+        %     otherwise, disp("Errore nel logging.");
+        % end
+
         % Salvataggio nella struct
         samples.user(user).acquisition(save_index(user)).acc = a; % Salvataggio accelerazione
 
@@ -256,11 +278,6 @@ while true % Finche' l'utente vuole fare nuove acquisizioni con lo stesso dispos
         samples.user(user).acquisition(save_index(user)).ang_vel = ang_vel; % Salvataggio velocita' angolare
 
         % samples.user(user).acquisition(save_index(user)).pos = pos; % Salvataggio posizione (NON VARIA CON I GESTI)
-
-
-        samples.user(user).acquisition(save_index(user)).hand = hand; % Salvataggio mano (VA IN CSV)
-        samples.user(user).acquisition(save_index(user)).device = m.device; % Salvataggio dispositivo (VA IN CSV)
-        % samples.user(user).acquisition(save_index(user)).sensors = sensors;
 
         filename = "acc.mat";
         save(filename, 'a'); % Salvataggio accelerazione singola (da rimuovere)
