@@ -1,4 +1,5 @@
 clearvars;
+close all;
 
 if (isfile("samples.mat"))
     load("samples.mat")
@@ -52,14 +53,33 @@ switch (scelta_s)
         sigplot(ang_vel, 'X', 'Y', 'Z', 'Velocità angolare (rad/s)', 'Velocità angolare');
 
     case 5
-        acc = samples.user(user).acquisition(scelta_a).acc;
-        sigplot(acc, 'X', 'Y', 'Z', 'Accelerazione (m/s^2)', 'Accelerazione');
-        mag = samples.user(user).acquisition(scelta_a).mag;
-        sigplot(mag, 'X', 'Y', 'Z', 'Campo magnetico (uT)', 'Campo Magnetico');
-        orientation = samples.user(user).acquisition(scelta_a).orientation;
-        sigplot(orientation, 'Azimut', 'Beccheggio', 'Rollio', 'Orientamento (deg)', 'Orientamento');
-        ang_vel = samples.user(user).acquisition(scelta_a).ang_vel;
-        sigplot(ang_vel, 'X', 'Y', 'Z', 'Velocità angolare (rad/s)', 'Velocità angolare');
+        while true
+            scelta_s = input("Scegliere sensori da visualizzare:\n"+ ...
+                "1 - Accelerometro\n"+ ...
+                "2 - Magnetometro\n"+ ...
+                "3 - Orientazione\n"+ ...
+                "4 - Giroscopio (Velocità angolare)\n");
+            switch (scelta_s)
+                case 1
+                    acc = samples.user(user).acquisition(scelta_a).acc;
+                    sigplot(acc, 'X', 'Y', 'Z', 'Accelerazione (m/s^2)', 'Accelerazione');
+                    break
+                case 2
+                    mag = samples.user(user).acquisition(scelta_a).mag;
+                    sigplot(mag, 'X', 'Y', 'Z', 'Campo magnetico (uT)', 'Campo Magnetico');
+                    break
+                case 3
+                    orientation = samples.user(user).acquisition(scelta_a).orientation;
+                    sigplot(orientation, 'Azimut', 'Beccheggio', 'Rollio', 'Orientamento (deg)', 'Orientamento');
+                    break
+                case 4
+                    ang_vel = samples.user(user).acquisition(scelta_a).ang_vel;
+                    sigplot(ang_vel, 'X', 'Y', 'Z', 'Velocità angolare (rad/s)', 'Velocità angolare');
+                    break
+
+                otherwise, disp("Indice non trovato.");
+            end
+        end
 
     otherwise, disp("Indice non trovato.");
 end
