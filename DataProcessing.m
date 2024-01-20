@@ -21,13 +21,17 @@ n = save_index(user);
 
 if (n == 1), scelta_a = 1;
 else
-    while true
-        fprintf("Ci sono %d acquisizioni per l'utente %d.\n"+ ...
-            "Inserire un numero da 1 a %d:\n", n, user, n);
-        scelta_a = input("");
-        if (scelta_a < n || scelta_a > 0)
-            break
-        else, disp("Indice non trovato");
+    if n == 0, fprintf("Nessuna acquisizione per l'utente %d.\n", user)
+        return
+    else
+        while true
+            fprintf("Ci sono %d acquisizioni per l'utente %d.\n"+ ...
+                "Inserire un numero da 1 a %d:\n", n, user, n);
+            scelta_a = input("");
+            if (scelta_a < n || scelta_a > 0)
+                break
+            else, disp("Indice non trovato");
+            end
         end
     end
 end
@@ -57,7 +61,7 @@ switch (scelta_s)
             scelta_s = input("Scegliere sensori da visualizzare:\n"+ ...
                 "1 - Accelerometro\n"+ ...
                 "2 - Magnetometro\n"+ ...
-                "3 - Orientazione\n"+ ...
+                "3 - Orientamento\n"+ ...
                 "4 - Giroscopio (Velocità angolare)\n"+ ...
                 "5 - Tutti\n");
             switch (scelta_s)
@@ -92,7 +96,7 @@ switch (scelta_s)
 
                     orientation = samples.user(user).acquisition(scelta_a).orientation;
                     sigplot(orientation, 'Azimut', 'Beccheggio', 'Rollio', 'Orientamento (deg)', 'Orientamento');
-                    disp("Orientazione")
+                    disp("Orientamento")
                     disp("Premi un tasto qualsiasi per il prossimo sensore.")
                     pause();
 

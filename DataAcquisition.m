@@ -47,7 +47,7 @@ while true % Finche' l'utente vuole fare nuove acquisizioni con lo stesso dispos
         scelta_s = input("Scegliere sensori da attivare:\n"+ ...
             "1 - Accelerometro\n"+ ...
             "2 - Magnetometro\n"+ ...
-            "3 - Orientazione\n"+ ...
+            "3 - Orientamento\n"+ ...
             "4 - Giroscopio (Velocità angolare)\n"+ ...
             "5 - Tutti\n");
         switch (scelta_s)
@@ -236,14 +236,6 @@ while true % Finche' l'utente vuole fare nuove acquisizioni con lo stesso dispos
         samples.user(user).acquisition(save_index(user)).ang_vel = ang_vel; % Salvataggio velocita' angolare
 
         % samples.user(user).acquisition(save_index(user)).pos = pos; % Salvataggio posizione (NON VARIA CON I GESTI)
-
-        filename = "acc.mat";
-        save(filename, 'a'); % Salvataggio accelerazione singola (da rimuovere)
-        fprintf("Dati salvati su %s\n", filename);
-
-        % filename = "save_index.mat";
-        % save(filename, 'save_index'); % Salvataggio indici di salvataggio
-        % fprintf("Dati salvati su %s\n", filename);
 
         filename = "samples.mat";
         save(filename, 'samples', 'save_index'); % Salvataggio campioni e indici di salvataggio
