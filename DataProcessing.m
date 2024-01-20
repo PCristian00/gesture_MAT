@@ -37,7 +37,7 @@ end
     switch (scelta_s)
         case 1
             acc = samples.user(user).acquisition(scelta_a).acc;
-            sigplot(acc);
+            sigplot(acc,'X','Y','Z','Accelerazione (m/s^2)','Accelerazione');
 
         case 2
             mag = samples.user(user).acquisition(scelta_a).mag;
@@ -170,11 +170,11 @@ end
         otherwise, disp("Indice non trovato.");
     end
 
-    function sigplot(s)
+    function sigplot(s,xl,yl,zl,ylab,name)
     plot(s);
-            legend('X', 'Y', 'Z');
+            legend(xl, yl, zl);
             xlabel('Campioni');
-            ylabel('Accelerazione (m/s^2)');
+            ylabel(ylab);
             x = s(:, 1);
             y = s(:, 2);
             z = s(:, 3);
@@ -207,7 +207,8 @@ end
             
             title('Segmentazione approssimata di Quiete e Movimento usando Movestd');
             xlabel('Campioni');
-            ylabel('Accelerazione');
-            legend('Segnale Accelerazione', 'Quiete', 'Movimento');
+            ylabel(ylab);
+            
+            legend(name, 'Quiete', 'Movimento');
 disp("Test")
 end
