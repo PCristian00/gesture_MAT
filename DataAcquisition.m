@@ -48,7 +48,7 @@ while true % Finche' l'utente vuole fare nuove acquisizioni con lo stesso dispos
             "1 - Accelerometro\n"+ ...
             "2 - Magnetometro\n"+ ...
             "3 - Orientazione\n"+ ...
-            "4 - Velocità angolare\n"+ ...
+            "4 - Giroscopio (Velocità angolare)\n"+ ...
             "5 - Tutti\n");
         switch (scelta_s)
             case 1
@@ -77,7 +77,7 @@ while true % Finche' l'utente vuole fare nuove acquisizioni con lo stesso dispos
                 m.MagneticSensorEnabled = 0;
                 m.OrientationSensorEnabled = 0;
                 m.AngularVelocitySensorEnabled = 1;
-                disp("Sensore velocità angolare acceso.");
+                disp("Giroscopio acceso.");
                 break
             case 5
                 m.AccelerationSensorEnabled = 1;
