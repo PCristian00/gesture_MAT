@@ -58,7 +58,8 @@ switch (scelta_s)
                 "1 - Accelerometro\n"+ ...
                 "2 - Magnetometro\n"+ ...
                 "3 - Orientazione\n"+ ...
-                "4 - Giroscopio (Velocità angolare)\n");
+                "4 - Giroscopio (Velocità angolare)\n"+ ...
+                "5 - Tutti\n");
             switch (scelta_s)
                 case 1
                     acc = samples.user(user).acquisition(scelta_a).acc;
@@ -75,6 +76,31 @@ switch (scelta_s)
                 case 4
                     ang_vel = samples.user(user).acquisition(scelta_a).ang_vel;
                     sigplot(ang_vel, 'X', 'Y', 'Z', 'Velocità angolare (rad/s)', 'Velocità angolare');
+                    break
+                case 5
+                    acc = samples.user(user).acquisition(scelta_a).acc;
+                    sigplot(acc, 'X', 'Y', 'Z', 'Accelerazione (m/s^2)', 'Accelerazione');
+                    disp("Accelerazione")
+                    disp("Premi un tasto qualsiasi per il prossimo sensore.")
+                    pause();
+
+                    mag = samples.user(user).acquisition(scelta_a).mag;
+                    sigplot(mag, 'X', 'Y', 'Z', 'Campo magnetico (uT)', 'Campo Magnetico');
+                    disp("Campo magnetico")
+                    disp("Premi un tasto qualsiasi per il prossimo sensore.")
+                    pause();
+
+                    orientation = samples.user(user).acquisition(scelta_a).orientation;
+                    sigplot(orientation, 'Azimut', 'Beccheggio', 'Rollio', 'Orientamento (deg)', 'Orientamento');
+                    disp("Orientazione")
+                    disp("Premi un tasto qualsiasi per il prossimo sensore.")
+                    pause();
+
+                    ang_vel = samples.user(user).acquisition(scelta_a).ang_vel;
+                    sigplot(ang_vel, 'X', 'Y', 'Z', 'Velocità angolare (rad/s)', 'Velocità angolare');
+                    disp("Giroscopio (Velocità Angolare)")
+                    disp("Premi un tasto qualsiasi per il prossimo sensore.")
+                    pause();
                     break
 
                 otherwise, disp("Indice non trovato.");
