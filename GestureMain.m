@@ -4,9 +4,8 @@ while true % Mantiene il programma attivo finche' non viene scelto di uscire dal
     pause(1); % Pausa aggiunta per stile
 
     fprintf("\nSCEGLIERE OPERAZIONE\n"+ ...
-        "1 - Nuovo Utente\n"+ ...
-        "2 - Avvio\n"+ ...
-        "3 - Processa e Visualizza\n"+ ...
+        "1 - Avvio\n"+ ...
+        "2 - Processa e Visualizza\n"+ ...
         "0 - Esci\n"+ ...
         "----------------\n");
 
@@ -17,19 +16,13 @@ while true % Mantiene il programma attivo finche' non viene scelto di uscire dal
 
         case 1
 
-            %% Inserire nuovo utente (da implementare)s
-            fprintf("NON IMPLEMENTATO\n");
-
-        case 2
-
             %% Acquisizione dati
             DataAcquisition;
 
-        case 3
+        case 2
 
             %% Processing e Visualizzazione
             DataProcessing;
-            % VisualizeSTD;
 
         case 0
 
