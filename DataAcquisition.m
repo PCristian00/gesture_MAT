@@ -205,7 +205,7 @@ while true % Finche' l'utente vuole fare nuove acquisizioni con lo stesso dispos
                         fprintf("Rimanere fermo per %.1f secondi.\n", time_left);
                         pause(time_left)
 
-                    else, fprintf("Tempo di 20 secondi superati. Riavvio raccolta.\n");
+                    else, fprintf("Tempo di 20 secondi superati. Raccolta eliminata.\n");
 
                     end
                     break
@@ -222,6 +222,7 @@ while true % Finche' l'utente vuole fare nuove acquisizioni con lo stesso dispos
         m.Logging = 0; % Disattivazione del logging
         m.discardlogs; % Cancellazione dei log
 
+        if(time_out==false) % Il salvataggio avviene solo se il tempo non è scaduto
         save_index(user) = save_index(user) + 1; % Incrementa le acquisioni fatte dall'utente
 
         samples.user(user).acquisition(save_index(user)).hand = hand; % Salvataggio mano (VA IN CSV)
@@ -240,6 +241,7 @@ while true % Finche' l'utente vuole fare nuove acquisizioni con lo stesso dispos
         filename = "samples.mat";
         save(filename, 'samples', 'save_index'); % Salvataggio campioni e indici di salvataggio
         fprintf("Dati salvati su %s\n", filename);
+        end
 
         % Riavvio del loop a scelta
         while true
