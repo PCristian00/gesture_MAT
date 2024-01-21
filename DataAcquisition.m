@@ -13,9 +13,7 @@ if (isfile("samples.mat")) % Se il file esiste, chiede se deve essere caricato
             break
         else
             if scelta_c == 0
-                fprintf("Creazione nuovo file.\n");
-                data = {"ID_Subject", "Idx_Acquisition", "Hand", "Smartphone_model", "Available_Sensors", "Start_GestureA", "End_GestureA", "ID_GestureA", "Start_GestureB", "End_GestureB", "ID_GestureB", "Start_GestureC", "End_GestureC", "ID_GestureC", "Start_GestureD", "End_GestureD", "ID_GestureD"};
-                writecell(data, 'metadata.csv', 'Delimiter', ';', 'WriteMode', 'overwrite');
+                newSave
                 save_index = zeros(1, 4);
                 break
             else
@@ -25,8 +23,7 @@ if (isfile("samples.mat")) % Se il file esiste, chiede se deve essere caricato
     end
 else
     fprintf("File di salvataggio non trovato.\n");
-    data = {"ID_Subject", "Idx_Acquisition", "Hand", "Smartphone_model", "Available_Sensors", "Start_GestureA", "End_GestureA", "ID_GestureA", "Start_GestureB", "End_GestureB", "ID_GestureB", "Start_GestureC", "End_GestureC", "ID_GestureC", "Start_GestureD", "End_GestureD", "ID_GestureD"};
-    writecell(data, 'metadata.csv', 'Delimiter', ';', 'WriteMode', 'overwrite');
+    newSave
     save_index = zeros(1, 4);
 end
 
@@ -222,6 +219,7 @@ while true % Finche' l'utente vuole fare nuove acquisizioni con lo stesso dispos
 
             save_index(user) = save_index(user) + 1; % Incrementa le acquisioni fatte dall'utente
 
+            % Salvataggio su csv
             data = {user, save_index(user), hand, m.device, scelta_s, "start_A", "end_A", gesture(1), "start_B", "end_B", gesture(2), "start_C", "end_C", gesture(3), "start_D", "end_D", gesture(4)};
             writecell(data, 'metadata.csv', 'Delimiter', ';', 'QuoteStrings', 1, 'WriteMode', 'append');
 
@@ -248,4 +246,12 @@ while true % Finche' l'utente vuole fare nuove acquisizioni con lo stesso dispos
             end
         end
     end
+end
+
+% Funzione che sovrascrive il file dei metadati
+function newSave
+fprintf("Creazione nuovo file.\n");
+% Creazione csv
+data = {"ID_Subject", "Idx_Acquisition", "Hand", "Smartphone_model", "Available_Sensors", "Start_GestureA", "End_GestureA", "ID_GestureA", "Start_GestureB", "End_GestureB", "ID_GestureB", "Start_GestureC", "End_GestureC", "ID_GestureC", "Start_GestureD", "End_GestureD", "ID_GestureD"};
+writecell(data, 'metadata.csv', 'Delimiter', ';', 'WriteMode', 'overwrite');
 end
