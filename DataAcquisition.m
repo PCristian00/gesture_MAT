@@ -15,9 +15,14 @@ if (isfile("samples.mat")) % Se il file esiste, chiede se deve essere caricato
             break
         else
             if scelta_c == 0
+
                 fprintf("Creazione nuovo file.\n");
+                data={"User" "ID_Acquisition" "Hand" "Device"};
+            writecell(data,'metadata.csv','Delimiter',';','WriteMode','overwrite');
                 save_index = zeros(1, 4);
-                % disp(save_index)
+                % delete metadata.csv;
+                 
+                
                 break
             else
                 fprintf("Indice non trovato.\n");
@@ -27,7 +32,12 @@ if (isfile("samples.mat")) % Se il file esiste, chiede se deve essere caricato
 else
     fprintf("File di salvataggio non trovato.\n");
     save_index = zeros(1, 4);
+
     % disp(save_index)
+end
+
+if (isfile("metadata.csv"))
+    disp("\nMETADATA TROVATI\n");
 end
 
 %% Connessione a dispositivo
@@ -165,7 +175,7 @@ while true % Finche' l'utente vuole fare nuove acquisizioni con lo stesso dispos
                         time_left = 20 - time;
                         fprintf("Rimanere fermo per %.1f secondi.\n", time_left);
                         % TOGLIERE PAUSA PER FARE TEST PIù RAPIDI
-                        pause(time_left)
+                        % pause(time_left)
                         break;
                     end
 
@@ -222,25 +232,40 @@ while true % Finche' l'utente vuole fare nuove acquisizioni con lo stesso dispos
         m.Logging = 0; % Disattivazione del logging
         m.discardlogs; % Cancellazione dei log
 
-        if(time_out==false) % Il salvataggio avviene solo se il tempo non è scaduto
-        save_index(user) = save_index(user) + 1; % Incrementa le acquisioni fatte dall'utente
+        if (time_out == false) % Il salvataggio avviene solo se il tempo non è scaduto
 
-        samples.user(user).acquisition(save_index(user)).hand = hand; % Salvataggio mano (VA IN CSV)
-        samples.user(user).acquisition(save_index(user)).device = m.device; % Salvataggio dispositivo (VA IN CSV)
-        samples.user(user).acquisition(save_index(user)).sensors = scelta_s;
+            save_index(user) = save_index(user) + 1; % Incrementa le acquisioni fatte dall'utente
 
-        % Salvataggio nella struct
-        samples.user(user).acquisition(save_index(user)).acc = a; % Salvataggio accelerazione
+            % Salvataggio nel csv
+            % fopen("metadata.csv","w+")
 
-        samples.user(user).acquisition(save_index(user)).mag = mag; % Salvataggio campo magnetico
-        samples.user(user).acquisition(save_index(user)).orientation = orientation; % Salvataggio orientamento
-        samples.user(user).acquisition(save_index(user)).ang_vel = ang_vel; % Salvataggio velocita' angolare
+            data={user save_index(user) hand m.device};
+            writecell(data,'metadata.csv','Delimiter',';','QuoteStrings',1,'WriteMode','append');
 
-        % samples.user(user).acquisition(save_index(user)).pos = pos; % Salvataggio posizione (NON VARIA CON I GESTI)
+            % meta = fopen('metadata.txt','w');
+            % fprintf(meta,"%d,%d,%s,%s\n",save_index(user),user,hand,m.device);
 
-        filename = "samples.mat";
-        save(filename, 'samples', 'save_index'); % Salvataggio campioni e indici di salvataggio
-        fprintf("Dati salvati su %s\n", filename);
+            %INCOMPLETO
+            % T = table('VariableNames',{'Subject', 'Acquisition','Hand','Smartphone'});
+            % %T.Properties.VariableNames(1:4) = {'Subject', 'Acquisition','Hand','Smartphone'};         % 
+            % 
+            % disp(T);
+            % writetable(T, "peaks.csv", "Delimiter", ";");
+
+
+            samples.user(user).acquisition(save_index(user)).hand = hand; % Salvataggio mano (VA IN CSV)
+            samples.user(user).acquisition(save_index(user)).device = m.device; % Salvataggio dispositivo (VA IN CSV)
+            samples.user(user).acquisition(save_index(user)).sensors = scelta_s; % Salvataggio sensori attivi (VA IN CSV)
+
+            % Salvataggio nella struct
+            samples.user(user).acquisition(save_index(user)).acc = a; % Salvataggio accelerazione
+            samples.user(user).acquisition(save_index(user)).mag = mag; % Salvataggio campo magnetico
+            samples.user(user).acquisition(save_index(user)).orientation = orientation; % Salvataggio orientamento
+            samples.user(user).acquisition(save_index(user)).ang_vel = ang_vel; % Salvataggio velocita' angolare
+
+            filename = "samples.mat";
+            save(filename, 'samples', 'save_index'); % Salvataggio campioni e indici di salvataggio
+            fprintf("Dati salvati su %s\n", filename);
         end
 
         % Riavvio del loop a scelta
