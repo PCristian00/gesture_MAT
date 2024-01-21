@@ -28,9 +28,11 @@ if (isfile("samples.mat")) % Se il file esiste, chiede se deve essere caricato
     end
 else
     fprintf("File di salvataggio non trovato.\n");
-    data = {"ID_Subject", "Idx_Acquisition", "Hand", "Smartphone_model", "Available_Sensors", "Start_GestureA", "End_GestureA", "ID_GestureA", "Start_GestureB", "End_GestureB", "ID_GestureB", "Start_GestureC", "End_GestureC", "ID_GestureC", "Start_GestureD", "End_GestureD", "ID_GestureD"};
-    writecell(data, 'metadata.csv', 'Delimiter', ';', 'WriteMode', 'overwrite');
     save_index = zeros(1, 4);
+end
+
+if (isfile("metadata.csv"))
+    disp("\nMETADATA TROVATI\n");
 end
 
 %% Connessione a dispositivo
@@ -233,9 +235,9 @@ while true % Finche' l'utente vuole fare nuove acquisizioni con lo stesso dispos
             writecell(data, 'metadata.csv', 'Delimiter', ';', 'QuoteStrings', 1, 'WriteMode', 'append');
 
 
-            % samples.user(user).acquisition(save_index(user)).hand = hand; % Salvataggio mano (VA IN CSV)
-            % samples.user(user).acquisition(save_index(user)).device = m.device; % Salvataggio dispositivo (VA IN CSV)
-            % samples.user(user).acquisition(save_index(user)).sensors = scelta_s; % Salvataggio sensori attivi (VA IN CSV)
+            samples.user(user).acquisition(save_index(user)).hand = hand; % Salvataggio mano (VA IN CSV)
+            samples.user(user).acquisition(save_index(user)).device = m.device; % Salvataggio dispositivo (VA IN CSV)
+            samples.user(user).acquisition(save_index(user)).sensors = scelta_s; % Salvataggio sensori attivi (VA IN CSV)
 
             % Salvataggio nella struct
             samples.user(user).acquisition(save_index(user)).acc = a; % Salvataggio accelerazione

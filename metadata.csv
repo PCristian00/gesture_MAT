@@ -1,3 +1,4 @@
-User;ID_Acquisition;Hand;Device
-1;1;"left";"Galaxy S9+ di Cristian"
-2;1;"right";"Galaxy S9+ di Cristian"
+ID_Subject;Idx_Acquisition;Hand;Smartphone_model;Available_Sensors;Start_GestureA;End_GestureA;ID_GestureA;Start_GestureB;End_GestureB;ID_GestureB;Start_GestureC;End_GestureC;ID_GestureC;Start_GestureD;End_GestureD;ID_GestureD
+1;1;"right";"Galaxy S9+ di Cristian";1;"start_A";"end_A";"AS";"start_B";"end_B";"AZ";"start_C";"end_C";"S";"start_D";"end_D";"Z"
+2;1;"left";"Galaxy S9+ di Cristian";2;"start_A";"end_A";"Up";"start_B";"end_B";"CW";"start_C";"end_C";"Down";"start_D";"end_D";"CCW"
+3;1;"right";"Galaxy S9+ di Cristian";3;"start_A";"end_A";"CW";"start_B";"end_B";"Pull";"start_C";"end_C";"Push";"start_D";"end_D";"CW"
