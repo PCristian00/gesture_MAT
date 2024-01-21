@@ -10,12 +10,9 @@ if (isfile("samples.mat")) % Se il file esiste, chiede se deve essere caricato
         if (scelta_c == 1)
             load("samples.mat")
             fprintf("File caricato con successo.\n");
-            % disp(save_index)
-            % disp(samples)
             break
         else
             if scelta_c == 0
-
                 fprintf("Creazione nuovo file.\n");
                 data = {"ID_Subject", "Idx_Acquisition", "Hand", "Smartphone_model", "Available_Sensors", "Start_GestureA", "End_GestureA", "ID_GestureA", "Start_GestureB", "End_GestureB", "ID_GestureB", "Start_GestureC", "End_GestureC", "ID_GestureC", "Start_GestureD", "End_GestureD", "ID_GestureD"};
                 writecell(data, 'metadata.csv', 'Delimiter', ';', 'WriteMode', 'overwrite');
@@ -92,7 +89,6 @@ while true % Finche' l'utente vuole fare nuove acquisizioni con lo stesso dispos
             otherwise, disp("Indice non trovato.");
         end
 
-        % m.PositionSensorEnabled = 1; % NON VARIA CON I GESTI
     end
     pause(0.5);
     sampling_frequency = 100; % Hz
@@ -133,13 +129,10 @@ while true % Finche' l'utente vuole fare nuove acquisizioni con lo stesso dispos
                 end
             end
         end
-        %        disp(hand);
+
         gesture = gestures(user, :); % Viene salvato il set di gesti corrispondente all'utente
         gesture = gesture(randperm(length(gesture))); % Randomizzazione ordine gesti
-        % disp("Riga randomizzata")
         disp(gesture)
-        % disp("Acquisizioni")
-        % disp(save_index)
 
         % Scelta del metodo di raccolta
         while (true)
@@ -231,11 +224,6 @@ while true % Finche' l'utente vuole fare nuove acquisizioni con lo stesso dispos
 
             data = {user, save_index(user), hand, m.device, scelta_s, "start_A", "end_A", gesture(1), "start_B", "end_B", gesture(2), "start_C", "end_C", gesture(3), "start_D", "end_D", gesture(4)};
             writecell(data, 'metadata.csv', 'Delimiter', ';', 'QuoteStrings', 1, 'WriteMode', 'append');
-
-
-            % samples.user(user).acquisition(save_index(user)).hand = hand; % Salvataggio mano (VA IN CSV)
-            % samples.user(user).acquisition(save_index(user)).device = m.device; % Salvataggio dispositivo (VA IN CSV)
-            % samples.user(user).acquisition(save_index(user)).sensors = scelta_s; % Salvataggio sensori attivi (VA IN CSV)
 
             % Salvataggio nella struct
             samples.user(user).acquisition(save_index(user)).acc = a; % Salvataggio accelerazione
