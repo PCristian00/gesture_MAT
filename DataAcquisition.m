@@ -1,19 +1,22 @@
 clearvars;
 
+filename = "samples.mat";
+metafilename = "metadata.csv";
+
 %% Caricamento file di salvataggio
-if (isfile("samples.mat")) % Se il file esiste, chiede se deve essere caricato
+if (isfile(filename)) % Se il file esiste, chiede se deve essere caricato
     while true
         fprintf("Caricare file?\n"+ ...
             "1 - Si\n"+ ...
             "0 - No\n");
         scelta_c = input("");
         if (scelta_c == 1)
-            load("samples.mat")
+            load(filename)
             fprintf("File caricato con successo.\n");
             break
         else
             if scelta_c == 0
-                newSave
+                newSave(metafilename)
                 save_index = zeros(1, 4);
                 break
             else
@@ -23,7 +26,7 @@ if (isfile("samples.mat")) % Se il file esiste, chiede se deve essere caricato
     end
 else
     fprintf("File di salvataggio non trovato.\n");
-    newSave
+    newSave(metafilename)
     save_index = zeros(1, 4);
 end
 
@@ -203,7 +206,7 @@ while true % Finche' l'utente vuole fare nuove acquisizioni con lo stesso dispos
                     end
                     disp(time)
                     break
-                    
+
 
                 otherwise, disp("Valore non trovato");
             end
@@ -222,12 +225,12 @@ while true % Finche' l'utente vuole fare nuove acquisizioni con lo stesso dispos
             save_index(user) = save_index(user) + 1; % Incrementa le acquisioni fatte dall'utente
 
             % Salvataggio su csv
-            if(scelta_a==1)
-            data = {user, save_index(user), hand, m.device, scelta_s, 0, time(1), gesture(1), time(1)+1, time(2), gesture(2), time(2)+1, time(3), gesture(3), time(3)+1, time(4), gesture(4)};
+            if (scelta_r == 1)
+                data = {user, save_index(user), hand, m.device, scelta_s, 0, time(1), gesture(1), time(1) + 1, time(2), gesture(2), time(2) + 1, time(3), gesture(3), time(3) + 1, time(4), gesture(4)};
             else
-            data = {user, save_index(user), hand, m.device, scelta_s, "start_A", "end_A", gesture(1), "start_B", "end_B", gesture(2), "start_C", "end_C", gesture(3), "start_D", "end_D", gesture(4)};
+                data = {user, save_index(user), hand, m.device, scelta_s, "start_A", "end_A", gesture(1), "start_B", "end_B", gesture(2), "start_C", "end_C", gesture(3), "start_D", "end_D", gesture(4)};
             end
-            writecell(data, 'metadata.csv', 'Delimiter', ';', 'QuoteStrings', 1, 'WriteMode', 'append');
+            writecell(data, metafilename, 'Delimiter', ';', 'QuoteStrings', 1, 'WriteMode', 'append');
 
             % Salvataggio nella struct
             samples.user(user).acquisition(save_index(user)).acc = a; % Salvataggio accelerazione
@@ -235,11 +238,11 @@ while true % Finche' l'utente vuole fare nuove acquisizioni con lo stesso dispos
             samples.user(user).acquisition(save_index(user)).orientation = orientation; % Salvataggio orientamento
             samples.user(user).acquisition(save_index(user)).ang_vel = ang_vel; % Salvataggio velocita' angolare
 
-            filename = "samples.mat";
-            metafilename = "metadata.csv";
+            samples.user(user).acquisition(save_index(user)).sensors = scelta_s;
+
             save(filename, 'samples', 'save_index'); % Salvataggio campioni e indici di salvataggio
             fprintf("Dati salvati su %s\n", filename);
-            fprintf("Metadati salvati su %s\n",metafilename);
+            fprintf("Metadati salvati su %s\n", metafilename);
         end
 
         % Riavvio del loop a scelta
@@ -257,9 +260,9 @@ while true % Finche' l'utente vuole fare nuove acquisizioni con lo stesso dispos
 end
 
 % Funzione che sovrascrive il file dei metadati
-function newSave
+function newSave(metafilename)
 fprintf("Creazione nuovo file.\n");
 % Creazione csv
 data = {"ID_Subject", "Idx_Acquisition", "Hand", "Smartphone_model", "Available_Sensors", "Start_GestureA", "End_GestureA", "ID_GestureA", "Start_GestureB", "End_GestureB", "ID_GestureB", "Start_GestureC", "End_GestureC", "ID_GestureC", "Start_GestureD", "End_GestureD", "ID_GestureD"};
-writecell(data, 'metadata.csv', 'Delimiter', ';', 'WriteMode', 'overwrite');
+writecell(data, metafilename, 'Delimiter', ';', 'WriteMode', 'overwrite');
 end

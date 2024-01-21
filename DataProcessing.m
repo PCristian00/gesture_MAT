@@ -1,8 +1,8 @@
 clearvars;
 close all;
-
-if (isfile("samples.mat"))
-    load("samples.mat")
+filename="samples.mat";
+if (isfile(filename))
+    load(filename)
 else
     disp("File non trovato.")
     return
