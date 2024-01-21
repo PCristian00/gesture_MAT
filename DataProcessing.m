@@ -10,7 +10,7 @@ else
 end
 
 while true
-    user = input("Inserire utente (1-4):");
+    user = input("Inserire utente (1-4):\n");
     if user < 1 || user > 4
         disp("Indice non trovato.")
     else
@@ -41,15 +41,10 @@ M = readmatrix(metafilename);
 for i = 1:size(M)
     % Prende ogni riga della matrice singolarmente e la analizza
     r = M(i, :);
-    % fprintf("Riga %d\n", i);
-    % disp(r)
     % Confronta gli ID nei metadati con le scelte dell'utente per trovare
     % il campo Available_Sensors (5)
     if r(1) == user && r(2) == scelta_a
         scelta_s = r(5);
-        % fprintf("%d == %d\n",r(1),user)
-        % fprintf("%d == %d\n",r(2),scelta_a)
-        % disp(scelta_s)
         break
     end
 

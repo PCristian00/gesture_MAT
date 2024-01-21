@@ -6,10 +6,9 @@ metafilename = "metadata.csv";
 %% Caricamento file di salvataggio
 if (isfile(filename)) % Se il file esiste, chiede se deve essere caricato
     while true
-        fprintf("Caricare file?\n"+ ...
+        scelta_c = input("Caricare file?\n"+ ...
             "1 - Si\n"+ ...
             "0 - No\n");
-        scelta_c = input("");
         if (scelta_c == 1)
             load(filename)
             fprintf("File caricato con successo.\n");
@@ -239,8 +238,6 @@ while true % Finche' l'utente vuole fare nuove acquisizioni con lo stesso dispos
             samples.user(user).acquisition(save_index(user)).orientation = orientation; % Salvataggio orientamento
             samples.user(user).acquisition(save_index(user)).ang_vel = ang_vel; % Salvataggio velocita' angolare
 
-            % samples.user(user).acquisition(save_index(user)).sensors = scelta_s;
-
             save(filename, 'samples', 'save_index'); % Salvataggio campioni e indici di salvataggio
             fprintf("Dati salvati su %s\n", filename);
             fprintf("Metadati salvati su %s\n", metafilename);
@@ -248,7 +245,8 @@ while true % Finche' l'utente vuole fare nuove acquisizioni con lo stesso dispos
 
         % Riavvio del loop a scelta
         while true
-            scelta_a = input("\nPremere 0 per uscire dalla raccolta.\nPremi 1 per una nuova acquisizione.\n");
+            scelta_a = input("\nPremere 0 per uscire dalla raccolta.\n"+ ...
+                "Premi 1 per una nuova acquisizione.\n");
             if scelta_a == 0, disp("Uscita in corso...");
                 return;
             else
