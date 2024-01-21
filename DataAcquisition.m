@@ -132,6 +132,7 @@ while true % Finche' l'utente vuole fare nuove acquisizioni con lo stesso dispos
 
         gesture = gestures(user, :); % Viene salvato il set di gesti corrispondente all'utente
         gesture = gesture(randperm(length(gesture))); % Randomizzazione ordine gesti
+        disp("Gesti da eseguire:");
         disp(gesture)
 
         % Scelta del metodo di raccolta
@@ -203,7 +204,7 @@ while true % Finche' l'utente vuole fare nuove acquisizioni con lo stesso dispos
                     else, fprintf("Tempo di 20 secondi superati. Raccolta eliminata.\n");
 
                     end
-                    disp(time)
+                    % disp(time)
                     break
 
 
@@ -246,7 +247,7 @@ while true % Finche' l'utente vuole fare nuove acquisizioni con lo stesso dispos
         while true
             scelta_a = input("\nPremere 0 per uscire dalla raccolta.\n"+ ...
                 "Premi 1 per una nuova acquisizione.\n");
-            if scelta_a == 0, disp("Uscita in corso...");
+            if scelta_a == 0, disp("Uscita operazione.");
                 return;
             else
                 if scelta_a ~= 1, fprintf("Codice non trovato.\n");
