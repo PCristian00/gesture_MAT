@@ -50,6 +50,7 @@ while true % Finche' l'utente vuole fare nuove acquisizioni con lo stesso dispos
             "3 - Orientamento\n"+ ...
             "4 - Giroscopio (Velocità angolare)\n"+ ...
             "5 - Tutti\n");
+        disp("Attendere...");
         switch (scelta_s)
             case 1
                 m.AccelerationSensorEnabled = 1;
@@ -238,7 +239,7 @@ while true % Finche' l'utente vuole fare nuove acquisizioni con lo stesso dispos
             samples.user(user).acquisition(save_index(user)).orientation = orientation; % Salvataggio orientamento
             samples.user(user).acquisition(save_index(user)).ang_vel = ang_vel; % Salvataggio velocita' angolare
 
-            samples.user(user).acquisition(save_index(user)).sensors = scelta_s;
+            % samples.user(user).acquisition(save_index(user)).sensors = scelta_s;
 
             save(filename, 'samples', 'save_index'); % Salvataggio campioni e indici di salvataggio
             fprintf("Dati salvati su %s\n", filename);
@@ -247,8 +248,8 @@ while true % Finche' l'utente vuole fare nuove acquisizioni con lo stesso dispos
 
         % Riavvio del loop a scelta
         while true
-            scelta_a = input("Premere 0 per uscire dalla raccolta.\nPremi 1 per una nuova acquisizione.\n");
-            if scelta_a == 0, disp("Fine raccolte.");
+            scelta_a = input("\nPremere 0 per uscire dalla raccolta.\nPremi 1 per una nuova acquisizione.\n");
+            if scelta_a == 0, disp("Uscita in corso...");
                 return;
             else
                 if scelta_a ~= 1, fprintf("Codice non trovato.\n");

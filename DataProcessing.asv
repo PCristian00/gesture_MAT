@@ -41,19 +41,20 @@ M = readmatrix(metafilename);
 for i = 1:size(M)
     % Prende ogni riga della matrice singolarmente e la analizza
     r = M(i, :);
-    % fprintf("Riga %d\n", i);
-    % disp(r)
+    fprintf("Riga %d\n", i);
+    disp(r)
     % Confronta gli ID nei metadati con le scelte dell'utente per trovare
     % il campo Available_Sensors (5)
-    if r(1) == user && r(2) == scelta_a
+    if r(1) == user && r(2) == n
         scelta_s = r(5);
-        % fprintf("%d == %d\n",r(1),user)
-        % fprintf("%d == %d\n",r(2),scelta_a)
-        % disp(scelta_s)
+        disp(scelta_s)
         break
     end
 
 end
+
+disp(samples.user(user).acquisition(scelta_a).sensors);
+
 
 switch (scelta_s)
     case 1
@@ -121,7 +122,6 @@ switch (scelta_s)
                     disp("Giroscopio (Velocità Angolare)")
                     disp("Premi un tasto qualsiasi per il prossimo sensore.")
                     pause();
-                    disp("Fine visualizzazione.");
                     break
 
                 otherwise, disp("Indice non trovato.");

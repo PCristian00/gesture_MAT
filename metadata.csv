@@ -1,2 +1,7 @@
 ID_Subject;Idx_Acquisition;Hand;Smartphone_model;Available_Sensors;Start_GestureA;End_GestureA;ID_GestureA;Start_GestureB;End_GestureB;ID_GestureB;Start_GestureC;End_GestureC;ID_GestureC;Start_GestureD;End_GestureD;ID_GestureD
-2;1;"right";"Galaxy S9+ di Cristian";4;0;2.5009686;"CCW";3.5009686;4.9119556;"Up";5.9119556;7.7191648;"Down";8.7191648;10.3384701;"CW"
+3;1;"right";"Galaxy S9+ di Cristian";1;"start_A";"end_A";"CW";"start_B";"end_B";"Push";"start_C";"end_C";"CW";"start_D";"end_D";"Pull"
+2;1;"right";"Galaxy S9+ di Cristian";3;"start_A";"end_A";"Down";"start_B";"end_B";"CCW";"start_C";"end_C";"Up";"start_D";"end_D";"CW"
+1;1;"left";"Galaxy S9+ di Cristian";5;"start_A";"end_A";"AZ";"start_B";"end_B";"Z";"start_C";"end_C";"AS";"start_D";"end_D";"S"
+1;2;"left";"Galaxy S9+ di Cristian";5;0;2.5580021;"Z";3.5580021;5.9049137;"AZ";6.9049137;9.0508657;"AS";10.0508657;12.2845143;"S"
+3;2;"left";"Galaxy S9+ di Cristian";3;"start_A";"end_A";"CW";"start_B";"end_B";"Pull";"start_C";"end_C";"Push";"start_D";"end_D";"CW"
+3;3;"right";"Galaxy S9+ di Cristian";2;0;0.9630222;"Pull";1.9630222;2.4319962;"CW";3.4319962;3.7323962;"CW";4.7323962;5.5917689;"Push"

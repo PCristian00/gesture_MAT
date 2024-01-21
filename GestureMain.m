@@ -1,8 +1,6 @@
 close all; clear m;
 
 while true % Mantiene il programma attivo finche' non viene scelto di uscire dal menu
-    pause(1); % Pausa aggiunta per stile
-
     fprintf("\nSCEGLIERE OPERAZIONE\n"+ ...
         "1 - Avvio\n"+ ...
         "2 - Processa e Visualizza\n"+ ...
@@ -27,7 +25,7 @@ while true % Mantiene il programma attivo finche' non viene scelto di uscire dal
         case 0
 
             %% Uscita
-            fprintf("CHIUSURA PROGRAMMA\n");
+            fprintf("Chiusura programma.\n");
             break; % Interrompe il ciclo
 
         otherwise, fprintf("Indice non trovato.\n"); % L'utente torna al menu
