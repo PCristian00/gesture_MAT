@@ -179,10 +179,10 @@ while true % Finche' l'utente vuole fare nuove acquisizioni con lo stesso dispos
                         disp('Premi un tasto quando il gesto è completo.');
                         pause; % Attesa del tasto
 
-                        time = toc; % Conteggio tempo impiegato
-                        time_left = 20 - time; % Calcolo tempo rimanente
+                        time(i) = toc; % Conteggio tempo impiegato
+                        time_left = 20 - time(i); % Calcolo tempo rimanente
 
-                        if time >= 20, break % Se il tempo e' esaurito il ciclo viene interrotto
+                        if time(i) >= 20, break % Se il tempo e' esaurito il ciclo viene interrotto
                         end
 
                         if i ~= 4
@@ -191,9 +191,9 @@ while true % Finche' l'utente vuole fare nuove acquisizioni con lo stesso dispos
                             fprintf("Massimo %.1f secondi rimanenti.\n", time_left-1);
                         end
                     end
-                    time = toc;
-                    fprintf("Gesti eseguiti in %.1f secondi.\n", time);
-                    if time < 20 % Se il tempo non e' scaduto va avanti
+                    time(i) = toc;
+                    fprintf("Gesti eseguiti in %.1f secondi.\n", time(i));
+                    if time(i) < 20 % Se il tempo non e' scaduto va avanti
                         time_out = false;
                         fprintf("Rimanere fermo per %.1f secondi.\n", time_left);
                         pause(time_left)
@@ -201,7 +201,9 @@ while true % Finche' l'utente vuole fare nuove acquisizioni con lo stesso dispos
                     else, fprintf("Tempo di 20 secondi superati. Raccolta eliminata.\n");
 
                     end
+                    disp(time)
                     break
+                    
 
                 otherwise, disp("Valore non trovato");
             end
@@ -220,7 +222,11 @@ while true % Finche' l'utente vuole fare nuove acquisizioni con lo stesso dispos
             save_index(user) = save_index(user) + 1; % Incrementa le acquisioni fatte dall'utente
 
             % Salvataggio su csv
+            if(scelta_a==1)
+            data = {user, save_index(user), hand, m.device, scelta_s, 0, time(1), gesture(1), time(1)+1, time(2), gesture(2), time(2)+1, time(3), gesture(3), time(3)+1, time(4), gesture(4)};
+            else
             data = {user, save_index(user), hand, m.device, scelta_s, "start_A", "end_A", gesture(1), "start_B", "end_B", gesture(2), "start_C", "end_C", gesture(3), "start_D", "end_D", gesture(4)};
+            end
             writecell(data, 'metadata.csv', 'Delimiter', ';', 'QuoteStrings', 1, 'WriteMode', 'append');
 
             % Salvataggio nella struct
@@ -230,14 +236,16 @@ while true % Finche' l'utente vuole fare nuove acquisizioni con lo stesso dispos
             samples.user(user).acquisition(save_index(user)).ang_vel = ang_vel; % Salvataggio velocita' angolare
 
             filename = "samples.mat";
+            metafilename = "metadata.csv";
             save(filename, 'samples', 'save_index'); % Salvataggio campioni e indici di salvataggio
             fprintf("Dati salvati su %s\n", filename);
+            fprintf("Metadati salvati su %s\n",metafilename);
         end
 
         % Riavvio del loop a scelta
         while true
             scelta_a = input("Premere 0 per uscire dalla raccolta.\nPremi 1 per una nuova acquisizione.\n");
-            if scelta_a == 0, disp("CHIUSURA");
+            if scelta_a == 0, disp("Fine raccolte.");
                 return;
             else
                 if scelta_a ~= 1, fprintf("Codice non trovato.\n");
