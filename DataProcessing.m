@@ -29,7 +29,7 @@ else
             fprintf("Ci sono %d acquisizioni per l'utente %d.\n"+ ...
                 "Inserire un numero da 1 a %d:\n", n, user, n);
             scelta_a = input("");
-            if (scelta_a < n || scelta_a > 0)
+            if (scelta_a > 0 && scelta_a <= n)
                 break
             else, disp("Indice non trovato");
             end
