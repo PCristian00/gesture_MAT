@@ -1,8 +1,9 @@
 clearvars;
 close all;
-
-if (isfile("samples.mat"))
-    load("samples.mat")
+filename = "samples.mat";
+metafilename = "metadata.csv";
+if (isfile(filename))
+    load(filename)
 else
     disp("File non trovato.")
     return
@@ -21,18 +22,38 @@ n = save_index(user);
 
 if (n == 1), scelta_a = 1;
 else
-    while true
-        fprintf("Ci sono %d acquisizioni per l'utente %d.\n"+ ...
-            "Inserire un numero da 1 a %d:\n", n, user, n);
-        scelta_a = input("");
-        if (scelta_a < n || scelta_a > 0)
-            break
-        else, disp("Indice non trovato");
+    if n == 0, fprintf("Nessuna acquisizione per l'utente %d.\n", user)
+        return
+    else
+        while true
+            fprintf("Ci sono %d acquisizioni per l'utente %d.\n"+ ...
+                "Inserire un numero da 1 a %d:\n", n, user, n);
+            scelta_a = input("");
+            if (scelta_a < n || scelta_a > 0)
+                break
+            else, disp("Indice non trovato");
+            end
         end
     end
 end
+% Carica i metadati in una matrice
+M = readmatrix(metafilename);
+for i = 1:size(M)
+    % Prende ogni riga della matrice singolarmente e la analizza
+    r = M(i, :);
+    fprintf("Riga %d\n", i);
+    disp(r)
+    % Confronta gli ID nei metadati con le scelte dell'utente per trovare
+    % il campo Available_Sensors (5)
+    if r(1) == user && r(2) == n
+        scelta_s = r(5);
+        disp(scelta_s)
+        break
+    end
 
-scelta_s = samples.user(user).acquisition(scelta_a).sensors;
+end
+
+disp(samples.user(user).acquisition(scelta_a).sensors);
 
 
 switch (scelta_s)
@@ -57,7 +78,7 @@ switch (scelta_s)
             scelta_s = input("Scegliere sensori da visualizzare:\n"+ ...
                 "1 - Accelerometro\n"+ ...
                 "2 - Magnetometro\n"+ ...
-                "3 - Orientazione\n"+ ...
+                "3 - Orientamento\n"+ ...
                 "4 - Giroscopio (Velocità angolare)\n"+ ...
                 "5 - Tutti\n");
             switch (scelta_s)
@@ -92,13 +113,13 @@ switch (scelta_s)
 
                     orientation = samples.user(user).acquisition(scelta_a).orientation;
                     sigplot(orientation, 'Azimut', 'Beccheggio', 'Rollio', 'Orientamento (deg)', 'Orientamento');
-                    disp("Orienta")
+                    disp("Orientamento")
                     disp("Premi un tasto qualsiasi per il prossimo sensore.")
                     pause();
 
                     ang_vel = samples.user(user).acquisition(scelta_a).ang_vel;
                     sigplot(ang_vel, 'X', 'Y', 'Z', 'Velocità angolare (rad/s)', 'Velocità angolare');
-                    disp("Accelerazione")
+                    disp("Giroscopio (Velocità Angolare)")
                     disp("Premi un tasto qualsiasi per il prossimo sensore.")
                     pause();
                     break

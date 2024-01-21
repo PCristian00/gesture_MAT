@@ -1,15 +1,16 @@
 clearvars;
 close all;
-
-if (isfile("samples.mat"))
-    load("samples.mat")
+filename = "samples.mat";
+metafilename = "metadata.csv";
+if (isfile(filename))
+    load(filename)
 else
     disp("File non trovato.")
     return
 end
 
 while true
-    user = input("Inserire utente (1-4):");
+    user = input("Inserire utente (1-4):\n");
     if user < 1 || user > 4
         disp("Indice non trovato.")
     else
@@ -28,16 +29,26 @@ else
             fprintf("Ci sono %d acquisizioni per l'utente %d.\n"+ ...
                 "Inserire un numero da 1 a %d:\n", n, user, n);
             scelta_a = input("");
-            if (scelta_a < n || scelta_a > 0)
+            if (scelta_a > 0 && scelta_a <= n)
                 break
             else, disp("Indice non trovato");
             end
         end
     end
 end
+% Carica i metadati in una matrice
+M = readmatrix(metafilename);
+for i = 1:size(M)
+    % Prende ogni riga della matrice singolarmente e la analizza
+    r = M(i, :);
+    % Confronta gli ID nei metadati con le scelte dell'utente per trovare
+    % il campo Available_Sensors (5)
+    if r(1) == user && r(2) == scelta_a
+        scelta_s = r(5);
+        break
+    end
 
-scelta_s = samples.user(user).acquisition(scelta_a).sensors;
-
+end
 
 switch (scelta_s)
     case 1
@@ -105,6 +116,7 @@ switch (scelta_s)
                     disp("Giroscopio (Velocità Angolare)")
                     disp("Premi un tasto qualsiasi per il prossimo sensore.")
                     pause();
+                    disp("Fine visualizzazione.");
                     break
 
                 otherwise, disp("Indice non trovato.");

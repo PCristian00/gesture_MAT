@@ -1,21 +1,24 @@
 clearvars;
 
-filename = "samples.mat";
-metafilename = "metadata.csv";
-
 %% Caricamento file di salvataggio
-if (isfile(filename)) % Se il file esiste, chiede se deve essere caricato
+if (isfile("samples.mat")) % Se il file esiste, chiede se deve essere caricato
     while true
-        scelta_c = input("Caricare file?\n"+ ...
+        fprintf("Caricare file?\n"+ ...
             "1 - Si\n"+ ...
             "0 - No\n");
+        scelta_c = input("");
         if (scelta_c == 1)
-            load(filename)
+            load("samples.mat")
             fprintf("File caricato con successo.\n");
+            % disp(save_index)
+            % disp(samples)
             break
         else
             if scelta_c == 0
-                newSave(metafilename)
+
+                fprintf("Creazione nuovo file.\n");
+                data = {"ID_Subject", "Idx_Acquisition", "Hand", "Smartphone_model", "Available_Sensors", "Start_GestureA", "End_GestureA", "ID_GestureA", "Start_GestureB", "End_GestureB", "ID_GestureB", "Start_GestureC", "End_GestureC", "ID_GestureC", "Start_GestureD", "End_GestureD", "ID_GestureD"};
+                writecell(data, 'metadata.csv', 'Delimiter', ';', 'WriteMode', 'overwrite');
                 save_index = zeros(1, 4);
                 break
             else
@@ -25,8 +28,11 @@ if (isfile(filename)) % Se il file esiste, chiede se deve essere caricato
     end
 else
     fprintf("File di salvataggio non trovato.\n");
-    newSave(metafilename)
     save_index = zeros(1, 4);
+end
+
+if (isfile("metadata.csv"))
+    disp("\nMETADATA TROVATI\n");
 end
 
 %% Connessione a dispositivo
@@ -49,7 +55,6 @@ while true % Finche' l'utente vuole fare nuove acquisizioni con lo stesso dispos
             "3 - Orientamento\n"+ ...
             "4 - Giroscopio (Velocità angolare)\n"+ ...
             "5 - Tutti\n");
-        disp("Attendere...");
         switch (scelta_s)
             case 1
                 m.AccelerationSensorEnabled = 1;
@@ -89,6 +94,7 @@ while true % Finche' l'utente vuole fare nuove acquisizioni con lo stesso dispos
             otherwise, disp("Indice non trovato.");
         end
 
+        % m.PositionSensorEnabled = 1; % NON VARIA CON I GESTI
     end
     pause(0.5);
     sampling_frequency = 100; % Hz
@@ -129,11 +135,13 @@ while true % Finche' l'utente vuole fare nuove acquisizioni con lo stesso dispos
                 end
             end
         end
-
+        %        disp(hand);
         gesture = gestures(user, :); % Viene salvato il set di gesti corrispondente all'utente
         gesture = gesture(randperm(length(gesture))); % Randomizzazione ordine gesti
-        disp("Gesti da eseguire:");
+        % disp("Riga randomizzata")
         disp(gesture)
+        % disp("Acquisizioni")
+        % disp(save_index)
 
         % Scelta del metodo di raccolta
         while (true)
@@ -161,7 +169,8 @@ while true % Finche' l'utente vuole fare nuove acquisizioni con lo stesso dispos
                         time_out = false;
                         time_left = 20 - time;
                         fprintf("Rimanere fermo per %.1f secondi.\n", time_left);
-                        pause(time_left)
+                        % TOGLIERE PAUSA PER FARE TEST PIù RAPIDI
+                        % pause(time_left)
                         break;
                     end
 
@@ -182,10 +191,10 @@ while true % Finche' l'utente vuole fare nuove acquisizioni con lo stesso dispos
                         disp('Premi un tasto quando il gesto è completo.');
                         pause; % Attesa del tasto
 
-                        time(i) = toc; % Conteggio tempo impiegato
-                        time_left = 20 - time(i); % Calcolo tempo rimanente
+                        time = toc; % Conteggio tempo impiegato
+                        time_left = 20 - time; % Calcolo tempo rimanente
 
-                        if time(i) >= 20, break % Se il tempo e' esaurito il ciclo viene interrotto
+                        if time >= 20, break % Se il tempo e' esaurito il ciclo viene interrotto
                         end
 
                         if i ~= 4
@@ -194,9 +203,9 @@ while true % Finche' l'utente vuole fare nuove acquisizioni con lo stesso dispos
                             fprintf("Massimo %.1f secondi rimanenti.\n", time_left-1);
                         end
                     end
-                    time(i) = toc;
-                    fprintf("Gesti eseguiti in %.1f secondi.\n", time(i));
-                    if time(i) < 20 % Se il tempo non e' scaduto va avanti
+                    time = toc;
+                    fprintf("Gesti eseguiti in %.1f secondi.\n", time);
+                    if time < 20 % Se il tempo non e' scaduto va avanti
                         time_out = false;
                         fprintf("Rimanere fermo per %.1f secondi.\n", time_left);
                         pause(time_left)
@@ -204,9 +213,7 @@ while true % Finche' l'utente vuole fare nuove acquisizioni con lo stesso dispos
                     else, fprintf("Tempo di 20 secondi superati. Raccolta eliminata.\n");
 
                     end
-                    % disp(time)
                     break
-
 
                 otherwise, disp("Valore non trovato");
             end
@@ -224,13 +231,13 @@ while true % Finche' l'utente vuole fare nuove acquisizioni con lo stesso dispos
 
             save_index(user) = save_index(user) + 1; % Incrementa le acquisioni fatte dall'utente
 
-            % Salvataggio su csv
-            if (scelta_r == 1)
-                data = {user, save_index(user), hand, m.device, scelta_s, 0, time(1), gesture(1), time(1) + 1, time(2), gesture(2), time(2) + 1, time(3), gesture(3), time(3) + 1, time(4), gesture(4)};
-            else
-                data = {user, save_index(user), hand, m.device, scelta_s, "start_A", "end_A", gesture(1), "start_B", "end_B", gesture(2), "start_C", "end_C", gesture(3), "start_D", "end_D", gesture(4)};
-            end
-            writecell(data, metafilename, 'Delimiter', ';', 'QuoteStrings', 1, 'WriteMode', 'append');
+            data = {user, save_index(user), hand, m.device, scelta_s, "start_A", "end_A", gesture(1), "start_B", "end_B", gesture(2), "start_C", "end_C", gesture(3), "start_D", "end_D", gesture(4)};
+            writecell(data, 'metadata.csv', 'Delimiter', ';', 'QuoteStrings', 1, 'WriteMode', 'append');
+
+
+            samples.user(user).acquisition(save_index(user)).hand = hand; % Salvataggio mano (VA IN CSV)
+            samples.user(user).acquisition(save_index(user)).device = m.device; % Salvataggio dispositivo (VA IN CSV)
+            samples.user(user).acquisition(save_index(user)).sensors = scelta_s; % Salvataggio sensori attivi (VA IN CSV)
 
             % Salvataggio nella struct
             samples.user(user).acquisition(save_index(user)).acc = a; % Salvataggio accelerazione
@@ -238,16 +245,15 @@ while true % Finche' l'utente vuole fare nuove acquisizioni con lo stesso dispos
             samples.user(user).acquisition(save_index(user)).orientation = orientation; % Salvataggio orientamento
             samples.user(user).acquisition(save_index(user)).ang_vel = ang_vel; % Salvataggio velocita' angolare
 
+            filename = "samples.mat";
             save(filename, 'samples', 'save_index'); % Salvataggio campioni e indici di salvataggio
             fprintf("Dati salvati su %s\n", filename);
-            fprintf("Metadati salvati su %s\n", metafilename);
         end
 
         % Riavvio del loop a scelta
         while true
-            scelta_a = input("\nPremere 0 per uscire dalla raccolta.\n"+ ...
-                "Premi 1 per una nuova acquisizione.\n");
-            if scelta_a == 0, disp("Uscita operazione.");
+            scelta_a = input("Premere 0 per uscire dalla raccolta.\nPremi 1 per una nuova acquisizione.\n");
+            if scelta_a == 0, disp("CHIUSURA");
                 return;
             else
                 if scelta_a ~= 1, fprintf("Codice non trovato.\n");
@@ -256,12 +262,4 @@ while true % Finche' l'utente vuole fare nuove acquisizioni con lo stesso dispos
             end
         end
     end
-end
-
-% Funzione che sovrascrive il file dei metadati
-function newSave(metafilename)
-fprintf("Creazione nuovo file.\n");
-% Creazione csv
-data = {"ID_Subject", "Idx_Acquisition", "Hand", "Smartphone_model", "Available_Sensors", "Start_GestureA", "End_GestureA", "ID_GestureA", "Start_GestureB", "End_GestureB", "ID_GestureB", "Start_GestureC", "End_GestureC", "ID_GestureC", "Start_GestureD", "End_GestureD", "ID_GestureD"};
-writecell(data, metafilename, 'Delimiter', ';', 'WriteMode', 'overwrite');
 end
