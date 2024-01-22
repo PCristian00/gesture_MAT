@@ -1,7 +1,11 @@
 clearvars;
 close all;
+% Nomi dei file da leggere
 filename = "samples.mat";
 metafilename = "metadata.csv";
+th = [0.45, 0.65, 0.3, 0.25]; % Valori di threshold per ogni sensore
+% (in ordine acc, mag, orientation, ang_vel)
+
 if (isfile(filename))
     load(filename)
 else
@@ -53,19 +57,19 @@ end
 switch (scelta_s)
     case 1
         acc = samples.user(user).acquisition(scelta_a).acc;
-        sigplot(acc, 'X', 'Y', 'Z', 'Accelerazione (m/s^2)', 'Accelerazione');
+        sigplot(acc, 'X', 'Y', 'Z', 'Accelerazione (m/s^2)', 'Accelerazione', th(1));
 
     case 2
         mag = samples.user(user).acquisition(scelta_a).mag;
-        sigplot(mag, 'X', 'Y', 'Z', 'Campo magnetico (uT)', 'Campo Magnetico');
+        sigplot(mag, 'X', 'Y', 'Z', 'Campo magnetico (uT)', 'Campo Magnetico', th(2));
 
     case 3
         orientation = samples.user(user).acquisition(scelta_a).orientation;
-        sigplot(orientation, 'Azimut', 'Beccheggio', 'Rollio', 'Orientamento (deg)', 'Orientamento');
+        sigplot(orientation, 'Azimut', 'Beccheggio', 'Rollio', 'Orientamento (deg)', 'Orientamento', th(3));
 
     case 4
         ang_vel = samples.user(user).acquisition(scelta_a).ang_vel;
-        sigplot(ang_vel, 'X', 'Y', 'Z', 'Velocità angolare (rad/s)', 'Velocità angolare');
+        sigplot(ang_vel, 'X', 'Y', 'Z', 'Velocità angolare (rad/s)', 'Velocità angolare', th(4));
 
     case 5
         while true
@@ -78,41 +82,41 @@ switch (scelta_s)
             switch (scelta_s)
                 case 1
                     acc = samples.user(user).acquisition(scelta_a).acc;
-                    sigplot(acc, 'X', 'Y', 'Z', 'Accelerazione (m/s^2)', 'Accelerazione', 0.45);
+                    sigplot(acc, 'X', 'Y', 'Z', 'Accelerazione (m/s^2)', 'Accelerazione', th(1));
                     break
                 case 2
                     mag = samples.user(user).acquisition(scelta_a).mag;
-                    sigplot(mag, 'X', 'Y', 'Z', 'Campo magnetico (uT)', 'Campo Magnetico', 0.65);
+                    sigplot(mag, 'X', 'Y', 'Z', 'Campo magnetico (uT)', 'Campo Magnetico', th(2));
                     break
                 case 3
                     orientation = samples.user(user).acquisition(scelta_a).orientation;
-                    sigplot(orientation, 'Azimut', 'Beccheggio', 'Rollio', 'Orientamento (deg)', 'Orientamento', 0.3);
+                    sigplot(orientation, 'Azimut', 'Beccheggio', 'Rollio', 'Orientamento (deg)', 'Orientamento', th(3));
                     break
                 case 4
                     ang_vel = samples.user(user).acquisition(scelta_a).ang_vel;
-                    sigplot(ang_vel, 'X', 'Y', 'Z', 'Velocità angolare (rad/s)', 'Velocità angolare', 0.25);
+                    sigplot(ang_vel, 'X', 'Y', 'Z', 'Velocità angolare (rad/s)', 'Velocità angolare', th(4));
                     break
                 case 5
                     acc = samples.user(user).acquisition(scelta_a).acc;
-                    sigplot(acc, 'X', 'Y', 'Z', 'Accelerazione (m/s^2)', 'Accelerazione', 0.45);
+                    sigplot(acc, 'X', 'Y', 'Z', 'Accelerazione (m/s^2)', 'Accelerazione', th(1));
                     disp("Accelerazione")
                     disp("Premi un tasto qualsiasi per il prossimo sensore.")
                     pause();
 
                     mag = samples.user(user).acquisition(scelta_a).mag;
-                    sigplot(mag, 'X', 'Y', 'Z', 'Campo magnetico (uT)', 'Campo Magnetico', 0.65);
+                    sigplot(mag, 'X', 'Y', 'Z', 'Campo magnetico (uT)', 'Campo Magnetico', th(2));
                     disp("Campo magnetico")
                     disp("Premi un tasto qualsiasi per il prossimo sensore.")
                     pause();
 
                     orientation = samples.user(user).acquisition(scelta_a).orientation;
-                    sigplot(orientation, 'Azimut', 'Beccheggio', 'Rollio', 'Orientamento (deg)', 'Orientamento', 0.3);
+                    sigplot(orientation, 'Azimut', 'Beccheggio', 'Rollio', 'Orientamento (deg)', 'Orientamento', th(3));
                     disp("Orientamento")
                     disp("Premi un tasto qualsiasi per il prossimo sensore.")
                     pause();
 
                     ang_vel = samples.user(user).acquisition(scelta_a).ang_vel;
-                    sigplot(ang_vel, 'X', 'Y', 'Z', 'Velocità angolare (rad/s)', 'Velocità angolare', 0.25);
+                    sigplot(ang_vel, 'X', 'Y', 'Z', 'Velocità angolare (rad/s)', 'Velocità angolare', th(4));
                     disp("Giroscopio (Velocità Angolare)")
                     disp("Premi un tasto qualsiasi per terminare la visualizzazione.")
                     pause();
@@ -128,6 +132,11 @@ switch (scelta_s)
 end
 
 function sigplot(s, xl, yl, zl, ylab, name, th)
+% Se il campione supera i 20 secondi viene ritagliato
+if (size(s, 1) > 2000)
+    s = s(1:2000, :);
+end
+
 figure("Name", name);
 plot(s);
 legend(xl, yl, zl);
