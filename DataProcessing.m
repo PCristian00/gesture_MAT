@@ -10,7 +10,7 @@ else
 end
 
 while true
-    user = input("Inserire utente (1-4):\n");
+    user = input("Inserire ID utente (1-4):\n");
     if user < 1 || user > 4
         disp("Indice non trovato.")
     else
@@ -27,7 +27,7 @@ else
     else
         while true
             fprintf("Ci sono %d acquisizioni per l'utente %d.\n"+ ...
-                "Inserire un numero da 1 a %d:\n", n, user, n);
+                "Inserire ID acquisizione (1-%d):\n", n, user, n);
             scelta_a = input("");
             if (scelta_a > 0 && scelta_a <= n)
                 break
@@ -150,14 +150,12 @@ threshold = 0.45; % Soglia iniziale = 0.45
 stillness_indices = find(movestd_signal <= threshold);
 movement_indices = find(movestd_signal > threshold);
 
-% Provare a controllare ogni 100 indici? Per scoprire veri gesti
-
 % Plot del segnale originale
 figure("Name", name);
 plot(s);
 
 % Evidenzia quiete in blu
-hold on; % scatter(X, Y) draws markers at the locations specified by X and Y
+hold on;
 scatter(stillness_indices, s(stillness_indices), 'b', 'filled');
 
 % Evidenzia movimento in rosso
