@@ -114,9 +114,10 @@ switch (scelta_s)
                     ang_vel = samples.user(user).acquisition(scelta_a).ang_vel;
                     sigplot(ang_vel, 'X', 'Y', 'Z', 'Velocità angolare (rad/s)', 'Velocità angolare');
                     disp("Giroscopio (Velocità Angolare)")
-                    disp("Premi un tasto qualsiasi per il prossimo sensore.")
+                    disp("Premi un tasto qualsiasi per terminare la visualizzazione.")
                     pause();
                     disp("Fine visualizzazione.");
+                    close all;
                     break
 
                 otherwise, disp("Indice non trovato.");
