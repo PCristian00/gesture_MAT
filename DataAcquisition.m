@@ -8,7 +8,7 @@ if (isfile(filename)) % Se il file esiste, chiede se deve essere caricato
     while true
         scelta_c = input("Caricare file?\n"+ ...
             "1 - Si\n"+ ...
-            "0 - No\n");
+            "0 - No (Può sovrascrivere il file)\n");
         if (scelta_c == 1)
             load(filename)
             fprintf("File caricato con successo.\n");
