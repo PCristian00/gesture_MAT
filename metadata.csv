@@ -4,3 +4,4 @@ ID_Subject;Idx_Acquisition;Hand;Smartphone_model;Available_Sensors;Start_Gesture
 3;1;"right";"vivo - V2023(399b)";1;0;4.6585695;"CW";5.6585695;10.6566196;"CW";11.6566196;14.577537;"Push";15.577537;18.0348274;"Pull"
 4;1;"left";"Galaxy S9+ di Cristian";1;0;2.0259932;"Pull";3.0259932;7.9795336;"CW";8.9795336;12.1984526;"CCW";13.1984526;14.9782004;"Push"
 1;2;"right";"Galaxy S9+ di Cristian";5;0;2.9066178;"AZ";3.9066178;5.8782515;"AS";6.8782515;9.7305205;"Z";10.7305205;14.4055098;"S"
+2;2;"left";"Galaxy S9+ di Cristian";4;0;3.4021955;"CW";4.4021955;7.5093306;"CCW";8.5093306;10.801079;"Up";11.801079;14.7081604;"Down"
