@@ -3,7 +3,7 @@ close all;
 % Nomi dei file da leggere
 filename = "samples.mat";
 metafilename = "metadata.csv";
-th = [0.45, 0.65, 0.3, 0.25]; % Valori di threshold per ogni sensore
+th = [0.45, 0.45, 0.3, 0.25]; % Valori di threshold per ogni sensore
 % (in ordine acc, mag, orientation, ang_vel)
 
 if (isfile(filename))
