@@ -10,7 +10,7 @@ else
 end
 
 while true
-    user = input("Inserire utente (1-4):");
+    user = input("Inserire ID utente (1-4):\n");
     if user < 1 || user > 4
         disp("Indice non trovato.")
     else
@@ -27,9 +27,9 @@ else
     else
         while true
             fprintf("Ci sono %d acquisizioni per l'utente %d.\n"+ ...
-                "Inserire un numero da 1 a %d:\n", n, user, n);
+                "Inserire ID acquisizione (1-%d):\n", n, user, n);
             scelta_a = input("");
-            if (scelta_a < n || scelta_a > 0)
+            if (scelta_a > 0 && scelta_a <= n)
                 break
             else, disp("Indice non trovato");
             end
@@ -41,20 +41,14 @@ M = readmatrix(metafilename);
 for i = 1:size(M)
     % Prende ogni riga della matrice singolarmente e la analizza
     r = M(i, :);
-    fprintf("Riga %d\n", i);
-    disp(r)
     % Confronta gli ID nei metadati con le scelte dell'utente per trovare
     % il campo Available_Sensors (5)
-    if r(1) == user && r(2) == n
+    if r(1) == user && r(2) == scelta_a
         scelta_s = r(5);
-        disp(scelta_s)
         break
     end
 
 end
-
-disp(samples.user(user).acquisition(scelta_a).sensors);
-
 
 switch (scelta_s)
     case 1
@@ -120,8 +114,10 @@ switch (scelta_s)
                     ang_vel = samples.user(user).acquisition(scelta_a).ang_vel;
                     sigplot(ang_vel, 'X', 'Y', 'Z', 'Velocità angolare (rad/s)', 'Velocità angolare');
                     disp("Giroscopio (Velocità Angolare)")
-                    disp("Premi un tasto qualsiasi per il prossimo sensore.")
+                    disp("Premi un tasto qualsiasi per terminare la visualizzazione.")
                     pause();
+                    disp("Fine visualizzazione.");
+                    close all;
                     break
 
                 otherwise, disp("Indice non trovato.");
@@ -131,7 +127,7 @@ switch (scelta_s)
     otherwise, disp("Indice non trovato.");
 end
 
-function sigplot(s, xl, yl, zl, ylab, name)
+function sigplot(s, xl, yl, zl, ylab, name, )
 figure("Name", name);
 plot(s);
 legend(xl, yl, zl);
@@ -154,14 +150,12 @@ threshold = 0.45; % Soglia iniziale = 0.45
 stillness_indices = find(movestd_signal <= threshold);
 movement_indices = find(movestd_signal > threshold);
 
-% Provare a controllare ogni 100 indici? Per scoprire veri gesti
-
 % Plot del segnale originale
 figure("Name", name);
 plot(s);
 
 % Evidenzia quiete in blu
-hold on; % scatter(X, Y) draws markers at the locations specified by X and Y
+hold on;
 scatter(stillness_indices, s(stillness_indices), 'b', 'filled');
 
 % Evidenzia movimento in rosso

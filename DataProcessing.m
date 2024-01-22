@@ -78,41 +78,41 @@ switch (scelta_s)
             switch (scelta_s)
                 case 1
                     acc = samples.user(user).acquisition(scelta_a).acc;
-                    sigplot(acc, 'X', 'Y', 'Z', 'Accelerazione (m/s^2)', 'Accelerazione');
+                    sigplot(acc, 'X', 'Y', 'Z', 'Accelerazione (m/s^2)', 'Accelerazione', 0.45);
                     break
                 case 2
                     mag = samples.user(user).acquisition(scelta_a).mag;
-                    sigplot(mag, 'X', 'Y', 'Z', 'Campo magnetico (uT)', 'Campo Magnetico');
+                    sigplot(mag, 'X', 'Y', 'Z', 'Campo magnetico (uT)', 'Campo Magnetico', 0.65);
                     break
                 case 3
                     orientation = samples.user(user).acquisition(scelta_a).orientation;
-                    sigplot(orientation, 'Azimut', 'Beccheggio', 'Rollio', 'Orientamento (deg)', 'Orientamento');
+                    sigplot(orientation, 'Azimut', 'Beccheggio', 'Rollio', 'Orientamento (deg)', 'Orientamento', 0.3);
                     break
                 case 4
                     ang_vel = samples.user(user).acquisition(scelta_a).ang_vel;
-                    sigplot(ang_vel, 'X', 'Y', 'Z', 'Velocità angolare (rad/s)', 'Velocità angolare');
+                    sigplot(ang_vel, 'X', 'Y', 'Z', 'Velocità angolare (rad/s)', 'Velocità angolare', 0.25);
                     break
                 case 5
                     acc = samples.user(user).acquisition(scelta_a).acc;
-                    sigplot(acc, 'X', 'Y', 'Z', 'Accelerazione (m/s^2)', 'Accelerazione');
+                    sigplot(acc, 'X', 'Y', 'Z', 'Accelerazione (m/s^2)', 'Accelerazione', 0.45);
                     disp("Accelerazione")
                     disp("Premi un tasto qualsiasi per il prossimo sensore.")
                     pause();
 
                     mag = samples.user(user).acquisition(scelta_a).mag;
-                    sigplot(mag, 'X', 'Y', 'Z', 'Campo magnetico (uT)', 'Campo Magnetico');
+                    sigplot(mag, 'X', 'Y', 'Z', 'Campo magnetico (uT)', 'Campo Magnetico', 0.65);
                     disp("Campo magnetico")
                     disp("Premi un tasto qualsiasi per il prossimo sensore.")
                     pause();
 
                     orientation = samples.user(user).acquisition(scelta_a).orientation;
-                    sigplot(orientation, 'Azimut', 'Beccheggio', 'Rollio', 'Orientamento (deg)', 'Orientamento');
+                    sigplot(orientation, 'Azimut', 'Beccheggio', 'Rollio', 'Orientamento (deg)', 'Orientamento', 0.3);
                     disp("Orientamento")
                     disp("Premi un tasto qualsiasi per il prossimo sensore.")
                     pause();
 
                     ang_vel = samples.user(user).acquisition(scelta_a).ang_vel;
-                    sigplot(ang_vel, 'X', 'Y', 'Z', 'Velocità angolare (rad/s)', 'Velocità angolare');
+                    sigplot(ang_vel, 'X', 'Y', 'Z', 'Velocità angolare (rad/s)', 'Velocità angolare', 0.25);
                     disp("Giroscopio (Velocità Angolare)")
                     disp("Premi un tasto qualsiasi per terminare la visualizzazione.")
                     pause();
@@ -127,7 +127,7 @@ switch (scelta_s)
     otherwise, disp("Indice non trovato.");
 end
 
-function sigplot(s, xl, yl, zl, ylab, name)
+function sigplot(s, xl, yl, zl, ylab, name, th)
 figure("Name", name);
 plot(s);
 legend(xl, yl, zl);
@@ -144,7 +144,7 @@ window_size = 20; % Imposta la dimensione della finestra
 movestd_signal = movstd(s, window_size);
 
 % Definizione soglia per movimento e quiete
-threshold = 0.45; % Soglia iniziale = 0.45
+threshold = th;
 
 % Identifica quiete e movimento in base alla soglia
 stillness_indices = find(movestd_signal <= threshold);
