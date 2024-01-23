@@ -1,3 +1,5 @@
+% GestureMain Permette di avviare tramite un menu testuale le operazioni contenute in DataAcquisition e DataProcessing.
+
 close all; clear m;
 
 while true % Mantiene il programma attivo finche' non viene scelto di uscire dal menu

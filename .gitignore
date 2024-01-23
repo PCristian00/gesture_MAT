@@ -24,3 +24,4 @@ MBeautyShortcuts.m
 resources/settings/MBeautyConfigurationRules.xml
 resources/testdata/testfile.m
 resources/testdata/testfile_bugs.m
+*.asv
