@@ -1,3 +1,6 @@
+% Permette di acquisire il segnale dal sensore scelto, guidando l'utente nella raccolta.
+% Il segnale viene salvato su file insieme a metadati fondamentali per il
+% successivo processing.
 clearvars;
 % Nomi dei file da caricare e sovrascrivere
 filename = "samples.mat";
@@ -41,7 +44,6 @@ fprintf("Dispositivo %s connesso con successo.\n", m.Device)
 while true % Finche' l'utente vuole fare nuove acquisizioni con lo stesso dispositivo
 
     %% Attivazione sensori
-
     while true
         scelta_s = input("Scegliere sensori da attivare:\n"+ ...
             "1 - Accelerometro\n"+ ...
@@ -95,15 +97,20 @@ while true % Finche' l'utente vuole fare nuove acquisizioni con lo stesso dispos
     m.SampleRate = sampling_frequency;
 
     time_out = true;
+
     % Viene mostrata un'immagine contenente tutti i gesti
     pic = imread("gestures.png");
     imshow(pic);
+
+    % Ciclo dell'acquisione, si interrompe se l'acquisizione è stata svolta
+    % correttamente in tempo
     while time_out
         gestures = ["S", "AS", "Z", "AZ"; ...
             "Up", "CW", "CCW", "Down"; ...
             "CW", "CW", "Push", "Pull"; ...
             "Push", "Pull", "CW", "CCW"]; % Set di gesti, ogni riga appartiene a un diverso utente
-        % Scelta dell'utente
+
+        %% Scelta dell'utente
         while true
             user = input("Inserire utente (1-4):");
             if user < 1 || user > 4
@@ -135,13 +142,26 @@ while true % Finche' l'utente vuole fare nuove acquisizioni con lo stesso dispos
         disp("Gesti da eseguire:");
         disp(gesture)
 
-        % Scelta del metodo di raccolta
+        %% Scelta del metodo di raccolta
+
+        % Il metodo Normale mostra su schermo i 4 gesti da acquisire e
+        % richiede di premere il tasto solo per avviare e fermare
+        % l'acquisizione.
+        % Le pause sono gestite dall'utente.
+
+        % Il metodo Guidato mostra su schermo 1 gesto alla volta e richiede
+        % di premere il tasto per ogni gesto completato.
+        % Le pause sono gestite e visualizzate a schermo.
+        % I tempi in cui sono stati eseguiti i singoli gesti vengono
+        % salvati nei metadati per un'analisi approssimativa.
+
         while (true)
             scelta_r = input("Scegliere metodo di raccolta.\n"+ ...
                 "0 - Normale: 1 tasto per avviare, 4 gesti\n"+ ...
                 "1 - Guidato: 1 gesto alla volta, con intervalli guidati\n");
             switch (scelta_r)
                 case 0
+                    % Metodo Normale
                     disp('Premi un tasto per avviare il logging...');
                     pause; % Attesa del tasto
                     disp('Logging avviato.');
@@ -168,6 +188,7 @@ while true % Finche' l'utente vuole fare nuove acquisizioni con lo stesso dispos
                     break
 
                 case 1
+                    % Metodo Guidato
                     disp('Premi un tasto per avviare il logging...');
                     pause; % Attesa del tasto
                     disp('Logging avviato.');
@@ -207,11 +228,11 @@ while true % Finche' l'utente vuole fare nuove acquisizioni con lo stesso dispos
                     % disp(time)
                     break
 
-
                 otherwise, disp("Valore non trovato");
             end
         end
 
+        %% Salvataggio
         [a, t1] = accellog(m); % Logging accelerometro
         [mag, t2] = magfieldlog(m); % Logging campo magnetico
         [ang_vel, t3] = angvellog(m); % Logging velocita' angolare
@@ -225,6 +246,8 @@ while true % Finche' l'utente vuole fare nuove acquisizioni con lo stesso dispos
             save_index(user) = save_index(user) + 1; % Incrementa le acquisioni fatte dall'utente
 
             % Salvataggio su csv
+            % Se il metodo di raccolta era Guidato, salva anche i tempi
+            % impiegati per i singoli gesti
             if (scelta_r == 1)
                 data = {user, save_index(user), hand, m.device, scelta_s, 0, time(1), gesture(1), time(1) + 1, time(2), gesture(2), time(2) + 1, time(3), gesture(3), time(3) + 1, time(4), gesture(4)};
             else
@@ -261,7 +284,7 @@ end
 % Funzione che sovrascrive il file dei metadati
 function newSave(metafilename)
 fprintf("Creazione nuovo file.\n");
-% Creazione csv
+% Preparazione prima riga, contenente i nomi dei campi
 data = {"ID_Subject", "Idx_Acquisition", "Hand", "Smartphone_model", "Available_Sensors", "Start_GestureA", "End_GestureA", "ID_GestureA", "Start_GestureB", "End_GestureB", "ID_GestureB", "Start_GestureC", "End_GestureC", "ID_GestureC", "Start_GestureD", "End_GestureD", "ID_GestureD"};
 writecell(data, metafilename, 'Delimiter', ';', 'WriteMode', 'overwrite');
 end
