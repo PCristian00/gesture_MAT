@@ -196,6 +196,7 @@ threshold = th;
 % Identifica quiete e movimento in base alla soglia
 stillness_indices = find(movestd_signal <= threshold);
 movement_indices = find(movestd_signal > threshold);
+whos
 
 %% Plot del segnale con segmentazione
 figure("Name", name);
@@ -205,6 +206,23 @@ plot(s);
 hold on;
 scatter(stillness_indices, s(stillness_indices), 'b', 'filled');
 
+filename="movement"+name+"_.mat";
+% save(filename,"movement_indices","stillness_indices");
+
+% disp(stillness_indices)
+disp(movement_indices(1))
+disp(stillness_indices(movement_indices(1)))
+
+a=1;
+for i=1:(size(movement_indices)-1)
+    if(movement_indices(i+1)~=movement_indices(i)+1)
+        fprintf(movement_indices(i+1)+" diverso da "+(movement_indices(i)+1)+"\n");
+        diff(a)=movement_indices(i+1);
+        a=a+1;        
+    end
+end
+
+save(filename,"diff","movement_indices","stillness_indices");
 % Evidenzia movimento in rosso
 scatter(movement_indices, s(movement_indices), 'r', 'filled');
 
@@ -213,4 +231,6 @@ xlabel('Campioni');
 ylabel(ylab);
 
 legend(name, 'Quiete', 'Movimento');
+input("Blocco debug\n");
+pause();
 end
