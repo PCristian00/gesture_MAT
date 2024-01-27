@@ -89,6 +89,7 @@ switch (scelta_s)
         % Tutti i sensori
         % Se l'acquisizione contiene tutti i sensori, si apre un sottomenu
         % che permette di scegliere quali visualizzare
+
         %% Scelta del sensore (acquisizioni multiple)
         while true
             scelta_s = input("Scegliere sensori da visualizzare:\n"+ ...
@@ -206,23 +207,25 @@ plot(s);
 hold on;
 scatter(stillness_indices, s(stillness_indices), 'b', 'filled');
 
-filename="movement"+name+"_.mat";
+filename = "movement" + name + "_.mat";
 % save(filename,"movement_indices","stillness_indices");
 
 % disp(stillness_indices)
 disp(movement_indices(1))
 disp(stillness_indices(movement_indices(1)))
 
-a=1;
-for i=1:(size(movement_indices)-1)
-    if(movement_indices(i+1)~=movement_indices(i)+1)
-        fprintf(movement_indices(i+1)+" diverso da "+(movement_indices(i)+1)+"\n");
-        diff(a)=movement_indices(i+1);
-        a=a+1;        
+a = 2;
+diff(1) = movement_indices(1);
+disp(diff)
+for i = 1:(size(movement_indices) - 1)
+    if (movement_indices(i+1) ~= movement_indices(i) + 1)
+        fprintf(movement_indices(i+1)+" diverso da "+(movement_indices(i) + 1)+"\n");
+        diff(a) = movement_indices(i+1);
+        a = a + 1;
     end
 end
 
-save(filename,"diff","movement_indices","stillness_indices");
+save(filename, "diff", "movement_indices", "stillness_indices");
 % Evidenzia movimento in rosso
 scatter(movement_indices, s(movement_indices), 'r', 'filled');
 
@@ -231,6 +234,4 @@ xlabel('Campioni');
 ylabel(ylab);
 
 legend(name, 'Quiete', 'Movimento');
-input("Blocco debug\n");
-pause();
 end
