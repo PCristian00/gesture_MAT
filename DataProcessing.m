@@ -154,9 +154,11 @@ switch (scelta_s)
                 otherwise, disp("Indice non trovato.");
             end
         end
-
     otherwise, disp("Indice non trovato.");
 end
+%RIMUOVERE
+disp("FINE")
+load('movementAccelerazione_.mat', 'diff')
 
 % sigPlot permette di mostrare il segnale desiderato sia al suo stato
 % naturale che in uno stato segmentato approssimativamente in periodi di
@@ -197,7 +199,7 @@ threshold = th;
 % Identifica quiete e movimento in base alla soglia
 stillness_indices = find(movestd_signal <= threshold);
 movement_indices = find(movestd_signal > threshold);
-whos
+% whos
 
 %% Plot del segnale con segmentazione
 figure("Name", name);
@@ -211,17 +213,37 @@ filename = "movement" + name + "_.mat";
 % save(filename,"movement_indices","stillness_indices");
 
 % disp(stillness_indices)
-disp(movement_indices(1))
-disp(stillness_indices(movement_indices(1)))
+% disp(movement_indices(1))
+% disp(stillness_indices(movement_indices(1)))
 
 a = 2;
 diff(1) = movement_indices(1);
-disp(diff)
+
+% Ricerca e filtraggio delle differenze maggiori di 1
 for i = 1:(size(movement_indices) - 1)
     if (movement_indices(i+1) ~= movement_indices(i) + 1)
-        fprintf(movement_indices(i+1)+" diverso da "+(movement_indices(i) + 1)+"\n");
         diff(a) = movement_indices(i+1);
         a = a + 1;
+        %end
+    end
+end
+
+q = 0;
+
+% Per ogni elemento dell'array delle differenze, si confronta il successivo
+% e l'elemento scartato in precedenza per vedere se sia un falso positivo
+% (cambio quiete-movimento in un lasso di tempo inferiore ai 150 punti??)
+for i = 1:((size(diff, 2) - 1))
+    fprintf("Diff (%d) = %d\n", i, diff(i));
+    if (diff(i+1) < (diff(i) + 150))
+        fprintf("Diff (%d+1) = %d\n", i, diff(i+1));
+        fprintf("Minore di diff %d\n", i);
+        q = diff(i+1);
+        diff(i+1) = 0;
+    else if (diff(i+1) < q + 150)
+            q = diff(i+1);
+            diff(i+1) = 0;
+    end
     end
 end
 
