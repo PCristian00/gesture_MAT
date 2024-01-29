@@ -158,7 +158,7 @@ switch (scelta_s)
 end
 %RIMUOVERE
 disp("FINE")
-load('movementAccelerazione_.mat', 'diff')
+load('movementAccelerazione_.mat')
 
 % sigPlot permette di mostrare il segnale desiderato sia al suo stato
 % naturale che in uno stato segmentato approssimativamente in periodi di
@@ -209,48 +209,16 @@ plot(s);
 hold on;
 scatter(stillness_indices, s(stillness_indices), 'b', 'filled');
 
+% CAMBIARE NOME FILE
 filename = "movement" + name + "_.mat";
-% save(filename,"movement_indices","stillness_indices");
 
-% disp(stillness_indices)
-% disp(movement_indices(1))
-% disp(stillness_indices(movement_indices(1)))
 
-a = 2;
-diff(1) = movement_indices(1);
+mov_diff = filterData(movement_indices,150);
 
-% Ricerca e filtraggio delle differenze maggiori di 1
-for i = 1:(size(movement_indices) - 1)
-    if (movement_indices(i+1) ~= movement_indices(i) + 1)
-        diff(a) = movement_indices(i+1);
-        a = a + 1;
-        %end
-    end
-end
+% CAPIRE SE filterData RIUTILIZZABILE (CAMBIARE OFFSET?)
+still_diff = filterData(stillness_indices,250);
 
-q = 0;
-
-% Per ogni elemento dell'array delle differenze, si confronta il successivo
-% e l'elemento scartato in precedenza per vedere se sia un falso positivo
-% (cambio quiete-movimento in un lasso di tempo inferiore ai 150 punti??)
-for i = 1:((size(diff, 2) - 1))
-    fprintf("Diff (%d) = %d\n", i, diff(i));
-    if (diff(i+1) < (diff(i) + 150))
-        fprintf("Diff (%d+1) = %d\n", i, diff(i+1));
-        fprintf("Minore di diff %d\n", i);
-        q = diff(i+1);
-        diff(i+1) = 0;
-    else if (diff(i+1) < q + 150)
-            q = diff(i+1);
-            diff(i+1) = 0;
-    end
-    end
-end
-
-% Rimuove gli elementi uguali a 0 da diff
-diff = diff(diff ~= 0);
-
-save(filename, "diff", "movement_indices", "stillness_indices");
+save(filename, "mov_diff", "still_diff", "movement_indices", "stillness_indices");
 % Evidenzia movimento in rosso
 scatter(movement_indices, s(movement_indices), 'r', 'filled');
 
@@ -259,4 +227,37 @@ xlabel('Campioni');
 ylabel(ylab);
 
 legend(name, 'Quiete', 'Movimento');
+end
+
+function diff = filterData(data,offset)
+a = 2;
+diff(1) = data(1);
+
+% Ricerca e filtraggio delle differenze maggiori di 1
+for i = 1:(size(data) - 1)
+    if (data(i+1) ~= data(i) + 1)
+        diff(a) = data(i+1);
+        a = a + 1;
+        %end
+    end
+end
+q = 0;
+% Per ogni elemento dell'array delle differenze, si confronta il successivo
+% e l'elemento scartato in precedenza per vedere se sia un falso positivo
+% (cambio quiete-movimento in un lasso di tempo inferiore ai 150 punti??)
+for i = 1:((size(diff, 2) - 1))
+    fprintf("Diff (%d) = %d\n", i, diff(i));
+    if (diff(i+1) < (diff(i) + offset))
+        fprintf("Diff (%d+1) = %d\n", i, diff(i+1));
+        fprintf("Minore di diff %d\n", i);
+        q = diff(i+1);
+        diff(i+1) = 0;
+    else if (diff(i+1) < q + offset)
+            q = diff(i+1);
+            diff(i+1) = 0;
+    end
+    end
+end
+% Rimuove gli elementi uguali a 0 da diff
+diff = diff(diff ~= 0);
 end
