@@ -221,11 +221,10 @@ legend(name, 'Quiete', 'Movimento');
 % CAMBIARE NOME FILE
 filename = "movement" + name + "_.mat";
 
-
 mov_diff = filterData(movement_indices, 150);
 
 % CAPIRE SE filterData RIUTILIZZABILE (CAMBIARE OFFSET?)
-still_diff = filterData(stillness_indices, 250);
+still_diff = filterData(stillness_indices, 0);
 
 % Salvataggio delle diff (AGGIORNARE CSV CON I VALORI OTTENUTI)
 save(filename, "mov_diff", "still_diff", "movement_indices", "stillness_indices");
@@ -248,6 +247,8 @@ q = 0;
 % Per ogni elemento dell'array delle differenze, si confronta il successivo
 % e l'elemento scartato in precedenza per vedere se sia un falso positivo
 % (cambio quiete-movimento in un lasso di tempo inferiore ai 150 punti??)
+
+% CAPIRE SE RIUTILIZZABILE ANCHE PER STILLNESS
 for i = 1:((size(diff, 2) - 1))
     fprintf("Diff (%d) = %d\n", i, diff(i));
     if (diff(i+1) < (diff(i) + offset))
