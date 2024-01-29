@@ -209,16 +209,6 @@ plot(s);
 hold on;
 scatter(stillness_indices, s(stillness_indices), 'b', 'filled');
 
-% CAMBIARE NOME FILE
-filename = "movement" + name + "_.mat";
-
-
-mov_diff = filterData(movement_indices,150);
-
-% CAPIRE SE filterData RIUTILIZZABILE (CAMBIARE OFFSET?)
-still_diff = filterData(stillness_indices,250);
-
-save(filename, "mov_diff", "still_diff", "movement_indices", "stillness_indices");
 % Evidenzia movimento in rosso
 scatter(movement_indices, s(movement_indices), 'r', 'filled');
 
@@ -227,9 +217,22 @@ xlabel('Campioni');
 ylabel(ylab);
 
 legend(name, 'Quiete', 'Movimento');
+
+% CAMBIARE NOME FILE
+filename = "movement" + name + "_.mat";
+
+
+mov_diff = filterData(movement_indices, 150);
+
+% CAPIRE SE filterData RIUTILIZZABILE (CAMBIARE OFFSET?)
+still_diff = filterData(stillness_indices, 250);
+
+% Salvataggio delle diff (AGGIORNARE CSV CON I VALORI OTTENUTI)
+save(filename, "mov_diff", "still_diff", "movement_indices", "stillness_indices");
+
 end
 
-function diff = filterData(data,offset)
+function diff = filterData(data, offset)
 a = 2;
 diff(1) = data(1);
 
