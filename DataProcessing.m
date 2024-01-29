@@ -247,6 +247,9 @@ for i = 1:((size(diff, 2) - 1))
     end
 end
 
+% Rimuove gli elementi uguali a 0 da diff
+diff = diff(diff ~= 0);
+
 save(filename, "diff", "movement_indices", "stillness_indices");
 % Evidenzia movimento in rosso
 scatter(movement_indices, s(movement_indices), 'r', 'filled');
