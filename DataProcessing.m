@@ -221,16 +221,63 @@ legend(name, 'Quiete', 'Movimento');
 % CAMBIARE NOME FILE
 filename = "movement" + name + "_.mat";
 
-mov_diff = filterData(movement_indices, 150);
+a = 2;
+mov_diff(1) = movement_indices(1);
 
-% CAPIRE SE filterData RIUTILIZZABILE (CAMBIARE OFFSET?)
-still_diff = filterData(stillness_indices, 0);
+% Ricerca e filtraggio delle differenze maggiori di 1
+for i = 1:(size(movement_indices) - 1)
+    if (movement_indices(i+1) ~= movement_indices(i) + 1)
+        mov_diff(a) = movement_indices(i+1);
+        a = a + 1;
+    end
+end
+
+a = 2;
+still_diff(1) = stillness_indices(1);
+
+% Ricerca e filtraggio delle differenze maggiori di 1
+for i = 1:(size(stillness_indices) - 1)
+    if (stillness_indices(i+1) ~= stillness_indices(i) + 1)
+        still_diff(a) = stillness_indices(i+1);
+        a = a + 1;
+    end
+end
+
+q = 0;
+% Per ogni elemento dell'array delle differenze, si confronta il successivo
+% e l'elemento scartato in precedenza per vedere se sia un falso positivo
+% (cambio quiete-movimento in un lasso di tempo inferiore ai 150 punti??)
+
+% CAPIRE SE RIUTILIZZABILE ANCHE PER STILLNESS
+% for i = 1:((size(mov_diff, 2) - 1))
+%     fprintf("Diff (%d) = %d\n", i, mov_diff(i));
+%     if (mov_diff(i+1) < (mov_diff(i) + 150))
+%         fprintf("Diff (%d+1) = %d\n", i, mov_diff(i+1));
+%         fprintf("Minore di diff %d\n", i);
+%         q = mov_diff(i+1);
+%         mov_diff(i+1) = 0;
+%     else if (mov_diff(i+1) < q + 150)
+%             q = mov_diff(i+1);
+%             mov_diff(i+1) = 0;
+%     end
+%     end
+% end
+
+% Rimuove gli elementi uguali a 0 da diff
+% mov_diff = mov_diff(mov_diff ~= 0);
+% still_diff = still_diff(still_diff ~= 0);
+
+% mov_diff = filterData(movement_indices, 150);
+%
+% % CAPIRE SE filterData RIUTILIZZABILE (CAMBIARE OFFSET?)
+% still_diff = filterData(stillness_indices, 0);
 
 % Salvataggio delle diff (AGGIORNARE CSV CON I VALORI OTTENUTI)
 save(filename, "mov_diff", "still_diff", "movement_indices", "stillness_indices");
 
 end
 
+% FORSE RIMUOVERE
 function diff = filterData(data, offset)
 a = 2;
 diff(1) = data(1);
