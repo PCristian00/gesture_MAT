@@ -249,19 +249,19 @@ q = 0;
 % (cambio quiete-movimento in un lasso di tempo inferiore ai 150 punti??)
 
 % CAPIRE SE RIUTILIZZABILE ANCHE PER STILLNESS
-% for i = 1:((size(mov_diff, 2) - 1))
-%     fprintf("Diff (%d) = %d\n", i, mov_diff(i));
-%     if (mov_diff(i+1) < (mov_diff(i) + 150))
-%         fprintf("Diff (%d+1) = %d\n", i, mov_diff(i+1));
-%         fprintf("Minore di diff %d\n", i);
-%         q = mov_diff(i+1);
-%         mov_diff(i+1) = 0;
-%     else if (mov_diff(i+1) < q + 150)
-%             q = mov_diff(i+1);
-%             mov_diff(i+1) = 0;
-%     end
-%     end
-% end
+for i = 1:((size(mov_diff, 2) - 1))
+    % fprintf("Diff (%d) = %d\n", i, mov_diff(i));
+    if (mov_diff(i+1) < (mov_diff(i) + 150))
+        % fprintf("Diff (%d+1) = %d\n", i, mov_diff(i+1));
+        % fprintf("Minore di diff %d\n", i);
+        q = mov_diff(i+1);
+        mov_diff(i+1) = 0;
+    else if (mov_diff(i+1) < q + 150)
+            q = mov_diff(i+1);
+            mov_diff(i+1) = 0;
+    end
+    end
+end
 
 % Rimuove gli elementi uguali a 0 da diff
 % mov_diff = mov_diff(mov_diff ~= 0);
