@@ -197,6 +197,8 @@ while true % Finche' l'utente vuole fare nuove acquisizioni con lo stesso dispos
 
                     tic; % Avvio timer
 
+                    fprintf("Rimanere in posizione iniziale...\n");
+                        pause(2);
                     for i = 1:4 % Raccolta dei 4 gesti
                         fprintf("Eseguire gesto %d:\t %s\n", i, gesture(i));
                         % disp(gesti(i))
