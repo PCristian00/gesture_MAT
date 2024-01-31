@@ -10,3 +10,4 @@ ID_Subject;Idx_Acquisition;Hand;Smartphone_model;Available_Sensors;Start_Gesture
 4;2;"right";"iPhone - iPhone";5;2;4.2073303;"Push";5.2073303;6.9231508;"Pull";7.9231508;11.6326566;"CCW";12.6326566;16.5789456;"CW"
 4;3;"right";"iPhone - iPhone";5;2;5.5072164;"CW";6.5072164;9.7997817;"CCW";10.7997817;12.9423684;"Pull";13.9423684;16.4863735;"Push"
 1;3;"right";"Galaxy S9+ di Cristian";1;2;5.7152618;"Z";6.7152618;10.3425693;"S";11.3425693;13.8206072;"AS";14.8206072;18.1050506;"AZ"
+1;4;"left";"Galaxy S9+ di Cristian";3;2;4.8467396;"AS";5.8467396;9.2422741;"Z";10.2422741;13.5100987;"AZ";14.5100987;16.6051788;"S"
