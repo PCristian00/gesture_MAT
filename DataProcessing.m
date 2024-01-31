@@ -62,6 +62,9 @@ for i = 1:size(M)
     end
 end
 
+acc = samples.user(user).acquisition(scelta_a).acc;
+                    sigPlot(acc, 'X', 'Y', 'Z', 'Accelerazione (m/s^2)', 'Accelerazione', th(1));
+
 %% Scelta del sensore automatica
 % Avviene in automatico in base ai metadati (campo Available_Sensors)
 switch (scelta_s)

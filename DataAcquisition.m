@@ -61,21 +61,21 @@ while true % Finche' l'utente vuole fare nuove acquisizioni con lo stesso dispos
                 disp("Accelerometro acceso.");
                 break
             case 2
-                m.AccelerationSensorEnabled = 0;
+                m.AccelerationSensorEnabled = 1;
                 m.MagneticSensorEnabled = 1;
                 m.OrientationSensorEnabled = 0;
                 m.AngularVelocitySensorEnabled = 0;
                 disp("Magnetometro acceso.");
                 break
             case 3
-                m.AccelerationSensorEnabled = 0;
+                m.AccelerationSensorEnabled = 1;
                 m.MagneticSensorEnabled = 0;
                 m.OrientationSensorEnabled = 1;
                 m.AngularVelocitySensorEnabled = 0;
                 disp("Sensore orientazione acceso.");
                 break
             case 4
-                m.AccelerationSensorEnabled = 0;
+                m.AccelerationSensorEnabled = 1;
                 m.MagneticSensorEnabled = 0;
                 m.OrientationSensorEnabled = 0;
                 m.AngularVelocitySensorEnabled = 1;
