@@ -13,3 +13,4 @@ ID_Subject;Idx_Acquisition;Hand;Smartphone_model;Available_Sensors;Start_Gesture
 1;4;"left";"Galaxy S9+ di Cristian";3;2;4.8467396;"AS";5.8467396;9.2422741;"Z";10.2422741;13.5100987;"AZ";14.5100987;16.6051788;"S"
 2;3;"left";"Galaxy S9+ di Cristian";5;2;5.0471334;"Down";6.0471334;10.0755054;"CW";11.0755054;15.0312718;"CCW";16.0312718;18.8135329;"Up"
 3;4;"left";"Galaxy S9+ di Cristian";4;2;4.5675707;"Pull";5.5675707;9.5777689;"CW";10.5777689;12.7282071;"Push";13.7282071;17.1961979;"CW"
+4;4;"right";"Galaxy S9+ di Cristian";5;2;5.34354;"CCW";6.34354;8.7432654;"Pull";9.7432654;11.7995217;"Push";12.7995217;17.1325979;"CW"
