@@ -61,21 +61,21 @@ while true % Finche' l'utente vuole fare nuove acquisizioni con lo stesso dispos
                 disp("Accelerometro acceso.");
                 break
             case 2
-                m.AccelerationSensorEnabled = 0;
+                m.AccelerationSensorEnabled = 1;
                 m.MagneticSensorEnabled = 1;
                 m.OrientationSensorEnabled = 0;
                 m.AngularVelocitySensorEnabled = 0;
                 disp("Magnetometro acceso.");
                 break
             case 3
-                m.AccelerationSensorEnabled = 0;
+                m.AccelerationSensorEnabled = 1;
                 m.MagneticSensorEnabled = 0;
                 m.OrientationSensorEnabled = 1;
                 m.AngularVelocitySensorEnabled = 0;
                 disp("Sensore orientazione acceso.");
                 break
             case 4
-                m.AccelerationSensorEnabled = 0;
+                m.AccelerationSensorEnabled = 1;
                 m.MagneticSensorEnabled = 0;
                 m.OrientationSensorEnabled = 0;
                 m.AngularVelocitySensorEnabled = 1;
@@ -197,6 +197,8 @@ while true % Finche' l'utente vuole fare nuove acquisizioni con lo stesso dispos
 
                     tic; % Avvio timer
 
+                    fprintf("Rimanere in posizione iniziale...\n");
+                        pause(2);
                     for i = 1:4 % Raccolta dei 4 gesti
                         fprintf("Eseguire gesto %d:\t %s\n", i, gesture(i));
                         % disp(gesti(i))
@@ -249,7 +251,7 @@ while true % Finche' l'utente vuole fare nuove acquisizioni con lo stesso dispos
             % Se il metodo di raccolta era Guidato, salva anche i tempi
             % impiegati per i singoli gesti
             if (scelta_r == 1)
-                data = {user, save_index(user), hand, m.device, scelta_s, 0, time(1), gesture(1), time(1) + 1, time(2), gesture(2), time(2) + 1, time(3), gesture(3), time(3) + 1, time(4), gesture(4)};
+                data = {user, save_index(user), hand, m.device, scelta_s, 2, time(1), gesture(1), time(1) + 1, time(2), gesture(2), time(2) + 1, time(3), gesture(3), time(3) + 1, time(4), gesture(4)};
             else
                 data = {user, save_index(user), hand, m.device, scelta_s, "start_A", "end_A", gesture(1), "start_B", "end_B", gesture(2), "start_C", "end_C", gesture(3), "start_D", "end_D", gesture(4)};
             end
