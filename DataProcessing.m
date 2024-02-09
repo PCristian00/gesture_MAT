@@ -226,29 +226,8 @@ legend(name, 'Quiete', 'Movimento');
 % CAMBIARE NOME FILE
 filename = "movement" + name + "_.mat";
 
-mov_diff = double.empty;
-a = 2;
-mov_diff(1) = movement_indices(1);
-
-% Ricerca e filtraggio delle differenze maggiori di 1
-for i = 1:(size(movement_indices) - 1)
-    if (movement_indices(i+1) ~= movement_indices(i) + 1)
-        mov_diff(a) = movement_indices(i+1);
-        a = a + 1;
-    end
-end
-
-still_diff = double.empty;
-a = 2;
-still_diff(1) = stillness_indices(1);
-
-% Ricerca e filtraggio delle differenze maggiori di 1
-for i = 1:(size(stillness_indices) - 1)
-    if (stillness_indices(i+1) ~= stillness_indices(i) + 1)
-        still_diff(a) = stillness_indices(i+1);
-        a = a + 1;
-    end
-end
+mov_diff = filterData(movement_indices);
+still_diff = filterData(stillness_indices);
 
 % Array con indici di inizio e fine gesti
 a = 1;
