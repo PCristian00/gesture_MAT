@@ -255,9 +255,11 @@ end
 
 %% PARTE CRITICA
 % Array con indici di inizio e fine gesti
-a = 1;
+a = 2;
+gest(1)=mov_diff(1,1);
+
 % Inizializza gest ad array vuoto di interi
-gest=double.empty;
+%gest=double.empty;
 % disp("QUO");
 for i = 1:(size(mov_diff, 2))
     % disp("QUI!");
