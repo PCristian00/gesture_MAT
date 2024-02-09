@@ -256,6 +256,8 @@ end
 %% PARTE CRITICA
 % Array con indici di inizio e fine gesti
 a = 2;
+
+% DA  MIGLIORARE
 gest(1)=mov_diff(1,1);
 
 % Inizializza gest ad array vuoto di interi
@@ -276,8 +278,11 @@ for i = 1:(size(mov_diff, 2))
                   %  disp("INIZIO FASE 3")
                     if (mov_diff(k) - 1 - still_diff(j) > 100)
                         fprintf("Indice "+mov_diff(k)+" Differenza : "+(mov_diff(k) - 1 - still_diff(j))+">100 (SALVATO)\n")
+                        gest(a)=still_diff(j)-1;
+                        a = a+1;
                         gest(a) = mov_diff(k);
                         a = a + 1;
+                        
                         break;
                     else, fprintf("Indice "+mov_diff(k)+" Differenza : "+(mov_diff(k) - 1 - still_diff(j))+"<100\n")
                     end
@@ -289,6 +294,9 @@ for i = 1:(size(mov_diff, 2))
         end
     end
 end
+
+% DA MIGLIORARE
+gest(8)=still_diff(size(still_diff,2))-1;
 
     % disp(gest)
 
