@@ -66,8 +66,38 @@ end
 % Riaggiungere successivamente in modo migliore queste due righe
 % FORSE SEPARARE SIGPLOT e raccolta / studio delle diff
 
-% acc = samples.user(user).acquisition(scelta_a).acc;
-% sigPlot(acc, 'X', 'Y', 'Z', 'Accelerazione (m/s^2)', 'Accelerazione', th(1));
+acc = samples.user(user).acquisition(scelta_a).acc;
+gest = sigPlot(acc, 'X', 'Y', 'Z', 'Accelerazione (m/s^2)', 'Accelerazione', th(1));
+
+r(6) = gest(1);
+r(7) = gest(2);
+r(9) = gest(3);
+r(10) = gest(4);
+r(12) = gest(5);
+r(13) = gest(6);
+r(15) = gest(7);
+r(16) = gest(8);
+
+disp(r)
+
+M(i,:) = r;
+writematrix(M,metafilename);
+
+% for i = 1:size(M)
+%     % Prende ogni riga della matrice singolarmente e la analizza
+%     r = M(i, :);
+%     if r(1) == user && r(2) == scelta_a
+%         r(6)=gest(1);
+%         r(7)=gest(2);
+%         r(9)=gest(3);
+%         r(10)=gest(4);
+%         r(12)=gest(5);
+%         r(13)=gest(6);
+%         r(15)=gest(7);
+%         r(16)=gest(8);
+%         break
+%     end
+% end
 
 %% Scelta del sensore automatica
 % Avviene in automatico in base ai metadati (campo Available_Sensors)
@@ -170,7 +200,7 @@ load('movementAccelerazione_.mat')
 % quiete e movimento.
 % La soglia (threshold) e le didascalie sono passate come argomento in modo
 % da rendere la funzione versatile.
-function sigPlot(s, xl, yl, zl, ylab, name, th)
+function gest = sigPlot(s, xl, yl, zl, ylab, name, th)
 
 % Se il campione supera i 20 secondi viene ritagliato
 if (size(s, 1) > 2000)
@@ -252,7 +282,7 @@ for i = 1:(size(mov_diff, 2))
                     % fprintf(mov_diff(k)+">"+still_diff(j)+"\n")
                     %  disp("INIZIO FASE 3")
                     if (mov_diff(k) - 1 - still_diff(j) > 100)
-                      %  fprintf("Indice "+mov_diff(k)+" Differenza : "+(mov_diff(k) - 1 - still_diff(j))+">100 (SALVATO)\n")
+                        %  fprintf("Indice "+mov_diff(k)+" Differenza : "+(mov_diff(k) - 1 - still_diff(j))+">100 (SALVATO)\n")
                         gest(a) = still_diff(j) - 1;
                         a = a + 1;
                         gest(a) = mov_diff(k);
@@ -260,7 +290,7 @@ for i = 1:(size(mov_diff, 2))
                         break;
                     else
                         if k == size(mov_diff, 2), gest(a) = still_diff(j+1) - 1;
-                        % else, fprintf("Indice "+mov_diff(k)+" Differenza : "+(mov_diff(k) - 1 - still_diff(j))+"<100\n")
+                            % else, fprintf("Indice "+mov_diff(k)+" Differenza : "+(mov_diff(k) - 1 - still_diff(j))+"<100\n")
                         end
                     end
                     break
