@@ -240,8 +240,8 @@ for i = 1:(size(mov_diff, 2))
     for j = 1:(size(still_diff, 2))
         % disp("QUE")
         if still_diff(j) > mov_diff(i)
-            fprintf("fase 1: BLU > ROSSO\n")
-            fprintf(still_diff(j)+">"+mov_diff(i)+"\n")
+            % fprintf("fase 1: BLU > ROSSO\n")
+            % fprintf(still_diff(j)+">"+mov_diff(i)+"\n")
             if (a == 1), gest(a) = mov_diff(i);
                 a = a + 1;
             end
@@ -260,7 +260,7 @@ for i = 1:(size(mov_diff, 2))
                         break;
                     else
                         if k == size(mov_diff, 2), gest(a) = still_diff(j+1) - 1;
-                        else, fprintf("Indice "+mov_diff(k)+" Differenza : "+(mov_diff(k) - 1 - still_diff(j))+"<100\n")
+                        % else, fprintf("Indice "+mov_diff(k)+" Differenza : "+(mov_diff(k) - 1 - still_diff(j))+"<100\n")
                         end
                     end
                     break
