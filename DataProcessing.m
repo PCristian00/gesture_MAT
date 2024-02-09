@@ -303,48 +303,6 @@ for i = 1:(size(mov_diff, 2))
     end
 end
 
-% DA MIGLIORARE
-% gest(8)=still_diff(size(still_diff,2))-1;
-
-% disp(gest)
-
-% SCARTO DEI FALSI POSITIVI: PRIMO METODO PROVATO
-% NON FUNZIONANTE AL 100%
-% Per ogni elemento dell'array delle differenze, si confronta il successivo
-% e l'elemento scartato in precedenza per vedere se sia un falso positivo
-% (cambio quiete-movimento in un lasso di tempo inferiore ai 150 punti??)
-
-% CAPIRE SE RIUTILIZZABILE ANCHE PER STILLNESS
-% q = 0;
-% for i = 1:((size(mov_diff, 2) - 1))
-%     % fprintf("Diff (%d) = %d\n", i, mov_diff(i));
-%     if (mov_diff(i+1) < (mov_diff(i) + 200))
-%         % fprintf("Diff (%d+1) = %d\n", i, mov_diff(i+1));
-%         % fprintf("Minore di diff %d\n", i);
-%         q = mov_diff(i+1);
-%         mov_diff(i+1) = 0;
-%     else if (mov_diff(i+1) < q + 200)
-%             q = mov_diff(i+1);
-%             mov_diff(i+1) = 0;
-%     end
-%     end
-% end
-%
-% % Stillness
-% q=0;
-% for i = 1:((size(still_diff, 2) - 1))
-%     % fprintf("Diff (%d) = %d\n", i, mov_diff(i));
-%     if (still_diff(i+1) < (still_diff(i) + 200))
-%         % fprintf("Diff (%d+1) = %d\n", i, mov_diff(i+1));
-%         % fprintf("Minore di diff %d\n", i);
-%         q = still_diff(i+1);
-%         still_diff(i+1) = 0;
-%     else if (still_diff(i+1) < q + 200)
-%             q = still_diff(i+1);
-%             still_diff(i+1) = 0;
-%     end
-%     end
-% end
 
 % Rimuove gli elementi uguali a 0 da diff
 mov_diff = mov_diff(mov_diff ~= 0);
@@ -360,38 +318,18 @@ save(filename, "mov_diff", "still_diff", "movement_indices", "stillness_indices"
 
 end
 
-% % FORSE RIMUOVERE
-% function diff = filterData(data, offset)
-% a = 2;
-% diff(1) = data(1);
-%
-% % Ricerca e filtraggio delle differenze maggiori di 1
-% for i = 1:(size(data) - 1)
-%     if (data(i+1) ~= data(i) + 1)
-%         diff(a) = data(i+1);
-%         a = a + 1;
-%         %end
-%     end
-% end
-% q = 0;
-% % Per ogni elemento dell'array delle differenze, si confronta il successivo
-% % e l'elemento scartato in precedenza per vedere se sia un falso positivo
-% % (cambio quiete-movimento in un lasso di tempo inferiore ai 150 punti??)
-%
-% % CAPIRE SE RIUTILIZZABILE ANCHE PER STILLNESS
-% for i = 1:((size(diff, 2) - 1))
-%     fprintf("Diff (%d) = %d\n", i, diff(i));
-%     if (diff(i+1) < (diff(i) + offset))
-%         fprintf("Diff (%d+1) = %d\n", i, diff(i+1));
-%         fprintf("Minore di diff %d\n", i);
-%         q = diff(i+1);
-%         diff(i+1) = 0;
-%     else if (diff(i+1) < q + offset)
-%             q = diff(i+1);
-%             diff(i+1) = 0;
-%     end
-%     end
-% end
-% % Rimuove gli elementi uguali a 0 da diff
-% diff = diff(diff ~= 0);
-% end
+% FORSE RIMUOVERE
+function diff = filterData(data)
+diff=double.empty;
+a = 2;
+diff(1) = data(1);
+
+% Ricerca e filtraggio delle differenze maggiori di 1
+for i = 1:(size(data) - 1)
+    if (data(i+1) ~= data(i) + 1)
+        diff(a) = data(i+1);
+        a = a + 1;
+        %end
+    end
+end
+end
