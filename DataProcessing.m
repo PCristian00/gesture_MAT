@@ -249,10 +249,10 @@ for i = 1:(size(mov_diff, 2))
                 % disp("INIZIO FASE 2")
                 if (mov_diff(k) > still_diff(j))
                     %    fprintf("fase 2: ROSSO > BLU\n")
-                    fprintf(mov_diff(k)+">"+still_diff(j)+"\n")
+                    % fprintf(mov_diff(k)+">"+still_diff(j)+"\n")
                     %  disp("INIZIO FASE 3")
                     if (mov_diff(k) - 1 - still_diff(j) > 100)
-                        fprintf("Indice "+mov_diff(k)+" Differenza : "+(mov_diff(k) - 1 - still_diff(j))+">100 (SALVATO)\n")
+                      %  fprintf("Indice "+mov_diff(k)+" Differenza : "+(mov_diff(k) - 1 - still_diff(j))+">100 (SALVATO)\n")
                         gest(a) = still_diff(j) - 1;
                         a = a + 1;
                         gest(a) = mov_diff(k);
@@ -272,9 +272,9 @@ for i = 1:(size(mov_diff, 2))
     end
 end
 
-% Rimuove gli elementi uguali a 0 da diff
-mov_diff = mov_diff(mov_diff ~= 0);
-still_diff = still_diff(still_diff ~= 0);
+% Rimuove gli elementi uguali a 0 da diff (INUTILE)
+% mov_diff = mov_diff(mov_diff ~= 0);
+% still_diff = still_diff(still_diff ~= 0);
 
 % Salvataggio delle diff (AGGIORNARE CSV CON I VALORI OTTENUTI)
 save(filename, "mov_diff", "still_diff", "movement_indices", "stillness_indices", "gest");
