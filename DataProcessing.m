@@ -7,7 +7,7 @@ close all;
 % Nomi dei file da leggere
 filename = "samples.mat";
 metafilename = "metadata.csv";
-th = [0.45, 0.45, 0.3, 0.25]; % Valori di threshold per ogni sensore
+th = [0.6, 0.45, 0.3, 0.25]; % Valori di threshold per ogni sensore
 % (in ordine acc, mag, orientation, ang_vel)
 
 % Caricamento del file
@@ -255,10 +255,10 @@ end
 
 %% PARTE CRITICA
 % Array con indici di inizio e fine gesti
-a = 2;
+a = 1;
 
 % DA  MIGLIORARE
-gest(1)=mov_diff(1,1);
+% gest(1)=mov_diff(1,1);
 
 % Inizializza gest ad array vuoto di interi
 %gest=double.empty;
@@ -267,7 +267,7 @@ for i = 1:(size(mov_diff, 2))
     % disp("QUI!");
     for j = 1:(size(still_diff, 2))
         % disp("QUE")
-        if (still_diff(j) > mov_diff(i))
+        if ((still_diff(j)-mov_diff(i))>20)
            % fprintf("fase 1: BLU > ROSSO\n")
            fprintf(still_diff(j)+">"+mov_diff(i)+"\n")
             for k = i:(size(mov_diff, 2))
@@ -296,7 +296,7 @@ for i = 1:(size(mov_diff, 2))
 end
 
 % DA MIGLIORARE
-gest(8)=still_diff(size(still_diff,2))-1;
+% gest(8)=still_diff(size(still_diff,2))-1;
 
     % disp(gest)
 
