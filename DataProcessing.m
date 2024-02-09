@@ -163,8 +163,6 @@ switch (scelta_s)
         end
     otherwise, disp("Indice non trovato.");
 end
-%RIMUOVERE
-disp("FINE")
 load('movementAccelerazione_.mat')
 
 % sigPlot permette di mostrare il segnale desiderato sia al suo stato
@@ -228,11 +226,7 @@ legend(name, 'Quiete', 'Movimento');
 % CAMBIARE NOME FILE
 filename = "movement" + name + "_.mat";
 
-% CALCOLO DEI DIFF : OK
-% PROVARE METODO CON CONFRONTO INCROCIATO
-% USARE 150 come distanza tra rossi e blu
-
-mov_diff=double.empty;
+mov_diff = double.empty;
 a = 2;
 mov_diff(1) = movement_indices(1);
 
@@ -244,7 +238,7 @@ for i = 1:(size(movement_indices) - 1)
     end
 end
 
-still_diff=double.empty;
+still_diff = double.empty;
 a = 2;
 still_diff(1) = stillness_indices(1);
 
@@ -256,15 +250,11 @@ for i = 1:(size(stillness_indices) - 1)
     end
 end
 
-%% PARTE CRITICA
 % Array con indici di inizio e fine gesti
 a = 1;
 
-% DA  MIGLIORARE
-% gest(1)=mov_diff(1,1);
-
 % Inizializza gest ad array vuoto di interi
-gest=double.empty;
+gest = double.empty;
 % disp("QUO");
 for i = 1:(size(mov_diff, 2))
     % disp("QUI!");
@@ -273,8 +263,8 @@ for i = 1:(size(mov_diff, 2))
         if still_diff(j) > mov_diff(i)
             fprintf("fase 1: BLU > ROSSO\n")
             fprintf(still_diff(j)+">"+mov_diff(i)+"\n")
-            if(a==1), gest(a)=mov_diff(i);
-                a=a+1;
+            if (a == 1), gest(a) = mov_diff(i);
+                a = a + 1;
             end
             for k = i:(size(mov_diff, 2))
                 % disp("INIZIO FASE 2")
@@ -303,33 +293,23 @@ for i = 1:(size(mov_diff, 2))
     end
 end
 
-
 % Rimuove gli elementi uguali a 0 da diff
 mov_diff = mov_diff(mov_diff ~= 0);
 still_diff = still_diff(still_diff ~= 0);
 
-% mov_diff = filterData(movement_indices, 150);
-%
-% % CAPIRE SE filterData RIUTILIZZABILE (CAMBIARE OFFSET?)
-% still_diff = filterData(stillness_indices, 0);
-
 % Salvataggio delle diff (AGGIORNARE CSV CON I VALORI OTTENUTI)
 save(filename, "mov_diff", "still_diff", "movement_indices", "stillness_indices", "gest");
-
 end
 
-% FORSE RIMUOVERE
+% Ricerca e filtraggio delle differenze maggiori di 1
 function diff = filterData(data)
-diff=double.empty;
+diff = double.empty;
 a = 2;
 diff(1) = data(1);
-
-% Ricerca e filtraggio delle differenze maggiori di 1
 for i = 1:(size(data) - 1)
     if (data(i+1) ~= data(i) + 1)
         diff(a) = data(i+1);
         a = a + 1;
-        %end
     end
 end
 end
