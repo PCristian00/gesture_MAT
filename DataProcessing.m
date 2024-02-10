@@ -307,6 +307,10 @@ for i = 1:(size(mov_diff, 2))
         end
     end
 end
+
+% Rimuove i campi di gest inferiori di 200 (falsi positivi della pausa
+% iniziale
+gest = gest(gest > 200);
 end
 
 % Ricerca e filtraggio delle differenze maggiori di 1
