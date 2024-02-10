@@ -182,7 +182,6 @@ switch (scelta_s)
         end
     otherwise, disp("Indice non trovato.");
 end
-% load('movementAccelerazione_.mat')
 
 % sigPlot permette di mostrare il segnale desiderato sia al suo stato
 % naturale che in uno stato segmentato approssimativamente in periodi di
@@ -242,9 +241,7 @@ ylabel(ylab);
 
 legend(name, 'Quiete', 'Movimento');
 
-% CAMBIARE NOME FILE
-% filename = "movement" + name + "_.mat";
-
+%% Segmentazione gesti
 mov_diff = filterData(movement_indices);
 still_diff = filterData(stillness_indices);
 
@@ -253,46 +250,34 @@ a = 1;
 
 % Inizializza gest ad array vuoto di interi
 gest = double.empty;
-% disp("QUO");
+
 for i = 1:(size(mov_diff, 2))
-    % disp("QUI!");
     for j = 1:(size(still_diff, 2))
-        % disp("QUE")
         if still_diff(j) > mov_diff(i)
-            % fprintf("fase 1: BLU > ROSSO\n")
-            % fprintf(still_diff(j)+">"+mov_diff(i)+"\n")
-            if (a == 1), gest(a) = mov_diff(i);
+            if (a == 1)
+                gest(a) = mov_diff(i);
                 a = a + 1;
             end
             for k = i:(size(mov_diff, 2))
-                % disp("INIZIO FASE 2")
-                if (mov_diff(k) > still_diff(j))
-                    %    fprintf("fase 2: ROSSO > BLU\n")
-                    % fprintf(mov_diff(k)+">"+still_diff(j)+"\n")
-                    %  disp("INIZIO FASE 3")
+                if mov_diff(k) > still_diff(j)
                     if (mov_diff(k) - 1 - still_diff(j) > 100)
-                        %  fprintf("Indice "+mov_diff(k)+" Differenza : "+(mov_diff(k) - 1 - still_diff(j))+">100 (SALVATO)\n")
                         gest(a) = still_diff(j) - 1;
                         a = a + 1;
                         gest(a) = mov_diff(k);
                         a = a + 1;
                         break;
                     else
-                        if k == size(mov_diff, 2), gest(a) = still_diff(j+1) - 1;
-                            % else, fprintf("Indice "+mov_diff(k)+" Differenza : "+(mov_diff(k) - 1 - still_diff(j))+"<100\n")
+                        if k == size(mov_diff, 2)
+                            gest(a) = still_diff(j+1) - 1;
                         end
                     end
                     break
-                    % else, fprintf(mov_diff(k)+"<"+still_diff(j)+"\n")
                 end
             end
             break
         end
     end
 end
-
-% Salvataggio delle diff (AGGIORNARE CSV CON I VALORI OTTENUTI)
-% save(filename, "mov_diff", "still_diff", "movement_indices", "stillness_indices", "gest");
 end
 
 % Ricerca e filtraggio delle differenze maggiori di 1
