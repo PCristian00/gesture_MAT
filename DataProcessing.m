@@ -9,17 +9,24 @@ filename = "samples.mat";
 metafilename = "metadata.csv";
 th = [0.8, 0.45, 0.3, 0.25]; % Valori di threshold per ogni sensore
 % (in ordine acc, mag, orientation, ang_vel)
+desc.acc = {'X', 'Y', 'Z', 'Accelerazione (m/s^2)', 'Accelerazione'};
+desc.mag = {'X', 'Y', 'Z', 'Campo magnetico (uT)', 'Campo Magnetico'};
+desc.orientation = {'Azimut', 'Beccheggio', 'Rollio', 'Orientamento (deg)', 'Orientamento'};
+desc.ang_vel = {'X', 'Y', 'Z', 'Velocità angolare (rad/s)', 'Velocità angolare'};
+% disp(desc)
+% save("test.mat","desc")
+
 
 % Caricamento del file
 if (isfile(filename))
     load(filename)
 else
-    fprintf("File %s non trovato.\n",filename)
+    fprintf("File %s non trovato.\n", filename)
     return
 end
 
 if (~isfile(metafilename))
-    fprintf("File %s non trovato.\n",metafilename)
+    fprintf("File %s non trovato.\n", metafilename)
     return
 end
 
@@ -77,7 +84,13 @@ end
 % FORSE SEPARARE SIGPLOT e raccolta / studio delle diff
 
 acc = samples.user(user).acquisition(scelta_a).acc;
-gest = sigPlot(acc, 'X', 'Y', 'Z', 'Accelerazione (m/s^2)', 'Accelerazione', th(1), false);
+% METTERE A FALSE ULTIMO CAMPO PER NON VISUALIZZARE
+gest = sigPlot(acc, desc.acc, th(1), true);
+% disp(size(gest))
+if (size(gest, 2) ~= 8)
+    disp("Segmentazione fallita.")
+    return
+end
 
 % Riempie i campi start e end di tutti i gesti sulla riga del csv
 j = 1;
@@ -99,22 +112,22 @@ switch (scelta_s)
     case 1
         % Accelerazione
         acc = samples.user(user).acquisition(scelta_a).acc;
-        sigPlot(acc, 'X', 'Y', 'Z', 'Accelerazione (m/s^2)', 'Accelerazione', th(1), true);
+        sigPlot(acc, desc.acc, th(1), true);
 
     case 2
         % Campo magnetico
         mag = samples.user(user).acquisition(scelta_a).mag;
-        sigPlot(mag, 'X', 'Y', 'Z', 'Campo magnetico (uT)', 'Campo Magnetico', th(2), true);
+        sigPlot(mag, desc.mag, th(2), true);
 
     case 3
         % Orientamento
         orientation = samples.user(user).acquisition(scelta_a).orientation;
-        sigPlot(orientation, 'Azimut', 'Beccheggio', 'Rollio', 'Orientamento (deg)', 'Orientamento', th(3), true);
+        sigPlot(orientation, desc.orientation, th(3), true);
 
     case 4
         % Velocità angolare
         ang_vel = samples.user(user).acquisition(scelta_a).ang_vel;
-        sigPlot(ang_vel, 'X', 'Y', 'Z', 'Velocità angolare (rad/s)', 'Velocità angolare', th(4), true);
+        sigPlot(ang_vel, desc.ang_vel, th(4), true);
 
     case 5
         % Tutti i sensori
@@ -133,22 +146,22 @@ switch (scelta_s)
                 case 1
                     % Accelerazione
                     acc = samples.user(user).acquisition(scelta_a).acc;
-                    sigPlot(acc, 'X', 'Y', 'Z', 'Accelerazione (m/s^2)', 'Accelerazione', th(1), true);
+                    sigPlot(acc, desc.acc, th(1), true);
                     break
                 case 2
                     % Campo magnetico
                     mag = samples.user(user).acquisition(scelta_a).mag;
-                    sigPlot(mag, 'X', 'Y', 'Z', 'Campo magnetico (uT)', 'Campo Magnetico', th(2), true);
+                    sigPlot(mag, desc.mag, th(2), true);
                     break
                 case 3
                     % Orientamento
                     orientation = samples.user(user).acquisition(scelta_a).orientation;
-                    sigPlot(orientation, 'Azimut', 'Beccheggio', 'Rollio', 'Orientamento (deg)', 'Orientamento', th(3), true);
+                    sigPlot(orientation, desc.orientation, th(3), true);
                     break
                 case 4
                     % Velocità angolare
                     ang_vel = samples.user(user).acquisition(scelta_a).ang_vel;
-                    sigPlot(ang_vel, 'X', 'Y', 'Z', 'Velocità angolare (rad/s)', 'Velocità angolare', th(4), true);
+                    sigPlot(ang_vel, desc.ang_vel, th(4), true);
                     break
                 case 5
                     % Tutti i sensori
@@ -156,25 +169,25 @@ switch (scelta_s)
                     % Per passare al prossimo sensore va premuto un tasto
                     % qualsiasi.
                     acc = samples.user(user).acquisition(scelta_a).acc;
-                    sigPlot(acc, 'X', 'Y', 'Z', 'Accelerazione (m/s^2)', 'Accelerazione', th(1), true);
+                    sigPlot(acc, desc.acc, th(1), true);
                     disp("Accelerazione")
                     disp("Premi un tasto qualsiasi per il prossimo sensore.")
                     pause();
 
                     mag = samples.user(user).acquisition(scelta_a).mag;
-                    sigPlot(mag, 'X', 'Y', 'Z', 'Campo magnetico (uT)', 'Campo Magnetico', th(2), true);
+                    sigPlot(mag, desc.mag, th(2), true);
                     disp("Campo magnetico")
                     disp("Premi un tasto qualsiasi per il prossimo sensore.")
                     pause();
 
                     orientation = samples.user(user).acquisition(scelta_a).orientation;
-                    sigPlot(orientation, 'Azimut', 'Beccheggio', 'Rollio', 'Orientamento (deg)', 'Orientamento', th(3), true);
+                    sigPlot(orientation, desc.orientation, th(3), true);
                     disp("Orientamento")
                     disp("Premi un tasto qualsiasi per il prossimo sensore.")
                     pause();
 
                     ang_vel = samples.user(user).acquisition(scelta_a).ang_vel;
-                    sigPlot(ang_vel, 'X', 'Y', 'Z', 'Velocità angolare (rad/s)', 'Velocità angolare', th(4), true);
+                    sigPlot(ang_vel, desc.ang_vel, th(4), true);
                     disp("Giroscopio (Velocità Angolare)")
                     disp("Premi un tasto qualsiasi per terminare la visualizzazione.")
                     pause();
@@ -193,7 +206,13 @@ end
 % quiete e movimento.
 % La soglia (threshold) e le didascalie sono passate come argomento in modo
 % da rendere la funzione versatile.
-function gest = sigPlot(s, xl, yl, zl, ylab, name, th, view)
+function gest = sigPlot(s, desc, th, view)
+
+xl = desc{1};
+yl = desc{2};
+zl = desc{3};
+ylab = desc{4};
+name = desc{5};
 
 % Se il campione supera i 20 secondi viene ritagliato
 if (size(s, 1) > 2000)
@@ -201,7 +220,7 @@ if (size(s, 1) > 2000)
 end
 
 %% Plot del segnale originale
-fprintf("View = "+view+"\n");
+% fprintf("View = "+view+"\n");
 if (view)
     figure("Name", name);
     plot(s);
