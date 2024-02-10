@@ -53,15 +53,30 @@ end
 
 % CAPIRE COME IMPORTARE ANCHE LE SCRITTE
 % FORSE USARE READCELL
-M = readmatrix(metafilename);
+
+% varNames = {"ID_Subject", "Idx_Acquisition", "Hand", "Smartphone_model", "Available_Sensors", "Start_GestureA", "End_GestureA", "ID_GestureA", "Start_GestureB", "End_GestureB", "ID_GestureB", "Start_GestureC", "End_GestureC", "ID_GestureC", "Start_GestureD", "End_GestureD", "ID_GestureD"};
+% varTypes = {'double','double','char','char','double','double','double','char','double','double','char','double','double','char','double','double','char'};
+% delimiter = ";";
+% dataStartLine = 2;
+% extraColRule = 'ignore';
+
+
+opts = detectImportOptions(metafilename);
+% opts = delimitedTextImportOptions('VariableNames',varNames,...
+%                                 'VariableTypes',varTypes,...
+%                                 'Delimiter',delimiter,...
+%                                 'DataLines', dataStartLine,...
+%                                 'ExtraColumnsRule',extraColRule); 
+M = readtable(metafilename,opts);
 
 for i = 1:size(M)
     % Prende ogni riga della matrice singolarmente e la analizza
     r = M(i, :);
     % Confronta gli ID nei metadati con le scelte dell'utente per trovare
     % il campo Available_Sensors (5)
-    if r(1) == user && r(2) == scelta_a
-        scelta_s = r(5);
+    if r.ID_Subject == user && r.Idx_Acquisition == scelta_a
+        scelta_s = r.Available_Sensors;
+        row=i;
         break
     end
 end
@@ -77,15 +92,15 @@ gest = sigPlot(acc, 'X', 'Y', 'Z', 'Accelerazione (m/s^2)', 'Accelerazione', th(
 j=1;
 for i=6:16
     if(i~=8 && i~=11 && i~=14)
-        r(i)=gest(j);
+        r.(i)=gest(j);
         j=j+1;
     end
 end
     
 disp(r)
 
-M(i,:) = r;
-writematrix(M,metafilename);
+M(row,:) = r;
+writetable(M,metafilename);
 
 %% Scelta del sensore automatica
 % Avviene in automatico in base ai metadati (campo Available_Sensors)
