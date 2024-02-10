@@ -50,7 +50,11 @@ else
 end
 
 % Carica i metadati in una matrice
+
+% CAPIRE COME IMPORTARE ANCHE LE SCRITTE
+% FORSE USARE READCELL
 M = readmatrix(metafilename);
+
 for i = 1:size(M)
     % Prende ogni riga della matrice singolarmente e la analizza
     r = M(i, :);
@@ -62,8 +66,43 @@ for i = 1:size(M)
     end
 end
 
+% SIGPLOT per gesti va sempre fatto su acc
+% Riaggiungere successivamente in modo migliore queste due righe
+% FORSE SEPARARE SIGPLOT e raccolta / studio delle diff
+
 acc = samples.user(user).acquisition(scelta_a).acc;
-                    sigPlot(acc, 'X', 'Y', 'Z', 'Accelerazione (m/s^2)', 'Accelerazione', th(1));
+gest = sigPlot(acc, 'X', 'Y', 'Z', 'Accelerazione (m/s^2)', 'Accelerazione', th(1));
+
+% Può essere fatto un for
+r(6) = gest(1);
+r(7) = gest(2);
+r(9) = gest(3);
+r(10) = gest(4);
+r(12) = gest(5);
+r(13) = gest(6);
+r(15) = gest(7);
+r(16) = gest(8);
+
+disp(r)
+
+M(i,:) = r;
+writematrix(M,metafilename);
+
+% for i = 1:size(M)
+%     % Prende ogni riga della matrice singolarmente e la analizza
+%     r = M(i, :);
+%     if r(1) == user && r(2) == scelta_a
+%         r(6)=gest(1);
+%         r(7)=gest(2);
+%         r(9)=gest(3);
+%         r(10)=gest(4);
+%         r(12)=gest(5);
+%         r(13)=gest(6);
+%         r(15)=gest(7);
+%         r(16)=gest(8);
+%         break
+%     end
+% end
 
 %% Scelta del sensore automatica
 % Avviene in automatico in base ai metadati (campo Available_Sensors)
@@ -92,6 +131,7 @@ switch (scelta_s)
         % Tutti i sensori
         % Se l'acquisizione contiene tutti i sensori, si apre un sottomenu
         % che permette di scegliere quali visualizzare
+
         %% Scelta del sensore (acquisizioni multiple)
         while true
             scelta_s = input("Scegliere sensori da visualizzare:\n"+ ...
@@ -156,16 +196,16 @@ switch (scelta_s)
                 otherwise, disp("Indice non trovato.");
             end
         end
-
     otherwise, disp("Indice non trovato.");
 end
+load('movementAccelerazione_.mat')
 
 % sigPlot permette di mostrare il segnale desiderato sia al suo stato
 % naturale che in uno stato segmentato approssimativamente in periodi di
 % quiete e movimento.
 % La soglia (threshold) e le didascalie sono passate come argomento in modo
 % da rendere la funzione versatile.
-function sigPlot(s, xl, yl, zl, ylab, name, th)
+function gest = sigPlot(s, xl, yl, zl, ylab, name, th)
 
 % Se il campione supera i 20 secondi viene ritagliato
 if (size(s, 1) > 2000)
@@ -199,6 +239,7 @@ threshold = th;
 % Identifica quiete e movimento in base alla soglia
 stillness_indices = find(movestd_signal <= threshold);
 movement_indices = find(movestd_signal > threshold);
+% whos
 
 %% Plot del segnale con segmentazione
 figure("Name", name);
@@ -216,4 +257,73 @@ xlabel('Campioni');
 ylabel(ylab);
 
 legend(name, 'Quiete', 'Movimento');
+
+% CAMBIARE NOME FILE
+filename = "movement" + name + "_.mat";
+
+mov_diff = filterData(movement_indices);
+still_diff = filterData(stillness_indices);
+
+% Array con indici di inizio e fine gesti
+a = 1;
+
+% Inizializza gest ad array vuoto di interi
+gest = double.empty;
+% disp("QUO");
+for i = 1:(size(mov_diff, 2))
+    % disp("QUI!");
+    for j = 1:(size(still_diff, 2))
+        % disp("QUE")
+        if still_diff(j) > mov_diff(i)
+            % fprintf("fase 1: BLU > ROSSO\n")
+            % fprintf(still_diff(j)+">"+mov_diff(i)+"\n")
+            if (a == 1), gest(a) = mov_diff(i);
+                a = a + 1;
+            end
+            for k = i:(size(mov_diff, 2))
+                % disp("INIZIO FASE 2")
+                if (mov_diff(k) > still_diff(j))
+                    %    fprintf("fase 2: ROSSO > BLU\n")
+                    % fprintf(mov_diff(k)+">"+still_diff(j)+"\n")
+                    %  disp("INIZIO FASE 3")
+                    if (mov_diff(k) - 1 - still_diff(j) > 100)
+                        %  fprintf("Indice "+mov_diff(k)+" Differenza : "+(mov_diff(k) - 1 - still_diff(j))+">100 (SALVATO)\n")
+                        gest(a) = still_diff(j) - 1;
+                        a = a + 1;
+                        gest(a) = mov_diff(k);
+                        a = a + 1;
+                        break;
+                    else
+                        if k == size(mov_diff, 2), gest(a) = still_diff(j+1) - 1;
+                            % else, fprintf("Indice "+mov_diff(k)+" Differenza : "+(mov_diff(k) - 1 - still_diff(j))+"<100\n")
+                        end
+                    end
+                    break
+                    % else, fprintf(mov_diff(k)+"<"+still_diff(j)+"\n")
+                end
+            end
+            break
+        end
+    end
+end
+
+% Rimuove gli elementi uguali a 0 da diff (INUTILE)
+% mov_diff = mov_diff(mov_diff ~= 0);
+% still_diff = still_diff(still_diff ~= 0);
+
+% Salvataggio delle diff (AGGIORNARE CSV CON I VALORI OTTENUTI)
+% save(filename, "mov_diff", "still_diff", "movement_indices", "stillness_indices", "gest");
+end
+
+% Ricerca e filtraggio delle differenze maggiori di 1
+function diff = filterData(data)
+diff = double.empty;
+a = 2;
+diff(1) = data(1);
+for i = 1:(size(data) - 1)
+    if (data(i+1) ~= data(i) + 1)
+        diff(a) = data(i+1);
+        a = a + 1;
+    end
+end
 end
