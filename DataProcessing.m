@@ -7,7 +7,7 @@ close all;
 % Nomi dei file da leggere
 filename = "samples.mat";
 metafilename = "metadata.csv";
-th = [0.45, 0.45, 0.3, 0.25]; % Valori di threshold per ogni sensore
+th = [0.8, 0.45, 0.3, 0.25]; % Valori di threshold per ogni sensore
 % (in ordine acc, mag, orientation, ang_vel)
 
 % Caricamento del file
@@ -73,36 +73,19 @@ end
 acc = samples.user(user).acquisition(scelta_a).acc;
 gest = sigPlot(acc, 'X', 'Y', 'Z', 'Accelerazione (m/s^2)', 'Accelerazione', th(1));
 
-% Può essere fatto un for
-r(6) = gest(1);
-r(7) = gest(2);
-r(9) = gest(3);
-r(10) = gest(4);
-r(12) = gest(5);
-r(13) = gest(6);
-r(15) = gest(7);
-r(16) = gest(8);
-
+% Riempie i campi start e end di tutti i gesti sulla riga del csv
+j=1;
+for i=6:16
+    if(i~=8 && i~=11 && i~=14)
+        r(i)=gest(j);
+        j=j+1;
+    end
+end
+    
 disp(r)
 
 M(i,:) = r;
 writematrix(M,metafilename);
-
-% for i = 1:size(M)
-%     % Prende ogni riga della matrice singolarmente e la analizza
-%     r = M(i, :);
-%     if r(1) == user && r(2) == scelta_a
-%         r(6)=gest(1);
-%         r(7)=gest(2);
-%         r(9)=gest(3);
-%         r(10)=gest(4);
-%         r(12)=gest(5);
-%         r(13)=gest(6);
-%         r(15)=gest(7);
-%         r(16)=gest(8);
-%         break
-%     end
-% end
 
 %% Scelta del sensore automatica
 % Avviene in automatico in base ai metadati (campo Available_Sensors)
@@ -312,7 +295,7 @@ end
 % still_diff = still_diff(still_diff ~= 0);
 
 % Salvataggio delle diff (AGGIORNARE CSV CON I VALORI OTTENUTI)
-% save(filename, "mov_diff", "still_diff", "movement_indices", "stillness_indices", "gest");
+save(filename, "mov_diff", "still_diff", "movement_indices", "stillness_indices", "gest");
 end
 
 % Ricerca e filtraggio delle differenze maggiori di 1
