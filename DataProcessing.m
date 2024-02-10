@@ -312,7 +312,7 @@ end
 % still_diff = still_diff(still_diff ~= 0);
 
 % Salvataggio delle diff (AGGIORNARE CSV CON I VALORI OTTENUTI)
-save(filename, "mov_diff", "still_diff", "movement_indices", "stillness_indices", "gest");
+% save(filename, "mov_diff", "still_diff", "movement_indices", "stillness_indices", "gest");
 end
 
 % Ricerca e filtraggio delle differenze maggiori di 1
