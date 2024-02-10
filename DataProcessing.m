@@ -14,7 +14,12 @@ th = [0.8, 0.45, 0.3, 0.25]; % Valori di threshold per ogni sensore
 if (isfile(filename))
     load(filename)
 else
-    disp("File non trovato.")
+    fprintf("File %s non trovato.\n",filename)
+    return
+end
+
+if (~isfile(metafilename))
+    fprintf("File %s non trovato.\n",metafilename)
     return
 end
 
