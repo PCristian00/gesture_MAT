@@ -182,7 +182,7 @@ switch (scelta_s)
         end
     otherwise, disp("Indice non trovato.");
 end
-load('movementAccelerazione_.mat')
+% load('movementAccelerazione_.mat')
 
 % sigPlot permette di mostrare il segnale desiderato sia al suo stato
 % naturale che in uno stato segmentato approssimativamente in periodi di
@@ -243,7 +243,7 @@ ylabel(ylab);
 legend(name, 'Quiete', 'Movimento');
 
 % CAMBIARE NOME FILE
-filename = "movement" + name + "_.mat";
+% filename = "movement" + name + "_.mat";
 
 mov_diff = filterData(movement_indices);
 still_diff = filterData(stillness_indices);
@@ -292,7 +292,7 @@ for i = 1:(size(mov_diff, 2))
 end
 
 % Salvataggio delle diff (AGGIORNARE CSV CON I VALORI OTTENUTI)
-save(filename, "mov_diff", "still_diff", "movement_indices", "stillness_indices", "gest");
+% save(filename, "mov_diff", "still_diff", "movement_indices", "stillness_indices", "gest");
 end
 
 % Ricerca e filtraggio delle differenze maggiori di 1
