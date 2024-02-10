@@ -50,7 +50,11 @@ else
 end
 
 % Carica i metadati in una matrice
+
+% CAPIRE COME IMPORTARE ANCHE LE SCRITTE
+% FORSE USARE READCELL
 M = readmatrix(metafilename);
+
 for i = 1:size(M)
     % Prende ogni riga della matrice singolarmente e la analizza
     r = M(i, :);
@@ -69,6 +73,7 @@ end
 acc = samples.user(user).acquisition(scelta_a).acc;
 gest = sigPlot(acc, 'X', 'Y', 'Z', 'Accelerazione (m/s^2)', 'Accelerazione', th(1));
 
+% Può essere fatto un for
 r(6) = gest(1);
 r(7) = gest(2);
 r(9) = gest(3);
