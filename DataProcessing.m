@@ -13,9 +13,6 @@ desc.acc = {'X', 'Y', 'Z', 'Accelerazione (m/s^2)', 'Accelerazione'};
 desc.mag = {'X', 'Y', 'Z', 'Campo magnetico (uT)', 'Campo Magnetico'};
 desc.orientation = {'Azimut', 'Beccheggio', 'Rollio', 'Orientamento (deg)', 'Orientamento'};
 desc.ang_vel = {'X', 'Y', 'Z', 'Velocità angolare (rad/s)', 'Velocità angolare'};
-% disp(desc)
-% save("test.mat","desc")
-
 
 % Caricamento del file
 if (isfile(filename))
@@ -87,26 +84,41 @@ acc = samples.user(user).acquisition(scelta_a).acc;
 % METTERE A FALSE ULTIMO CAMPO PER NON VISUALIZZARE
 gest = sigPlot(acc, desc.acc, th(1), true);
 % disp(size(gest))
-if (size(gest, 2) ~= 8)
-    % PROVARE A RIFARE SIGPLOT CON ALTRO TH oppure
-    %FARE FOR DI SOTTO SOLO SE GEST == 8, altrimenti messaggio e csv vuoto
-    disp("Segmentazione fallita.")
-    return
-end
 
-% Riempie i campi start e end di tutti i gesti sulla riga del csv
-j = 1;
-for i = 6:16
-    if (i ~= 8 && i ~= 11 && i ~= 14)
-        r.(i) = gest(j);
-        j = j + 1;
+% Se la segmentazione fallisce con la soglia scelta dall'utente, il
+% programma esegue vari tentativi finché non si trovano gli 8 punti
+% necessari
+thn = 0.4;
+while (size(gest, 2) ~= 8)
+    gest = sigPlot(acc, desc.acc, thn, false);
+    if (size(gest, 2) ~= 8 && thn < th(1))
+        % fprintf("Segmentazione fallita con th ="+thn+"\n");
+        thn = thn + 0.05;
+    else
+        gest = sigPlot(acc, desc.acc, thn, true);
+        fprintf("Segmentazione OK con th = "+thn+"\n");
+        break;
     end
 end
 
-% disp(r);
 
-M(row, :) = r;
-writetable(M, metafilename);
+if (size(gest, 2) ~= 8)
+    fprintf("Utente %d Acquisizione %d : Segmentazione automatica fallita.\n", user, scelta_a);
+else
+    % Riempie i campi start e end di tutti i gesti sulla riga del csv
+    j = 1;
+    for i = 6:16
+        if (i ~= 8 && i ~= 11 && i ~= 14)
+            r.(i) = gest(j);
+            j = j + 1;
+        end
+    end
+
+    % disp(r);
+
+    M(row, :) = r;
+    writetable(M, metafilename);
+end
 
 %% Scelta del sensore automatica
 % Avviene in automatico in base ai metadati (campo Available_Sensors)
@@ -311,10 +323,10 @@ for i = 1:(size(mov_diff, 2))
 end
 
 % Solo per test, rimuovere
-if(view==false)
-scarto=gest(gest<200);
-disp("Scarto =");
-disp(scarto)
+if (view == false)
+    scarto = gest(gest < 200);
+    disp("Scarto =");
+    disp(scarto)
 end
 
 % Rimuove i campi di gest inferiori di 200 (falsi positivi della pausa
