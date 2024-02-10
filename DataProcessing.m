@@ -88,6 +88,8 @@ acc = samples.user(user).acquisition(scelta_a).acc;
 gest = sigPlot(acc, desc.acc, th(1), true);
 % disp(size(gest))
 if (size(gest, 2) ~= 8)
+    % PROVARE A RIFARE SIGPLOT CON ALTRO TH oppure
+    %FARE FOR DI SOTTO SOLO SE GEST == 8, altrimenti messaggio e csv vuoto
     disp("Segmentazione fallita.")
     return
 end
@@ -308,8 +310,15 @@ for i = 1:(size(mov_diff, 2))
     end
 end
 
+% Solo per test, rimuovere
+if(view==false)
+scarto=gest(gest<200);
+disp("Scarto =");
+disp(scarto)
+end
+
 % Rimuove i campi di gest inferiori di 200 (falsi positivi della pausa
-% iniziale
+% iniziale)
 gest = gest(gest > 200);
 end
 
