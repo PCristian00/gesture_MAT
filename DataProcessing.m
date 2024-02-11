@@ -1,6 +1,8 @@
 % Permette di scegliere un'acquisizione salvata sul file e di studiarne il segnale mediante grafici.
 % Il segnale viene mostrato sia al suo stato naturale che in uno stato
-% segmentato approssimativamente in periodi di quiete e movimento.
+% segmentato approssimativamente in periodi di quiete e movimento. Inoltre,
+% se il segnale è abbastanza leggibile, vengono raccolti gli 8 punti
+% fondamentali per la segmentazione e salvati sul .csv.
 
 clearvars;
 close all;
@@ -38,6 +40,7 @@ while true
     end
 end
 
+% Carica l'array contenente i contatori delle acquisizioni
 n = save_index(user);
 
 % Scelta dell'acquisizione da mostrare
@@ -76,26 +79,30 @@ for i = 1:size(M)
     end
 end
 
-% SIGPLOT per gesti va sempre fatto su acc
-% Riaggiungere successivamente in modo migliore queste due righe
-% FORSE SEPARARE SIGPLOT e raccolta / studio delle diff
-
+%% Salvataggio dei punti dei gesti
+% Per il salvataggio dei punti dei gesti lo script utilizza esclusivamente
+% il segnale dell'accelerometro
 acc = samples.user(user).acquisition(scelta_a).acc;
-% METTERE A FALSE ULTIMO CAMPO PER NON VISUALIZZARE
-gest = sigPlot(acc, desc.acc, th(1), true);
-% disp(size(gest))
+% Raccoglie i punti di interesse dei 4 gesti (se ultimo campo == true
+% visualizza anche i grafici)
+gest = sigPlot(acc, desc.acc, th(1), false);
 
 % Se la segmentazione fallisce con la soglia scelta dall'utente, il
 % programma esegue vari tentativi finché non si trovano gli 8 punti
 % necessari
 thn = 0.4;
+new_th = false;
 while (size(gest, 2) ~= 8)
     gest = sigPlot(acc, desc.acc, thn, false);
     if (size(gest, 2) ~= 8 && thn < th(1))
-        % fprintf("Segmentazione fallita con th ="+thn+"\n");
         thn = thn + 0.05;
     else
         gest = sigPlot(acc, desc.acc, thn, true);
+        % Indica che è stato usato un treshold diverso da quello
+        % inizialmente previsto (permette di evitare che vengano
+        % visualizzate doppie finestre per lo stesso segnale di
+        % accelerazione)
+        new_th = true;
         fprintf("Segmentazione OK con th = "+thn+"\n");
         break;
     end
@@ -114,8 +121,7 @@ else
         end
     end
 
-    % disp(r);
-
+    % Aggiorna la riga modificata nel file .csv
     M(row, :) = r;
     writetable(M, metafilename);
 end
@@ -125,8 +131,10 @@ end
 switch (scelta_s)
     case 1
         % Accelerazione
-        acc = samples.user(user).acquisition(scelta_a).acc;
-        sigPlot(acc, desc.acc, th(1), true);
+        if (new_th == false)
+            acc = samples.user(user).acquisition(scelta_a).acc;
+            sigPlot(acc, desc.acc, th(1), true);
+        end
 
     case 2
         % Campo magnetico
@@ -160,7 +168,9 @@ switch (scelta_s)
                 case 1
                     % Accelerazione
                     acc = samples.user(user).acquisition(scelta_a).acc;
-                    sigPlot(acc, desc.acc, th(1), true);
+                    if (new_th == false)
+                        sigPlot(acc, desc.acc, th(1), true);
+                    end
                     break
                 case 2
                     % Campo magnetico
@@ -183,7 +193,11 @@ switch (scelta_s)
                     % Per passare al prossimo sensore va premuto un tasto
                     % qualsiasi.
                     acc = samples.user(user).acquisition(scelta_a).acc;
-                    sigPlot(acc, desc.acc, th(1), true);
+                    if (new_th == true)
+                        sigPlot(acc, desc.acc, thn, true);
+                    else
+                        sigPlot(acc, desc.acc, th(1), true);
+                    end
                     disp("Accelerazione")
                     disp("Premi un tasto qualsiasi per il prossimo sensore.")
                     pause();
@@ -226,7 +240,7 @@ xl = desc{1};
 yl = desc{2};
 zl = desc{3};
 ylab = desc{4};
-name = desc{5};
+name = desc{5} + " (th = " + th + " )";
 
 % Se il campione supera i 20 secondi viene ritagliato
 if (size(s, 1) > 2000)
@@ -234,7 +248,7 @@ if (size(s, 1) > 2000)
 end
 
 %% Plot del segnale originale
-% fprintf("View = "+view+"\n");
+% I grafici vengono mostrati solo se sigPlot ha view==true come argomento
 if (view)
     figure("Name", name);
     plot(s);
@@ -263,9 +277,9 @@ threshold = th;
 % Identifica quiete e movimento in base alla soglia
 stillness_indices = find(movestd_signal <= threshold);
 movement_indices = find(movestd_signal > threshold);
-% whos
 
 %% Plot del segnale con segmentazione
+% I grafici vengono mostrati solo se sigPlot ha view==true come argomento
 if (view)
     figure("Name", name);
     plot(s);
@@ -285,6 +299,7 @@ if (view)
 end
 
 %% Segmentazione gesti
+% Vengono selezionati solo i probabili punti di interesse
 mov_diff = filterData(movement_indices);
 still_diff = filterData(stillness_indices);
 
@@ -292,18 +307,30 @@ still_diff = filterData(stillness_indices);
 a = 1;
 
 % Inizializza gest ad array vuoto di interi
+% Gest conterrà gli 8 punti di interesse (inizio e partenza di ognuno dei 4
+% gesti)
 gest = double.empty;
 
+% Per ogni probabile punto di interesse di movimento
 for i = 1:(size(mov_diff, 2))
+    % Viene fatto il confronto con tutti i punti di quiete
     for j = 1:(size(still_diff, 2))
         if still_diff(j) > mov_diff(i)
             if (a == 1)
+                % Salva il primo punto di movimento
                 gest(a) = mov_diff(i);
                 a = a + 1;
             end
+            % Se il punto di quiete attuale è superiore a quello di
+            % movimento analizzato, il punto viene confrontato con tutti
+            % i punti di movimento successivi
             for k = i:(size(mov_diff, 2))
                 if mov_diff(k) > still_diff(j)
                     if (mov_diff(k) - 1 - still_diff(j) > 100)
+                        % Rimozione dei falsi positivi
+                        % Se il punto di movimento è maggiore di quello di
+                        % quiete e c'è una differenza abbastanza grande tra
+                        % i due punti, vengono salvati entrambi
                         gest(a) = still_diff(j) - 1;
                         a = a + 1;
                         gest(a) = mov_diff(k);
@@ -311,6 +338,7 @@ for i = 1:(size(mov_diff, 2))
                         break;
                     else
                         if k == size(mov_diff, 2)
+                            % Salvataggio dell'ultimo punto
                             gest(a) = still_diff(j+1) - 1;
                         end
                     end
@@ -322,19 +350,13 @@ for i = 1:(size(mov_diff, 2))
     end
 end
 
-% Solo per test, rimuovere
-% if (view == false)
-%     scarto = gest(gest < 200);
-%     disp("Scarto =");
-%     disp(scarto)
-% end
-
 % Rimuove i campi di gest inferiori di 200 (falsi positivi della pausa
-% iniziale)
+% iniziale di due secondi)
 gest = gest(gest > 200);
 end
 
-% Ricerca e filtraggio delle differenze maggiori di 1
+% Ricerca e filtraggio delle differenze maggiori di 1 tra gli indici
+% raccolti per evidenziare i probabili punti di interesse
 function diff = filterData(data)
 diff = double.empty;
 a = 2;
