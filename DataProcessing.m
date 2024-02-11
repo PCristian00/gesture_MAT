@@ -240,7 +240,7 @@ xl = desc{1};
 yl = desc{2};
 zl = desc{3};
 ylab = desc{4};
-name = desc{5} + " (th = " + th + " )";
+name = desc{5} + " (th = " + th + ")";
 
 % Se il campione supera i 20 secondi viene ritagliato
 if (size(s, 1) > 2000)

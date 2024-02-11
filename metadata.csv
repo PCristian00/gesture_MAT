@@ -1,6 +1,6 @@
 ID_Subject,Idx_Acquisition,Hand,Smartphone_model,Available_Sensors,Start_GestureA,End_GestureA,ID_GestureA,Start_GestureB,End_GestureB,ID_GestureB,Start_GestureC,End_GestureC,ID_GestureC,Start_GestureD,End_GestureD,ID_GestureD
 1,1,right,Galaxy S10e,1,263,460,AZ,814,1058,AS,1256,1490,S,1741,1899,Z
-2,1,right,Galaxy S10e,2,242,444,CW,608,726,Up,1040,1228,CCW,1510,1656,Down
+2,1,right,Galaxy S10e,2,241,466,CW,606,728,Up,1033,1256,CCW,1506,1696,Down
 3,1,right,Galaxy S10e,5,269,357,Push,544,648,Pull,802,991,CW,1136,1355,CW
 3,2,left,Galaxy S10e,2,282,375,Push,674,881,CW,1122,1229,Pull,1410,1692,CW
 4,1,right,Galaxy S10e,1,384,391,Pull,682,828,CW,1193,1459,CCW,1705,1803,Push
