@@ -9,12 +9,21 @@ filename = "samples.mat";
 metafilename = "metadata.csv";
 th = [0.8, 0.45, 0.3, 0.25]; % Valori di threshold per ogni sensore
 % (in ordine acc, mag, orientation, ang_vel)
+desc.acc = {'X', 'Y', 'Z', 'Accelerazione (m/s^2)', 'Accelerazione'};
+desc.mag = {'X', 'Y', 'Z', 'Campo magnetico (uT)', 'Campo Magnetico'};
+desc.orientation = {'Azimut', 'Beccheggio', 'Rollio', 'Orientamento (deg)', 'Orientamento'};
+desc.ang_vel = {'X', 'Y', 'Z', 'Velocità angolare (rad/s)', 'Velocità angolare'};
 
 % Caricamento del file
 if (isfile(filename))
     load(filename)
 else
-    disp("File non trovato.")
+    fprintf("File %s non trovato.\n", filename)
+    return
+end
+
+if (~isfile(metafilename))
+    fprintf("File %s non trovato.\n", metafilename)
     return
 end
 
@@ -72,21 +81,44 @@ end
 % FORSE SEPARARE SIGPLOT e raccolta / studio delle diff
 
 acc = samples.user(user).acquisition(scelta_a).acc;
-gest = sigPlot(acc, 'X', 'Y', 'Z', 'Accelerazione (m/s^2)', 'Accelerazione', th(1));
+% METTERE A FALSE ULTIMO CAMPO PER NON VISUALIZZARE
+gest = sigPlot(acc, desc.acc, th(1), true);
+% disp(size(gest))
 
-% Riempie i campi start e end di tutti i gesti sulla riga del csv
-j = 1;
-for i = 6:16
-    if (i ~= 8 && i ~= 11 && i ~= 14)
-        r.(i) = gest(j);
-        j = j + 1;
+% Se la segmentazione fallisce con la soglia scelta dall'utente, il
+% programma esegue vari tentativi finché non si trovano gli 8 punti
+% necessari
+thn = 0.4;
+while (size(gest, 2) ~= 8)
+    gest = sigPlot(acc, desc.acc, thn, false);
+    if (size(gest, 2) ~= 8 && thn < th(1))
+        % fprintf("Segmentazione fallita con th ="+thn+"\n");
+        thn = thn + 0.05;
+    else
+        gest = sigPlot(acc, desc.acc, thn, true);
+        fprintf("Segmentazione OK con th = "+thn+"\n");
+        break;
     end
 end
 
-% disp(r);
 
-M(row, :) = r;
-writetable(M, metafilename);
+if (size(gest, 2) ~= 8)
+    fprintf("Utente %d Acquisizione %d : Segmentazione automatica fallita.\n", user, scelta_a);
+else
+    % Riempie i campi start e end di tutti i gesti sulla riga del csv
+    j = 1;
+    for i = 6:16
+        if (i ~= 8 && i ~= 11 && i ~= 14)
+            r.(i) = gest(j);
+            j = j + 1;
+        end
+    end
+
+    % disp(r);
+
+    M(row, :) = r;
+    writetable(M, metafilename);
+end
 
 %% Scelta del sensore automatica
 % Avviene in automatico in base ai metadati (campo Available_Sensors)
@@ -94,22 +126,22 @@ switch (scelta_s)
     case 1
         % Accelerazione
         acc = samples.user(user).acquisition(scelta_a).acc;
-        sigPlot(acc, 'X', 'Y', 'Z', 'Accelerazione (m/s^2)', 'Accelerazione', th(1));
+        sigPlot(acc, desc.acc, th(1), true);
 
     case 2
         % Campo magnetico
         mag = samples.user(user).acquisition(scelta_a).mag;
-        sigPlot(mag, 'X', 'Y', 'Z', 'Campo magnetico (uT)', 'Campo Magnetico', th(2));
+        sigPlot(mag, desc.mag, th(2), true);
 
     case 3
         % Orientamento
         orientation = samples.user(user).acquisition(scelta_a).orientation;
-        sigPlot(orientation, 'Azimut', 'Beccheggio', 'Rollio', 'Orientamento (deg)', 'Orientamento', th(3));
+        sigPlot(orientation, desc.orientation, th(3), true);
 
     case 4
         % Velocità angolare
         ang_vel = samples.user(user).acquisition(scelta_a).ang_vel;
-        sigPlot(ang_vel, 'X', 'Y', 'Z', 'Velocità angolare (rad/s)', 'Velocità angolare', th(4));
+        sigPlot(ang_vel, desc.ang_vel, th(4), true);
 
     case 5
         % Tutti i sensori
@@ -128,22 +160,22 @@ switch (scelta_s)
                 case 1
                     % Accelerazione
                     acc = samples.user(user).acquisition(scelta_a).acc;
-                    sigPlot(acc, 'X', 'Y', 'Z', 'Accelerazione (m/s^2)', 'Accelerazione', th(1));
+                    sigPlot(acc, desc.acc, th(1), true);
                     break
                 case 2
                     % Campo magnetico
                     mag = samples.user(user).acquisition(scelta_a).mag;
-                    sigPlot(mag, 'X', 'Y', 'Z', 'Campo magnetico (uT)', 'Campo Magnetico', th(2));
+                    sigPlot(mag, desc.mag, th(2), true);
                     break
                 case 3
                     % Orientamento
                     orientation = samples.user(user).acquisition(scelta_a).orientation;
-                    sigPlot(orientation, 'Azimut', 'Beccheggio', 'Rollio', 'Orientamento (deg)', 'Orientamento', th(3));
+                    sigPlot(orientation, desc.orientation, th(3), true);
                     break
                 case 4
                     % Velocità angolare
                     ang_vel = samples.user(user).acquisition(scelta_a).ang_vel;
-                    sigPlot(ang_vel, 'X', 'Y', 'Z', 'Velocità angolare (rad/s)', 'Velocità angolare', th(4));
+                    sigPlot(ang_vel, desc.ang_vel, th(4), true);
                     break
                 case 5
                     % Tutti i sensori
@@ -151,25 +183,25 @@ switch (scelta_s)
                     % Per passare al prossimo sensore va premuto un tasto
                     % qualsiasi.
                     acc = samples.user(user).acquisition(scelta_a).acc;
-                    sigPlot(acc, 'X', 'Y', 'Z', 'Accelerazione (m/s^2)', 'Accelerazione', th(1));
+                    sigPlot(acc, desc.acc, th(1), true);
                     disp("Accelerazione")
                     disp("Premi un tasto qualsiasi per il prossimo sensore.")
                     pause();
 
                     mag = samples.user(user).acquisition(scelta_a).mag;
-                    sigPlot(mag, 'X', 'Y', 'Z', 'Campo magnetico (uT)', 'Campo Magnetico', th(2));
+                    sigPlot(mag, desc.mag, th(2), true);
                     disp("Campo magnetico")
                     disp("Premi un tasto qualsiasi per il prossimo sensore.")
                     pause();
 
                     orientation = samples.user(user).acquisition(scelta_a).orientation;
-                    sigPlot(orientation, 'Azimut', 'Beccheggio', 'Rollio', 'Orientamento (deg)', 'Orientamento', th(3));
+                    sigPlot(orientation, desc.orientation, th(3), true);
                     disp("Orientamento")
                     disp("Premi un tasto qualsiasi per il prossimo sensore.")
                     pause();
 
                     ang_vel = samples.user(user).acquisition(scelta_a).ang_vel;
-                    sigPlot(ang_vel, 'X', 'Y', 'Z', 'Velocità angolare (rad/s)', 'Velocità angolare', th(4));
+                    sigPlot(ang_vel, desc.ang_vel, th(4), true);
                     disp("Giroscopio (Velocità Angolare)")
                     disp("Premi un tasto qualsiasi per terminare la visualizzazione.")
                     pause();
@@ -182,14 +214,19 @@ switch (scelta_s)
         end
     otherwise, disp("Indice non trovato.");
 end
-load('movementAccelerazione_.mat')
 
 % sigPlot permette di mostrare il segnale desiderato sia al suo stato
 % naturale che in uno stato segmentato approssimativamente in periodi di
 % quiete e movimento.
 % La soglia (threshold) e le didascalie sono passate come argomento in modo
 % da rendere la funzione versatile.
-function gest = sigPlot(s, xl, yl, zl, ylab, name, th)
+function gest = sigPlot(s, desc, th, view)
+
+xl = desc{1};
+yl = desc{2};
+zl = desc{3};
+ylab = desc{4};
+name = desc{5};
 
 % Se il campione supera i 20 secondi viene ritagliato
 if (size(s, 1) > 2000)
@@ -197,11 +234,14 @@ if (size(s, 1) > 2000)
 end
 
 %% Plot del segnale originale
-figure("Name", name);
-plot(s);
-legend(xl, yl, zl);
-xlabel('Campioni');
-ylabel(ylab);
+% fprintf("View = "+view+"\n");
+if (view)
+    figure("Name", name);
+    plot(s);
+    legend(xl, yl, zl);
+    xlabel('Campioni');
+    ylabel(ylab);
+end
 
 %% Processing
 % Calcolo della grandezza (magnitude) del segnale e trasformazione in
@@ -226,25 +266,25 @@ movement_indices = find(movestd_signal > threshold);
 % whos
 
 %% Plot del segnale con segmentazione
-figure("Name", name);
-plot(s);
+if (view)
+    figure("Name", name);
+    plot(s);
 
-% Evidenzia quiete in blu
-hold on;
-scatter(stillness_indices, s(stillness_indices), 'b', 'filled');
+    % Evidenzia quiete in blu
+    hold on;
+    scatter(stillness_indices, s(stillness_indices), 'b', 'filled');
 
-% Evidenzia movimento in rosso
-scatter(movement_indices, s(movement_indices), 'r', 'filled');
+    % Evidenzia movimento in rosso
+    scatter(movement_indices, s(movement_indices), 'r', 'filled');
 
-title('Segmentazione approssimata di Quiete e Movimento usando Movestd');
-xlabel('Campioni');
-ylabel(ylab);
+    title('Segmentazione approssimata di Quiete e Movimento usando Movestd');
+    xlabel('Campioni');
+    ylabel(ylab);
 
-legend(name, 'Quiete', 'Movimento');
+    legend(name, 'Quiete', 'Movimento');
+end
 
-% CAMBIARE NOME FILE
-filename = "movement" + name + "_.mat";
-
+%% Segmentazione gesti
 mov_diff = filterData(movement_indices);
 still_diff = filterData(stillness_indices);
 
@@ -253,37 +293,28 @@ a = 1;
 
 % Inizializza gest ad array vuoto di interi
 gest = double.empty;
-% disp("QUO");
+
 for i = 1:(size(mov_diff, 2))
-    % disp("QUI!");
     for j = 1:(size(still_diff, 2))
-        % disp("QUE")
         if still_diff(j) > mov_diff(i)
-            % fprintf("fase 1: BLU > ROSSO\n")
-            % fprintf(still_diff(j)+">"+mov_diff(i)+"\n")
-            if (a == 1), gest(a) = mov_diff(i);
+            if (a == 1)
+                gest(a) = mov_diff(i);
                 a = a + 1;
             end
             for k = i:(size(mov_diff, 2))
-                % disp("INIZIO FASE 2")
-                if (mov_diff(k) > still_diff(j))
-                    %    fprintf("fase 2: ROSSO > BLU\n")
-                    % fprintf(mov_diff(k)+">"+still_diff(j)+"\n")
-                    %  disp("INIZIO FASE 3")
+                if mov_diff(k) > still_diff(j)
                     if (mov_diff(k) - 1 - still_diff(j) > 100)
-                        %  fprintf("Indice "+mov_diff(k)+" Differenza : "+(mov_diff(k) - 1 - still_diff(j))+">100 (SALVATO)\n")
                         gest(a) = still_diff(j) - 1;
                         a = a + 1;
                         gest(a) = mov_diff(k);
                         a = a + 1;
                         break;
                     else
-                        if k == size(mov_diff, 2), gest(a) = still_diff(j+1) - 1;
-                            % else, fprintf("Indice "+mov_diff(k)+" Differenza : "+(mov_diff(k) - 1 - still_diff(j))+"<100\n")
+                        if k == size(mov_diff, 2)
+                            gest(a) = still_diff(j+1) - 1;
                         end
                     end
                     break
-                    % else, fprintf(mov_diff(k)+"<"+still_diff(j)+"\n")
                 end
             end
             break
@@ -291,8 +322,16 @@ for i = 1:(size(mov_diff, 2))
     end
 end
 
-% Salvataggio delle diff (AGGIORNARE CSV CON I VALORI OTTENUTI)
-save(filename, "mov_diff", "still_diff", "movement_indices", "stillness_indices", "gest");
+% Solo per test, rimuovere
+% if (view == false)
+%     scarto = gest(gest < 200);
+%     disp("Scarto =");
+%     disp(scarto)
+% end
+
+% Rimuove i campi di gest inferiori di 200 (falsi positivi della pausa
+% iniziale)
+gest = gest(gest > 200);
 end
 
 % Ricerca e filtraggio delle differenze maggiori di 1
