@@ -323,11 +323,11 @@ for i = 1:(size(mov_diff, 2))
 end
 
 % Solo per test, rimuovere
-if (view == false)
-    scarto = gest(gest < 200);
-    disp("Scarto =");
-    disp(scarto)
-end
+% if (view == false)
+%     scarto = gest(gest < 200);
+%     disp("Scarto =");
+%     disp(scarto)
+% end
 
 % Rimuove i campi di gest inferiori di 200 (falsi positivi della pausa
 % iniziale)
