@@ -14,3 +14,4 @@ ID_Subject,Idx_Acquisition,Hand,Smartphone_model,Available_Sensors,Start_Gesture
 2,3,left,Galaxy S9+ di Cristian,5,279,494,Down,715,1001,CW,1230,1472,CCW,1666,1862,Up
 3,4,left,Galaxy S9+ di Cristian,4,400,428,Pull,790,897,CW,1241,1255,Push,1478,1713,CW
 4,4,right,Galaxy S9+ di Cristian,5,322,551,CCW,766,869,Pull,1085,1171,Push,1415,1645,CW
+2,4,right,Galaxy S9+ di Cristian,1,356,517,Up,801,1069,CCW,1278,1501,CW,1737,1882,Down
